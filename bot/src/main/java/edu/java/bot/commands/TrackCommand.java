@@ -13,6 +13,9 @@ public class TrackCommand implements Command {
     private static final String COMMAND = "/track";
     private static final String DESCRIPTION = "Отслеживание ссылки";
     private static final String HANDLE_TEXT = "Начали отслеживать данную ссылку";
+    private static final String ALREADY_LINKED_TEXT = "Ссылка уже добавлена, для просмотра ссылок введите /list";
+    private static final String INCORRECT_LINK_TEXT = "Вы указали неправильную ссылку, возможно вам поможет /help";
+    private static final String NO_LINK_TEXT = "Введите ссылку для отслеживания. Пример ввода: /track ,,ваша_ссылка,,";
 
     public TrackCommand(UserLinks links) {
         this.links = links;
@@ -45,16 +48,16 @@ public class TrackCommand implements Command {
             if (Link.isCorrectUri(link)) {
                 boolean isInUserLinks = links.isInUserLinks(user, link);
                 if (isInUserLinks) {
-                    answerText = "Ссылка уже добавлена, для просмотра ссылок введите /list";
+                    answerText = ALREADY_LINKED_TEXT;
                 } else {
                     links.addUserLink(user, link);
                     answerText = HANDLE_TEXT;
                 }
             } else {
-                answerText = "Вы указали неправильную ссылку, возможно вам поможет /help";
+                answerText = INCORRECT_LINK_TEXT;
             }
         } catch (Exception exception) {
-            answerText = "Введите ссылку для отслеживания. Пример ввода: /track ,,ваша_ссылка,,";
+            answerText = NO_LINK_TEXT;
         }
 
         return answerText;

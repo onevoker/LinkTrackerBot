@@ -12,6 +12,7 @@ public class ListCommand implements Command {
     private static final String COMMAND = "/list";
     private static final String DESCRIPTION = "Список ссылок";
     private static final String HANDLE_TEXT = "Список ваших отслеживаемых ссылок:\n";
+    private static final StringBuilder NOT_LINKED_MESSAGE = new StringBuilder("Вы не отслеживаете ни одной ссылки(((");
 
     public ListCommand(UserLinks links) {
         this.links = links;
@@ -34,7 +35,7 @@ public class ListCommand implements Command {
         long chatId = message.chat().id();
         Set<URI> userLinks = links.getUserLinks(message.from());
         if (userLinks == null || userLinks.isEmpty()) {
-            text = new StringBuilder("Вы не отслеживаете ни одной ссылки(((");
+            text = NOT_LINKED_MESSAGE;
             return new SendMessage(chatId, text.toString());
         }
         text = new StringBuilder(HANDLE_TEXT);

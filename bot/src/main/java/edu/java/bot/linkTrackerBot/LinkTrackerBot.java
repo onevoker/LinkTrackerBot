@@ -43,8 +43,7 @@ public class LinkTrackerBot implements Bot {
             SendMessage response = messageProcessor.process(update);
             SendResponse sendResponse = bot.execute(response);
             if (!sendResponse.isOk()) {
-                LOGGER.error(
-                    "Error sending message: " + sendResponse.errorCode() + " - " + sendResponse.description());
+                LOGGER.error(sendResponse.errorCode() + " - " + sendResponse.description());
                 return UpdatesListener.CONFIRMED_UPDATES_NONE;
             }
         }

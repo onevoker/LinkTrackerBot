@@ -13,6 +13,9 @@ public class UntrackCommand implements Command {
     private static final String COMMAND = "/untrack";
     private static final String DESCRIPTION = "Прекращение отслеживания ссылки";
     private static final String HANDLE_TEXT = "Прекратили отслеживание данной ссылки";
+    private static final String NOT_LINKED_TEXT = "Вы не отслеживаете данную ссылку";
+    private static final String INCORRECT_LINK_TEXT = "Вы указали неправильную ссылку, возможно вам поможет /help";
+    private static final String NO_LINK_TEXT = "Укажите что перестать отслеживать. Пример /untrack ,,ваша_ссылка,,";
 
     public UntrackCommand(UserLinks links) {
         this.links = links;
@@ -48,13 +51,13 @@ public class UntrackCommand implements Command {
                     links.deleteUserLink(user, link);
                     answerText = HANDLE_TEXT;
                 } else {
-                    answerText = "Вы не отслеживаете данную ссылку";
+                    answerText = NOT_LINKED_TEXT;
                 }
             } else {
-                answerText = "Вы указали неправильную ссылку, возможно вам поможет /help";
+                answerText = INCORRECT_LINK_TEXT;
             }
         } catch (Exception exception) {
-            answerText = "Укажите что перестать отслеживать. Пример /untrack ,,ваша_ссылка,,";
+            answerText = NO_LINK_TEXT;
         }
 
         return answerText;

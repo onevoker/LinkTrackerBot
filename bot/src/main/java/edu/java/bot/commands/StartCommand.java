@@ -11,6 +11,7 @@ public class StartCommand implements Command {
     private static final String COMMAND = "/start";
     private static final String DESCRIPTION = "Начать работу с ботом";
     private static final String HANDLE_TEXT = "Начинаем регистрацию...\nДля получения списка команд используйте /help";
+    private static final String REGISTERED_TEXT = "Вы уже были зарегестрированы раньше";
 
     public StartCommand(UserLinks links) {
         this.links = links;
@@ -32,7 +33,7 @@ public class StartCommand implements Command {
         long chatId = message.chat().id();
         User user = message.from();
         if (links.isRegistered(user)) {
-            return new SendMessage(chatId, "Вы уже были зарегестрированы раньше");
+            return new SendMessage(chatId, REGISTERED_TEXT);
         }
 
         return new SendMessage(chatId, HANDLE_TEXT);
