@@ -13,8 +13,8 @@ public class LinkTest {
             Arguments.of("https://github.com/onevoker"),
             Arguments.of("https://github.com/onevoker/LinkTrackerBot"),
             Arguments.of("https://stackoverflow.com/"),
-            Arguments.of("https://stackoverflow.com/help"),
-            Arguments.of("https://github.com/iskanred")
+            Arguments.of("https://stackoverflow.com/questions/73548870/telegram-bot-java-contact"),
+            Arguments.of("https://github.com/iskanred/iu-devops-course")
         );
     }
 
