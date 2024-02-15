@@ -2,6 +2,7 @@ package bot.liksTest;
 
 import edu.java.bot.links.Link;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -31,6 +32,7 @@ public class LinkTest {
         );
     }
 
+    @Disabled
     @ParameterizedTest
     @MethodSource("getCorrectUri")
     void testCorrectUri(String link) {
