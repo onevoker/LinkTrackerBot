@@ -10,11 +10,11 @@ import edu.java.bot.commands.ListCommand;
 import edu.java.bot.commands.StartCommand;
 import edu.java.bot.commands.TrackCommand;
 import edu.java.bot.commands.UntrackCommand;
-import edu.java.bot.links.UserLinks;
+import edu.java.bot.links.LinksRepository;
 import java.util.List;
 
 public class UserMessageProcessorImpl implements UserMessageProcessor {
-    private final UserLinks links = new UserLinks();
+    private final LinksRepository links = new LinksRepository();
     private static final String UNKNOWN_COMMAND_TEXT =
         "Мне не известна эта команда, для получения доступных команд воспользуйтесь командой /help";
 

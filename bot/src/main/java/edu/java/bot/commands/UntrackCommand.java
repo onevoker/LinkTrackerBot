@@ -5,10 +5,10 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.links.Link;
-import edu.java.bot.links.UserLinks;
+import edu.java.bot.links.LinksRepository;
 
 public class UntrackCommand implements Command {
-    private final UserLinks links;
+    private final LinksRepository links;
     private static final int BEGIN_LINK_INDEX = 9;
     private static final String COMMAND = "/untrack";
     private static final String DESCRIPTION = "Прекращение отслеживания ссылки";
@@ -17,7 +17,7 @@ public class UntrackCommand implements Command {
     private static final String INCORRECT_LINK_TEXT = "Вы указали неправильную ссылку, возможно вам поможет /help";
     private static final String NO_LINK_TEXT = "Укажите что перестать отслеживать. Пример /untrack ,,ваша_ссылка,,";
 
-    public UntrackCommand(UserLinks links) {
+    public UntrackCommand(LinksRepository links) {
         this.links = links;
     }
 

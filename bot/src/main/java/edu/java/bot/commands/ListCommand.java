@@ -3,19 +3,19 @@ package edu.java.bot.commands;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.links.UserLinks;
+import edu.java.bot.links.LinksRepository;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
 
 public class ListCommand implements Command {
-    private final UserLinks links;
+    private final LinksRepository links;
     private static final String COMMAND = "/list";
     private static final String DESCRIPTION = "Список ссылок";
     private static final String HANDLE_TEXT = "Список ваших отслеживаемых ссылок:\n";
     private static final String NOT_LINKED_MESSAGE = "Вы не отслеживаете ни одной ссылки(((";
 
-    public ListCommand(UserLinks links) {
+    public ListCommand(LinksRepository links) {
         this.links = links;
     }
 

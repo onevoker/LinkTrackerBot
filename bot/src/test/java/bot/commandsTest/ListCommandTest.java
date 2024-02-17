@@ -7,7 +7,7 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
 import edu.java.bot.commands.ListCommand;
-import edu.java.bot.links.UserLinks;
+import edu.java.bot.links.LinksRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ public class ListCommandTest {
     private Chat chat;
     @Mock
     private Update update;
-    private final UserLinks links = new UserLinks();
+    private final LinksRepository links = new LinksRepository();
     @InjectMocks
     private Command listCommand = new ListCommand(links);
     private static final User USER = new User(-10L);

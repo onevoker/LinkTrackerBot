@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
-public class UserLinks {
+@Repository
+public class LinksRepository {
     private final Map<Long, Set<URI>> links;
 
-    public UserLinks() {
+    public LinksRepository() {
         this.links = new HashMap<>();
     }
 
@@ -34,9 +34,7 @@ public class UserLinks {
 
     public void deleteUserLink(User user, String link) {
         Set<URI> set = links.get(user.id());
-        if (!set.isEmpty()) {
-            set.remove(normalizeLink(link));
-        }
+        set.remove(normalizeLink(link));
     }
 
     public Set<URI> getUserLinks(User user) {

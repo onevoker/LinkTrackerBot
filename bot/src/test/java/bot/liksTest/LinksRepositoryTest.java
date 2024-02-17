@@ -1,7 +1,7 @@
 package bot.liksTest;
 
 import com.pengrad.telegrambot.model.User;
-import edu.java.bot.links.UserLinks;
+import edu.java.bot.links.LinksRepository;
 import java.net.URI;
 import java.util.Set;
 import lombok.SneakyThrows;
@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class UserLinksTest {
-    private UserLinks links;
+public class LinksRepositoryTest {
+    private LinksRepository links;
     private User user;
     private static final String GIT_HUB_LINK = "https://github.com";
     private static final String STACK_LINK = "https://stackoverflow.com";
@@ -19,7 +19,7 @@ public class UserLinksTest {
 
     @BeforeEach
     void setUp() {
-        this.links = new UserLinks();
+        this.links = new LinksRepository();
         user = new User(-14L);
     }
 

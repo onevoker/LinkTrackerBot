@@ -6,7 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.StartCommand;
-import edu.java.bot.links.UserLinks;
+import edu.java.bot.links.LinksRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ public class StartCommandTest {
     private Chat chat;
     @Mock
     private Update update;
-    private final UserLinks links = new UserLinks();
+    private final LinksRepository links = new LinksRepository();
 
     @InjectMocks
     private StartCommand startCommand = new StartCommand(links);

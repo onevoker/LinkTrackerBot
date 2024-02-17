@@ -25,13 +25,13 @@ public class Link {
             if (statusCode != AVAILABLE_RESPONSE_CODE) {
                 return false;
             }
-            return isGitHubOrStackOverflowLink(link);
+            return isValidResource(link);
         } catch (IOException | InterruptedException | URISyntaxException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    private static boolean isGitHubOrStackOverflowLink(String link) {
+    private static boolean isValidResource(String link) {
         try {
             URI uri = new URI(link);
             return Objects.equals(uri.getHost(), GITHUB_DOMAIN) || Objects.equals(uri.getHost(), STACK_OVERFLOW_DOMAIN);
