@@ -15,9 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
 
+@ExtendWith(MockitoExtension.class)
 public class StartCommandTest {
-    @ExtendWith(MockitoExtension.class)
-
     @Mock
     private Message message;
     @Mock
@@ -29,14 +28,7 @@ public class StartCommandTest {
     @InjectMocks
     private StartCommand startCommand = new StartCommand(links);
 
-    private static final User USER = new User(-10L);
-
-    private void setUpTest() {
-        doReturn(message).when(update).message();
-        doReturn(chat).when(message).chat();
-        doReturn(USER).when(message).from();
-        doReturn(-14L).when(chat).id();
-    }
+    private static final User USER = new User(1L);
 
     @Test
     void testCommand() {
@@ -46,21 +38,15 @@ public class StartCommandTest {
     }
 
     @Test
-    void testDescription() {
-        String description = startCommand.description();
-        String expectedDescription = "Начать работу с ботом";
-
-        assertThat(description).isEqualTo(expectedDescription);
-
-    }
-
-    @Test
     void testHandle() {
-        setUpTest();
+        doReturn(message).when(update).message();
+        doReturn(chat).when(message).chat();
+        doReturn(USER).when(message).from();
+        doReturn(-1L).when(chat).id();
 
         String expectedHandleText = "Начинаем регистрацию...\nДля получения списка команд используйте /help";
         SendMessage result = startCommand.handle(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }

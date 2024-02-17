@@ -23,9 +23,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
 
+@ExtendWith(MockitoExtension.class)
 public class UserMessageProcessorImplTest {
-    @ExtendWith(MockitoExtension.class)
-
     @Mock
     private Message message;
     @Mock
@@ -37,13 +36,13 @@ public class UserMessageProcessorImplTest {
     @InjectMocks
     private UserMessageProcessorImpl messageProcessor;
     private static final String GIT_HUB = "https://github.com/onevoker";
-    private static final User USER = new User(-10L);
+    private static final User USER = new User(1L);
 
-    private void setUpTest(String returnedTextFromMessage) {
+    private void setUpMocksWithMessageFromTelegram(String messageFromTelegram) {
         doReturn(message).when(update).message();
-        doReturn(returnedTextFromMessage).when(message).text();
+        doReturn(messageFromTelegram).when(message).text();
         doReturn(chat).when(message).chat();
-        doReturn(-14L).when(chat).id();
+        doReturn(-1L).when(chat).id();
     }
 
     @Test
@@ -64,67 +63,67 @@ public class UserMessageProcessorImplTest {
 
     @Test
     void testProcessUnknownCommand() {
-        setUpTest("привет");
+        setUpMocksWithMessageFromTelegram("привет");
 
         String unknownCommandText =
             "Мне не известна эта команда, для получения доступных команд воспользуйтесь командой /help";
         SendMessage result = messageProcessor.process(update);
-        SendMessage expected = new SendMessage(-14L, unknownCommandText).parseMode(ParseMode.Markdown);
+        SendMessage expected = new SendMessage(-1L, unknownCommandText).parseMode(ParseMode.Markdown);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 
     @Test
     void testProcessTrackCommand() {
-        setUpTest("/track " + GIT_HUB);
+        setUpMocksWithMessageFromTelegram("/track " + GIT_HUB);
         doReturn(USER).when(message).from();
 
         String expectedHandleText = "Начали отслеживать данную ссылку";
         SendMessage result = messageProcessor.process(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText).parseMode(ParseMode.HTML);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText).parseMode(ParseMode.HTML);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 
     @Test
     void testProcessUntrackCommand() {
-        setUpTest("/untrack " + GIT_HUB);
+        setUpMocksWithMessageFromTelegram("/untrack " + GIT_HUB);
         doReturn(USER).when(message).from();
 
         String expectedHandleText = "Вы не отслеживаете данную ссылку";
         SendMessage result = messageProcessor.process(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText).parseMode(ParseMode.HTML);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText).parseMode(ParseMode.HTML);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 
     @Test
     void testProcessStartCommand() {
-        setUpTest("/start");
+        setUpMocksWithMessageFromTelegram("/start");
         doReturn(USER).when(message).from();
 
         String expectedHandleText = "Начинаем регистрацию...\nДля получения списка команд используйте /help";
         SendMessage result = messageProcessor.process(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText).parseMode(ParseMode.HTML);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText).parseMode(ParseMode.HTML);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 
     @Test
     void testProcessListCommand() {
-        setUpTest("/list");
+        setUpMocksWithMessageFromTelegram("/list");
         doReturn(USER).when(message).from();
 
         String expectedHandleText = "Вы не отслеживаете ни одной ссылки(((";
         SendMessage result = messageProcessor.process(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText).parseMode(ParseMode.HTML);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText).parseMode(ParseMode.HTML);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 
     @Test
     void testProcessHelpCommand() {
-        setUpTest("/help");
+        setUpMocksWithMessageFromTelegram("/help");
 
         String expectedHandleText =
             "На данный момент поддерживается отслеживание ссылок с таких ресурсов как github и stackoverflow\n\n"
@@ -135,7 +134,7 @@ public class UserMessageProcessorImplTest {
                 + "/untrack ,,ссылка,, -- прекратить отслеживание ссылки\n"
                 + "/list -- показать список отслеживаемых ссылок\n";
         SendMessage result = messageProcessor.process(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText).parseMode(ParseMode.HTML);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText).parseMode(ParseMode.HTML);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }

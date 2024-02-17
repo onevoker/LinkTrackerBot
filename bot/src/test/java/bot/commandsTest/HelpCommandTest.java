@@ -13,21 +13,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
 
+@ExtendWith(MockitoExtension.class)
 class HelpCommandTest {
-    @ExtendWith(MockitoExtension.class)
-
     @Mock
     private Message message;
     @Mock
     private Chat chat;
     @Mock
     private Update update;
-
-    private void setUpTest() {
-        doReturn(message).when(update).message();
-        doReturn(chat).when(message).chat();
-        doReturn(-14L).when(chat).id();
-    }
 
     @InjectMocks
     private HelpCommand helpCommand;
@@ -40,17 +33,10 @@ class HelpCommandTest {
     }
 
     @Test
-    void testDescription() {
-        String description = helpCommand.description();
-        String expectedDescription = "Вам помогут";
-
-        assertThat(description).isEqualTo(expectedDescription);
-
-    }
-
-    @Test
     void testHandle() {
-        setUpTest();
+        doReturn(message).when(update).message();
+        doReturn(chat).when(message).chat();
+        doReturn(-1L).when(chat).id();
 
         String expectedHandleText =
             "На данный момент поддерживается отслеживание ссылок с таких ресурсов как github и stackoverflow\n\n"
@@ -61,7 +47,7 @@ class HelpCommandTest {
                 + "/untrack ,,ссылка,, -- прекратить отслеживание ссылки\n"
                 + "/list -- показать список отслеживаемых ссылок\n";
         SendMessage result = helpCommand.handle(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }

@@ -20,7 +20,7 @@ public class LinksRepositoryTest {
     @BeforeEach
     void setUp() {
         this.links = new LinksRepository();
-        user = new User(-14L);
+        user = new User(1L);
     }
 
     @Test

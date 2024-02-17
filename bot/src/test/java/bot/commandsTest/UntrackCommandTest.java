@@ -16,9 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
 
+@ExtendWith(MockitoExtension.class)
 public class UntrackCommandTest {
-    @ExtendWith(MockitoExtension.class)
-
     @Mock
     private Message message;
     @Mock
@@ -28,15 +27,15 @@ public class UntrackCommandTest {
     private final LinksRepository links = new LinksRepository();
     @InjectMocks
     private Command untrackCommand = new UntrackCommand(links);
-    private static final User USER = new User(-10L);
+    private static final User USER = new User(1L);
     private static final String GIT_HUB = "https://github.com/onevoker";
 
-    private void setUpTest(String returnedTextFromMessage) {
+    private void setUpMocksWithUntrackCommandFromTelegram(String messageFromTelegram) {
         doReturn(message).when(update).message();
         doReturn(USER).when(message).from();
-        doReturn(returnedTextFromMessage).when(message).text();
+        doReturn(messageFromTelegram).when(message).text();
         doReturn(chat).when(message).chat();
-        doReturn(-14L).when(chat).id();
+        doReturn(-1L).when(chat).id();
     }
 
     @Test
@@ -57,43 +56,44 @@ public class UntrackCommandTest {
 
     @Test
     void testUntrackNothing() {
-        setUpTest("/untrack");
+        setUpMocksWithUntrackCommandFromTelegram("/untrack");
 
         String expectedHandleText = "Укажите что перестать отслеживать. Пример /untrack ,,ваша_ссылка,,";
         SendMessage result = untrackCommand.handle(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
+
     @Test
     void testUntrackNotALink() {
-        setUpTest("/untrack man");
+        setUpMocksWithUntrackCommandFromTelegram("/untrack man");
 
         String expectedHandleText = "Вы указали неправильную ссылку, возможно вам поможет /help";
         SendMessage result = untrackCommand.handle(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 
     @Test
     void testUntrackUncorrectLink() {
-        setUpTest("/untrack https://open.spotify.com/");
+        setUpMocksWithUntrackCommandFromTelegram("/untrack https://open.spotify.com/");
 
         String expectedHandleText = "Вы указали неправильную ссылку, возможно вам поможет /help";
         SendMessage result = untrackCommand.handle(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 
     @Test
     void testUntrackNotTrackedLink() {
-        setUpTest("/untrack " + GIT_HUB);
+        setUpMocksWithUntrackCommandFromTelegram("/untrack " + GIT_HUB);
 
         String expectedHandleText = "Вы не отслеживаете данную ссылку";
         SendMessage result = untrackCommand.handle(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
@@ -101,11 +101,11 @@ public class UntrackCommandTest {
     @Test
     void testUntrackLink() {
         links.addUserLink(USER, GIT_HUB);
-        setUpTest("/untrack " + GIT_HUB);
+        setUpMocksWithUntrackCommandFromTelegram("/untrack " + GIT_HUB);
 
         String expectedHandleText = "Прекратили отслеживание данной ссылки";
         SendMessage result = untrackCommand.handle(update);
-        SendMessage expected = new SendMessage(-14L, expectedHandleText);
+        SendMessage expected = new SendMessage(-1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }

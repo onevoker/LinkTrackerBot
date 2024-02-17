@@ -15,18 +15,19 @@ import java.util.List;
 
 public class UserMessageProcessorImpl implements UserMessageProcessor {
     private final LinksRepository links = new LinksRepository();
+    private final List<? extends Command> listOfCommands = List.of(
+        new HelpCommand(),
+        new ListCommand(links),
+        new StartCommand(links),
+        new TrackCommand(links),
+        new UntrackCommand(links)
+    );
     private static final String UNKNOWN_COMMAND_TEXT =
         "Мне не известна эта команда, для получения доступных команд воспользуйтесь командой /help";
 
     @Override
     public List<? extends Command> commands() {
-        return List.of(
-            new HelpCommand(),
-            new ListCommand(links),
-            new StartCommand(links),
-            new TrackCommand(links),
-            new UntrackCommand(links)
-        );
+        return listOfCommands;
     }
 
     @Override
