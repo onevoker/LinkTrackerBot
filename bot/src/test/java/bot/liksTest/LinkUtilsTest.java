@@ -1,13 +1,13 @@
 package bot.liksTest;
 
-import edu.java.bot.links.Link;
+import edu.java.bot.links.LinkUtils;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class LinkTest {
+public class LinkUtilsTest {
     public static Stream<Arguments> getCorrectUri() {
         return Stream.of(
             Arguments.of("https://github.com/onevoker"),
@@ -32,14 +32,14 @@ public class LinkTest {
     @ParameterizedTest
     @MethodSource("getCorrectUri")
     void testCorrectUri(String link) {
-        boolean isCorrect = Link.isCorrectUri(link);
+        boolean isCorrect = LinkUtils.isCorrectUri(link);
         assertThat(isCorrect).isTrue();
     }
 
     @ParameterizedTest
     @MethodSource("getUncorrectUri")
     void testUnCorrectUri(String link) {
-        boolean isCorrect = Link.isCorrectUri(link);
+        boolean isCorrect = LinkUtils.isCorrectUri(link);
         assertThat(isCorrect).isFalse();
     }
 }

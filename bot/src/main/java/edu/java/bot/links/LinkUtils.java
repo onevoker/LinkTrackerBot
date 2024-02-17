@@ -8,12 +8,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Objects;
 
-public class Link {
+public class LinkUtils {
     private static final int AVAILABLE_RESPONSE_CODE = 200;
     private static final String GITHUB_DOMAIN = "github.com";
     private static final String STACK_OVERFLOW_DOMAIN = "stackoverflow.com";
 
-    private Link() {
+    private LinkUtils() {
     }
 
     public static boolean isCorrectUri(String link) {

@@ -2,18 +2,18 @@ package edu.java.bot.links;
 
 import com.pengrad.telegrambot.model.User;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class LinksRepository {
+public class LinkRepository {
     private final Map<Long, Set<URI>> links;
 
-    public LinksRepository() {
+    public LinkRepository() {
         this.links = new HashMap<>();
     }
 
@@ -50,11 +50,8 @@ public class LinksRepository {
         }
     }
 
-    private URI normalizeLink(String link) {
-        try {
-            return new URI(link.replaceAll("/+$", ""));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows
+    public static URI normalizeLink(String link) {
+        return new URI(link.replaceAll("/+$", ""));
     }
 }

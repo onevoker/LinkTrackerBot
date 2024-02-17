@@ -4,11 +4,11 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.links.Link;
-import edu.java.bot.links.LinksRepository;
+import edu.java.bot.links.LinkRepository;
+import edu.java.bot.links.LinkUtils;
 
 public class TrackCommand implements Command {
-    private final LinksRepository links;
+    private final LinkRepository links;
     private static final int BEGIN_LINK_INDEX = 7;
     private static final String COMMAND = "/track";
     private static final String DESCRIPTION = "Отслеживание ссылки";
@@ -17,7 +17,7 @@ public class TrackCommand implements Command {
     private static final String INCORRECT_LINK_TEXT = "Вы указали неправильную ссылку, возможно вам поможет /help";
     private static final String NO_LINK_TEXT = "Введите ссылку для отслеживания. Пример ввода: /track ,,ваша_ссылка,,";
 
-    public TrackCommand(LinksRepository links) {
+    public TrackCommand(LinkRepository links) {
         this.links = links;
     }
 
@@ -45,7 +45,7 @@ public class TrackCommand implements Command {
         String answerText;
         try {
             String link = message.text().substring(BEGIN_LINK_INDEX);
-            if (Link.isCorrectUri(link)) {
+            if (LinkUtils.isCorrectUri(link)) {
                 boolean isInUserLinks = links.isInUserLinks(user, link);
                 if (isInUserLinks) {
                     answerText = ALREADY_LINKED_TEXT;

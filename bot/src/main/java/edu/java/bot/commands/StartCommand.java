@@ -4,16 +4,16 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.links.LinksRepository;
+import edu.java.bot.links.LinkRepository;
 
 public class StartCommand implements Command {
-    private final LinksRepository links;
+    private final LinkRepository links;
     private static final String COMMAND = "/start";
     private static final String DESCRIPTION = "Начать работу с ботом";
     private static final String HANDLE_TEXT = "Начинаем регистрацию...\nДля получения списка команд используйте /help";
     private static final String REGISTERED_TEXT = "Вы уже были зарегестрированы раньше";
 
-    public StartCommand(LinksRepository links) {
+    public StartCommand(LinkRepository links) {
         this.links = links;
     }
 

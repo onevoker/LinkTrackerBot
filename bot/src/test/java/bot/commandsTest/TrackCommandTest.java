@@ -7,7 +7,7 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
 import edu.java.bot.commands.TrackCommand;
-import edu.java.bot.links.LinksRepository;
+import edu.java.bot.links.LinkRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ public class TrackCommandTest {
     private Chat chat;
     @Mock
     private Update update;
-    private final LinksRepository links = new LinksRepository();
+    private final LinkRepository links = new LinkRepository();
     @InjectMocks
     private Command trackCommand = new TrackCommand(links);
     private static final User USER = new User(1L);

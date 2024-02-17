@@ -7,7 +7,7 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
 import edu.java.bot.commands.UntrackCommand;
-import edu.java.bot.links.LinksRepository;
+import edu.java.bot.links.LinkRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ public class UntrackCommandTest {
     private Chat chat;
     @Mock
     private Update update;
-    private final LinksRepository links = new LinksRepository();
+    private final LinkRepository links = new LinkRepository();
     @InjectMocks
     private Command untrackCommand = new UntrackCommand(links);
     private static final User USER = new User(1L);
