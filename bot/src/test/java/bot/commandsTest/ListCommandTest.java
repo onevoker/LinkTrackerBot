@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
 import edu.java.bot.commands.ListCommand;
+import edu.java.bot.links.Link;
 import edu.java.bot.links.LinkRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,8 +39,9 @@ public class ListCommandTest {
 
     @Test
     void testHandle() {
-        String link = "https://github.com/onevoker";
-        links.addUserLink(USER, link);
+        String strLink = "https://github.com/onevoker";
+        Link link = new Link(USER.id(), strLink);
+        links.addUserLink(link);
 
         doReturn(message).when(update).message();
         doReturn(USER).when(message).from();

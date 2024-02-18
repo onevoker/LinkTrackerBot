@@ -4,8 +4,9 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.links.InvalidLinkException;
+import edu.java.bot.links.Link;
 import edu.java.bot.links.LinkRepository;
-import edu.java.bot.links.LinkUtils;
 
 public class TrackCommand implements Command {
     private final LinkRepository links;
@@ -42,21 +43,23 @@ public class TrackCommand implements Command {
     }
 
     private String getAnswerText(User user, Message message) {
+        Long userID = user.id();
         String answerText;
         try {
-            String link = message.text().substring(BEGIN_LINK_INDEX);
-            if (LinkUtils.isCorrectUri(link)) {
-                boolean isInUserLinks = links.isInUserLinks(user, link);
+            String strLink = message.text().substring(BEGIN_LINK_INDEX);
+            try {
+                Link link = new Link(userID, strLink);
+                boolean isInUserLinks = links.isInUserLinks(link);
                 if (isInUserLinks) {
                     answerText = ALREADY_LINKED_TEXT;
                 } else {
-                    links.addUserLink(user, link);
+                    links.addUserLink(link);
                     answerText = HANDLE_TEXT;
                 }
-            } else {
+            } catch (InvalidLinkException exception) {
                 answerText = INCORRECT_LINK_TEXT;
             }
-        } catch (Exception exception) {
+        } catch (IndexOutOfBoundsException exception) {
             answerText = NO_LINK_TEXT;
         }
 

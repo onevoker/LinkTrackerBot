@@ -1,18 +1,24 @@
 package bot.liksTest;
 
-import edu.java.bot.links.LinkUtils;
+import edu.java.bot.links.InvalidLinkException;
+import edu.java.bot.links.Link;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class LinkUtilsTest {
+public class LinkTest {
+    private static final Long userId = 1L;
+
     public static Stream<Arguments> getCorrectUri() {
         return Stream.of(
             Arguments.of("https://github.com/onevoker"),
             Arguments.of("https://github.com/onevoker/LinkTrackerBot"),
-            Arguments.of("https://github.com/iskanred/iu-devops-course")
+            Arguments.of("https://github.com/iskanred/iu-devops-course"),
+            Arguments.of(
+                "https://stackoverflow.com/questions/78013649/python-functional-method-of-checking-that-all-elements-in-a-list-are-equal")
         );
     }
 
@@ -31,15 +37,15 @@ public class LinkUtilsTest {
 
     @ParameterizedTest
     @MethodSource("getCorrectUri")
-    void testCorrectUri(String link) {
-        boolean isCorrect = LinkUtils.isCorrectUri(link);
-        assertThat(isCorrect).isTrue();
+    void testCorrectUri(String strLink) {
+        Link link = new Link(userId, strLink);
+        assertThat(link.stringLink()).isEqualTo(strLink);
     }
 
     @ParameterizedTest
     @MethodSource("getUncorrectUri")
-    void testUnCorrectUri(String link) {
-        boolean isCorrect = LinkUtils.isCorrectUri(link);
-        assertThat(isCorrect).isFalse();
+    void testUnCorrectUri(String strLink) {
+        var exception = assertThrows(InvalidLinkException.class, () -> new Link(userId, strLink));
+        assertThat(exception.getMessage()).isEqualTo("Invalid link");
     }
 }

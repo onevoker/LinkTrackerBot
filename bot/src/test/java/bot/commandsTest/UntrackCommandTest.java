@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
 import edu.java.bot.commands.UntrackCommand;
+import edu.java.bot.links.Link;
 import edu.java.bot.links.LinkRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -100,7 +101,7 @@ public class UntrackCommandTest {
 
     @Test
     void testUntrackLink() {
-        links.addUserLink(USER, GIT_HUB);
+        links.addUserLink(new Link(USER.id(), GIT_HUB));
         setUpMocksWithUntrackCommandFromTelegram("/untrack " + GIT_HUB);
 
         String expectedHandleText = "Прекратили отслеживание данной ссылки";

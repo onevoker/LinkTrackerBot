@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -26,15 +25,16 @@ public class LinkRepository {
         return false;
     }
 
-    public void addUserLink(User user, String link) {
-        Long userId = user.id();
+    public void addUserLink(Link link) {
+        Long userId = link.userId();
         Set<URI> set = links.computeIfAbsent(userId, k -> new HashSet<>());
-        set.add(normalizeLink(link));
+        set.add(link.getUriLink());
     }
 
-    public void deleteUserLink(User user, String link) {
-        Set<URI> set = links.get(user.id());
-        set.remove(normalizeLink(link));
+    public void deleteUserLink(Link link) {
+        Long userId = link.userId();
+        Set<URI> set = links.get(userId);
+        set.remove(link.getUriLink());
     }
 
     public Set<URI> getUserLinks(User user) {
@@ -42,16 +42,11 @@ public class LinkRepository {
         return links.get(userId);
     }
 
-    public boolean isInUserLinks(User user, String link) {
+    public boolean isInUserLinks(Link link) {
         try {
-            return this.getUserLinks(user).contains(normalizeLink(link));
+            return links.get(link.userId()).contains(link.getUriLink());
         } catch (Exception e) {
             return false;
         }
-    }
-
-    @SneakyThrows
-    public static URI normalizeLink(String link) {
-        return new URI(link.replaceAll("/+$", ""));
     }
 }
