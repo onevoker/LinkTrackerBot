@@ -13,6 +13,7 @@ import edu.java.bot.commands.UntrackCommand;
 import edu.java.bot.repositories.LinkRepository;
 import edu.java.bot.repositories.UserRepository;
 import java.util.List;
+import java.util.Objects;
 
 public class UserMessageProcessorImpl implements UserMessageProcessor {
     private final LinkRepository links = new LinkRepository();
@@ -36,9 +37,11 @@ public class UserMessageProcessorImpl implements UserMessageProcessor {
     public SendMessage process(Update update) {
         Message message = update.message();
         String response = message.text();
+        String[] responseArr = response.split(" ");
+        String strCommand = responseArr[0];
 
         for (var command : this.commands()) {
-            if (response != null && response.startsWith(command.command())) {
+            if (Objects.equals(strCommand, command.command())) {
                 return command.handle(update).parseMode(ParseMode.HTML);
             }
         }
