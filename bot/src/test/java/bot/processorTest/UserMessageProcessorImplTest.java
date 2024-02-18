@@ -12,9 +12,10 @@ import edu.java.bot.commands.ListCommand;
 import edu.java.bot.commands.StartCommand;
 import edu.java.bot.commands.TrackCommand;
 import edu.java.bot.commands.UntrackCommand;
-import edu.java.bot.links.LinkRepository;
+import edu.java.bot.repositories.LinkRepository;
 import edu.java.bot.processor.UserMessageProcessorImpl;
 import java.util.List;
+import edu.java.bot.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -48,12 +49,13 @@ public class UserMessageProcessorImplTest {
     @Test
     void testCommands() {
         LinkRepository links = new LinkRepository();
+        UserRepository users = new UserRepository();
 
         List<? extends Command> result = messageProcessor.commands();
         List<? extends Command> expected = List.of(
             new HelpCommand(),
             new ListCommand(links),
-            new StartCommand(links),
+            new StartCommand(users),
             new TrackCommand(links),
             new UntrackCommand(links)
         );

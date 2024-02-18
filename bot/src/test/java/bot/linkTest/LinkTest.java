@@ -1,4 +1,4 @@
-package bot.liksTest;
+package bot.linkTest;
 
 import edu.java.bot.links.InvalidLinkException;
 import edu.java.bot.links.Link;

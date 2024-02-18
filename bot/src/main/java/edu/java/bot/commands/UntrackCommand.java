@@ -6,7 +6,7 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.links.InvalidLinkException;
 import edu.java.bot.links.Link;
-import edu.java.bot.links.LinkRepository;
+import edu.java.bot.repositories.LinkRepository;
 
 public class UntrackCommand implements Command {
     private final LinkRepository links;

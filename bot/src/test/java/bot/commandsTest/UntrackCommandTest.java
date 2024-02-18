@@ -8,7 +8,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
 import edu.java.bot.commands.UntrackCommand;
 import edu.java.bot.links.Link;
-import edu.java.bot.links.LinkRepository;
+import edu.java.bot.repositories.LinkRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

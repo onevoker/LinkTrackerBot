@@ -10,15 +10,17 @@ import edu.java.bot.commands.ListCommand;
 import edu.java.bot.commands.StartCommand;
 import edu.java.bot.commands.TrackCommand;
 import edu.java.bot.commands.UntrackCommand;
-import edu.java.bot.links.LinkRepository;
+import edu.java.bot.repositories.LinkRepository;
+import edu.java.bot.repositories.UserRepository;
 import java.util.List;
 
 public class UserMessageProcessorImpl implements UserMessageProcessor {
     private final LinkRepository links = new LinkRepository();
+    private final UserRepository users = new UserRepository();
     private final List<? extends Command> listOfCommands = List.of(
         new HelpCommand(),
         new ListCommand(links),
-        new StartCommand(links),
+        new StartCommand(users),
         new TrackCommand(links),
         new UntrackCommand(links)
     );

@@ -7,7 +7,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Objects;
-import lombok.SneakyThrows;
 
 public record Link(Long userId, String stringLink) {
     private static final int AVAILABLE_RESPONSE_CODE = 200;
@@ -49,13 +48,5 @@ public record Link(Long userId, String stringLink) {
 
     private String normalizeLink(String link) {
         return link.replaceAll("/+$", "");
-    }
-
-    /**
-     * Here used @SneakyThrows, because in constructor we checked is Uri correct
-     */
-    @SneakyThrows
-    public URI getUriLink() {
-        return new URI(stringLink);
     }
 }

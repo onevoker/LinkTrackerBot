@@ -3,8 +3,8 @@ package edu.java.bot.commands;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.links.LinkRepository;
-import java.net.URI;
+import edu.java.bot.links.Link;
+import edu.java.bot.repositories.LinkRepository;
 import java.util.Collection;
 import java.util.Set;
 
@@ -33,7 +33,7 @@ public class ListCommand implements Command {
     public SendMessage handle(Update update) {
         Message message = update.message();
         long chatId = message.chat().id();
-        Set<URI> userLinks = links.getUserLinks(message.from());
+        Set<Link> userLinks = links.getUserLinks(message.from());
 
         if (userLinks == null || userLinks.isEmpty()) {
             return new SendMessage(chatId, NOT_LINKED_MESSAGE);
@@ -43,12 +43,12 @@ public class ListCommand implements Command {
         return new SendMessage(chatId, text);
     }
 
-    private String getLinksListText(Collection<URI> userLinks) {
+    private String getLinksListText(Collection<Link> userLinks) {
         StringBuilder text = new StringBuilder();
         int i = 0;
 
-        for (URI link : userLinks) {
-            text.append("%s. ".formatted(++i)).append(link.toString()).append("\n");
+        for (Link link : userLinks) {
+            text.append("%s. ".formatted(++i)).append(link.stringLink()).append("\n");
         }
 
         return text.toString();

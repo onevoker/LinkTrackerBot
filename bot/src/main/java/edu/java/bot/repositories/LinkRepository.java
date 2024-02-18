@@ -1,7 +1,7 @@
-package edu.java.bot.links;
+package edu.java.bot.repositories;
 
 import com.pengrad.telegrambot.model.User;
-import java.net.URI;
+import edu.java.bot.links.Link;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,41 +10,32 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class LinkRepository {
-    private final Map<Long, Set<URI>> links;
+    private final Map<Long, Set<Link>> links;
 
     public LinkRepository() {
         this.links = new HashMap<>();
     }
 
-    public boolean isRegistered(User user) {
-        Long userId = user.id();
-        if (links.containsKey(userId)) {
-            return true;
-        }
-        links.computeIfAbsent(userId, k -> new HashSet<>());
-        return false;
-    }
-
     public void addUserLink(Link link) {
         Long userId = link.userId();
-        Set<URI> set = links.computeIfAbsent(userId, k -> new HashSet<>());
-        set.add(link.getUriLink());
+        Set<Link> set = links.computeIfAbsent(userId, k -> new HashSet<>());
+        set.add(link);
     }
 
     public void deleteUserLink(Link link) {
         Long userId = link.userId();
-        Set<URI> set = links.get(userId);
-        set.remove(link.getUriLink());
+        Set<Link> set = links.get(userId);
+        set.remove(link);
     }
 
-    public Set<URI> getUserLinks(User user) {
+    public Set<Link> getUserLinks(User user) {
         Long userId = user.id();
         return links.get(userId);
     }
 
     public boolean isInUserLinks(Link link) {
         try {
-            return links.get(link.userId()).contains(link.getUriLink());
+            return links.get(link.userId()).contains(link);
         } catch (Exception e) {
             return false;
         }
