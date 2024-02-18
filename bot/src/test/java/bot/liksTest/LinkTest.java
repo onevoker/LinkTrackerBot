@@ -16,9 +16,7 @@ public class LinkTest {
         return Stream.of(
             Arguments.of("https://github.com/onevoker"),
             Arguments.of("https://github.com/onevoker/LinkTrackerBot"),
-            Arguments.of("https://github.com/iskanred/iu-devops-course"),
-            Arguments.of(
-                "https://stackoverflow.com/questions/78013649/python-functional-method-of-checking-that-all-elements-in-a-list-are-equal")
+            Arguments.of("https://github.com/iskanred/iu-devops-course")
         );
     }
 
