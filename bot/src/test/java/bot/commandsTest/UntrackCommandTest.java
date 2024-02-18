@@ -30,6 +30,7 @@ public class UntrackCommandTest {
     private Command untrackCommand = new UntrackCommand(links);
     private static final User USER = new User(1L);
     private static final String GIT_HUB = "https://github.com/onevoker";
+    private static final Link GIT_HUB_LINK = new Link(USER.id(), GIT_HUB);
 
     private void setUpMocksWithUntrackCommandFromTelegram(String messageFromTelegram) {
         doReturn(message).when(update).message();
@@ -101,7 +102,7 @@ public class UntrackCommandTest {
 
     @Test
     void testUntrackLink() {
-        links.addUserLink(new Link(USER.id(), GIT_HUB));
+        links.addUserLink(GIT_HUB_LINK);
         setUpMocksWithUntrackCommandFromTelegram("/untrack " + GIT_HUB);
 
         String expectedHandleText = "Прекратили отслеживание данной ссылки";

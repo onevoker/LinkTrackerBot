@@ -3,12 +3,9 @@ package edu.java.bot.links;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
-import java.util.logging.Level;
-import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-@Log
 public record Link(Long userId, String stringLink) {
     private static final String GITHUB_DOMAIN = "github.com";
     private static final String STACK_OVERFLOW_DOMAIN = "stackoverflow.com";
@@ -24,19 +21,14 @@ public record Link(Long userId, String stringLink) {
 
     private boolean isCorrectUri(String link) {
         try {
-            log.log(Level.INFO, "Проверяем ссылку...");
             RestTemplate restTemplate = new RestTemplate();
-            log.log(Level.INFO, "Создаем запрос");
             ResponseEntity<String> response = restTemplate.getForEntity(link, String.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                log.log(Level.INFO, "Статус код корректный");
                 return isValidResource(link);
             }
-            log.log(Level.INFO, "Статус код не корректный");
             return false;
         } catch (Exception e) {
-            log.log(Level.INFO, "Сработал catch " + e.getMessage());
             return false;
         }
     }

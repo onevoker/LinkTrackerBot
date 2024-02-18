@@ -14,10 +14,10 @@ public class LinkRepositoryTest {
     private static final Long userId = 1L;
     private User user;
     private static final String GIT_HUB = "https://github.com";
-    private static final String STACK = "https://stackoverflow.com";
+    private static final String GIT_HUB_TKF = "https://github.com/onevoker/Tkf";
     private static final String MY_GITHUB = "https://github.com/onevoker";
     private Link MY_GITHUB_LINK;
-    private Link STACK_LINK;
+    private Link GIT_HUB_TKF_LINK;
     private Link GIT_HUB_LINK;
 
     @BeforeEach
@@ -25,18 +25,18 @@ public class LinkRepositoryTest {
         this.links = new LinkRepository();
         this.user = new User(userId);
         this.MY_GITHUB_LINK = new Link(userId, MY_GITHUB);
-        this.STACK_LINK = new Link(userId, STACK);
+        this.GIT_HUB_TKF_LINK = new Link(userId, GIT_HUB_TKF);
         this.GIT_HUB_LINK = new Link(userId, GIT_HUB);
     }
 
     @Test
     void testIsInUserLinks() {
         links.addUserLink(GIT_HUB_LINK);
-        links.addUserLink(STACK_LINK);
+        links.addUserLink(GIT_HUB_TKF_LINK);
 
         assertAll(
             () -> assertThat(links.isInUserLinks(GIT_HUB_LINK)).isTrue(),
-            () -> assertThat(links.isInUserLinks(STACK_LINK)).isTrue()
+            () -> assertThat(links.isInUserLinks(GIT_HUB_TKF_LINK)).isTrue()
         );
     }
 
@@ -51,10 +51,11 @@ public class LinkRepositoryTest {
 
     @Test
     void testAddUserLink() {
-        Link unnormalizeLink = new Link(userId, "https://github.com////////////////");
+        String strLink = "https://github.com////////////////";
+        Link unnormalizeLink = new Link(userId, strLink);
         links.addUserLink(GIT_HUB_LINK);
         links.addUserLink(unnormalizeLink);
-        links.addUserLink(STACK_LINK);
+        links.addUserLink(GIT_HUB_TKF_LINK);
         links.addUserLink(MY_GITHUB_LINK);
         Set<Link> userLinks = links.getUserLinks(user);
 
@@ -64,7 +65,7 @@ public class LinkRepositoryTest {
     @Test
     void deleteUserLink() {
         links.addUserLink(GIT_HUB_LINK);
-        links.addUserLink(STACK_LINK);
+        links.addUserLink(GIT_HUB_TKF_LINK);
 
         links.deleteUserLink(GIT_HUB_LINK);
         links.deleteUserLink(GIT_HUB_LINK);
@@ -72,7 +73,7 @@ public class LinkRepositoryTest {
         assertAll(
             () -> assertThat(links.getUserLinks(user).size()).isEqualTo(1),
             () -> {
-                links.deleteUserLink(STACK_LINK);
+                links.deleteUserLink(GIT_HUB_TKF_LINK);
                 assertThat(links.getUserLinks(user).size()).isEqualTo(0);
             }
         );
@@ -81,12 +82,12 @@ public class LinkRepositoryTest {
     @Test
     void testGetUserLinks() {
         links.addUserLink(GIT_HUB_LINK);
-        links.addUserLink(STACK_LINK);
+        links.addUserLink(GIT_HUB_TKF_LINK);
         links.addUserLink(MY_GITHUB_LINK);
 
         Set<Link> expected = Set.of(
             new Link(userId, GIT_HUB),
-            new Link(userId, STACK),
+            new Link(userId, GIT_HUB_TKF),
             new Link(userId, MY_GITHUB)
         );
 
@@ -96,6 +97,6 @@ public class LinkRepositoryTest {
     @Test
     void testIsNotInUserLinks() {
         links.addUserLink(GIT_HUB_LINK);
-        assertThat(links.isInUserLinks(STACK_LINK)).isFalse();
+        assertThat(links.isInUserLinks(GIT_HUB_TKF_LINK)).isFalse();
     }
 }

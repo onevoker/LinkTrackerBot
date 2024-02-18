@@ -93,9 +93,10 @@ public class TrackCommandTest {
     void testTrackLinkTwice() {
         setUpMocksWithTrackCommandFromTelegram("/track " + GIT_HUB);
 
-        String expectedHandleText = "Ссылка уже добавлена, для просмотра ссылок введите /list";
         SendMessage firstTracking = trackCommand.handle(update);
         SendMessage secondTracking = trackCommand.handle(update);
+
+        String expectedHandleText = "Ссылка уже добавлена, для просмотра ссылок введите /list";
         SendMessage expected = new SendMessage(-1L, expectedHandleText);
 
         assertThat(secondTracking.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
