@@ -26,7 +26,7 @@ public class LinkRepositoryTest {
         this.links = new LinkRepository();
         this.user = new User(userId);
         this.MY_GITHUB_LINK = new Link(userId, MY_GITHUB);
-        this.STACK_LINK = new Link(userId, STACK);
+        //this.STACK_LINK = new Link(userId, STACK);
         this.GIT_HUB_LINK = new Link(userId, GIT_HUB);
     }
 
