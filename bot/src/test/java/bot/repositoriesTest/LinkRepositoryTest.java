@@ -5,7 +5,6 @@ import edu.java.bot.links.Link;
 import edu.java.bot.repositories.LinkRepository;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -26,11 +25,10 @@ public class LinkRepositoryTest {
         this.links = new LinkRepository();
         this.user = new User(userId);
         this.MY_GITHUB_LINK = new Link(userId, MY_GITHUB);
-        //this.STACK_LINK = new Link(userId, STACK);
+        this.STACK_LINK = new Link(userId, STACK);
         this.GIT_HUB_LINK = new Link(userId, GIT_HUB);
     }
 
-    @Disabled
     @Test
     void testIsInUserLinks() {
         links.addUserLink(GIT_HUB_LINK);
@@ -51,7 +49,6 @@ public class LinkRepositoryTest {
         assertThat(userLinks.size()).isEqualTo(1);
     }
 
-    @Disabled
     @Test
     void testAddUserLink() {
         Link unnormalizeLink = new Link(userId, "https://github.com////////////////");
@@ -64,7 +61,6 @@ public class LinkRepositoryTest {
         assertThat(userLinks.size()).isEqualTo(3);
     }
 
-    @Disabled
     @Test
     void deleteUserLink() {
         links.addUserLink(GIT_HUB_LINK);
@@ -82,7 +78,6 @@ public class LinkRepositoryTest {
         );
     }
 
-    @Disabled
     @Test
     void testGetUserLinks() {
         links.addUserLink(GIT_HUB_LINK);
@@ -98,7 +93,6 @@ public class LinkRepositoryTest {
         assertThat(links.getUserLinks(user)).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expected);
     }
 
-    @Disabled
     @Test
     void testIsNotInUserLinks() {
         links.addUserLink(GIT_HUB_LINK);
