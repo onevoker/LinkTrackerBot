@@ -36,8 +36,8 @@ public record Link(Long userId, String stringLink) {
     private boolean isValidResource(String link) {
         try {
             URI uri = new URI(link);
-            return Objects.equals(uri.getHost(), GIT_HUB_DOMAIN) ||
-                Objects.equals(uri.getHost(), STACK_OVERFLOW_DOMAIN);
+            return Objects.equals(uri.getHost(), GIT_HUB_DOMAIN)
+                || Objects.equals(uri.getHost(), STACK_OVERFLOW_DOMAIN);
         } catch (URISyntaxException e) {
             return false;
         }
