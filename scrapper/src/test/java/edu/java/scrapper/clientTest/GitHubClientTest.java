@@ -1,4 +1,4 @@
-package edu.java.clientTest;
+package edu.java.scrapper.clientTest;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
