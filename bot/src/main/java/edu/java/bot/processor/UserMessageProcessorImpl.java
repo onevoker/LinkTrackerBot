@@ -10,26 +10,30 @@ import edu.java.bot.commands.ListCommand;
 import edu.java.bot.commands.StartCommand;
 import edu.java.bot.commands.TrackCommand;
 import edu.java.bot.commands.UntrackCommand;
-import edu.java.bot.repositories.LinkRepository;
-import edu.java.bot.repositories.UserRepository;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class UserMessageProcessorImpl implements UserMessageProcessor {
-    private final LinkRepository links = new LinkRepository();
-    private final UserRepository users = new UserRepository();
-    private final List<? extends Command> listOfCommands = List.of(
-        new HelpCommand(),
-        new ListCommand(links),
-        new StartCommand(users),
-        new TrackCommand(links),
-        new UntrackCommand(links)
-    );
+    private final HelpCommand helpCommand;
+    private final ListCommand listCommand;
+    private final StartCommand startCommand;
+    private final TrackCommand trackCommand;
+    private final UntrackCommand untrackCommand;
     private static final String UNKNOWN_COMMAND_TEXT =
         "Мне не известна эта команда, для получения доступных команд воспользуйтесь командой /help";
 
     @Override
     public List<? extends Command> commands() {
-        return listOfCommands;
+        return List.of(
+            helpCommand,
+            listCommand,
+            startCommand,
+            trackCommand,
+            untrackCommand
+        );
     }
 
     @Override

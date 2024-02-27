@@ -7,17 +7,17 @@ import edu.java.bot.links.Link;
 import edu.java.bot.repositories.LinkRepository;
 import java.util.Collection;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class ListCommand implements Command {
     private final LinkRepository links;
     private static final String COMMAND = "/list";
     private static final String DESCRIPTION = "Список ссылок";
     private static final String HANDLE_TEXT = "Список ваших отслеживаемых ссылок:\n";
     private static final String NOT_LINKED_MESSAGE = "Вы не отслеживаете ни одной ссылки(((";
-
-    public ListCommand(LinkRepository links) {
-        this.links = links;
-    }
 
     @Override
     public String command() {

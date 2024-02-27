@@ -6,10 +6,16 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.links.InvalidLinkException;
 import edu.java.bot.links.Link;
+import edu.java.bot.links.LinkFactory;
 import edu.java.bot.repositories.LinkRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class UntrackCommand implements Command {
     private final LinkRepository links;
+    private final LinkFactory linkFactory;
     private static final int BEGIN_LINK_INDEX = 9;
     private static final String COMMAND = "/untrack";
     private static final String DESCRIPTION = "Прекращение отслеживания ссылки";
@@ -17,10 +23,6 @@ public class UntrackCommand implements Command {
     private static final String NOT_LINKED_TEXT = "Вы не отслеживаете данную ссылку";
     private static final String INCORRECT_LINK_TEXT = "Вы указали неправильную ссылку, возможно вам поможет /help";
     private static final String NO_LINK_TEXT = "Укажите что перестать отслеживать. Пример /untrack ,,ваша_ссылка,,";
-
-    public UntrackCommand(LinkRepository links) {
-        this.links = links;
-    }
 
     @Override
     public String command() {
@@ -48,7 +50,7 @@ public class UntrackCommand implements Command {
         try {
             String strLink = message.text().substring(BEGIN_LINK_INDEX);
             try {
-                Link link = new Link(userID, strLink);
+                Link link = linkFactory.createLink(userID, strLink);
                 boolean isInUserLinks = links.isInUserLinks(link);
                 if (isInUserLinks) {
                     links.deleteUserLink(link);

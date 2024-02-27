@@ -11,26 +11,22 @@ import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.processor.UserMessageProcessor;
-import edu.java.bot.processor.UserMessageProcessorImpl;
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
+@Log4j2
+@RequiredArgsConstructor
 public class LinkTrackerBot implements Bot {
-    private final static Logger LOGGER = LogManager.getLogger();
 
-    private final UserMessageProcessor messageProcessor = new UserMessageProcessorImpl();
+    private final UserMessageProcessor userMessageProcessor;
 
     private final ApplicationConfig applicationConfig;
     private TelegramBot bot;
-
-    public LinkTrackerBot(ApplicationConfig applicationConfig) {
-        this.applicationConfig = applicationConfig;
-    }
 
     @Override
     public <T extends BaseRequest<T, R>, R extends BaseResponse> void execute(BaseRequest<T, R> request) {
@@ -40,10 +36,10 @@ public class LinkTrackerBot implements Bot {
     @Override
     public int process(List<Update> updates) {
         for (Update update : updates) {
-            SendMessage response = messageProcessor.process(update);
+            SendMessage response = userMessageProcessor.process(update);
             SendResponse sendResponse = bot.execute(response);
             if (!sendResponse.isOk()) {
-                LOGGER.error(sendResponse.errorCode() + " - " + sendResponse.description());
+                log.error(sendResponse.errorCode() + " - " + sendResponse.description());
                 return UpdatesListener.CONFIRMED_UPDATES_NONE;
             }
         }
@@ -66,7 +62,7 @@ public class LinkTrackerBot implements Bot {
 
     private void createMenu() {
         List<BotCommand> listOfCommands = new ArrayList<>();
-        messageProcessor.commands().forEach(command -> listOfCommands.add(command.toApiCommand()));
+        userMessageProcessor.commands().forEach(command -> listOfCommands.add(command.toApiCommand()));
         BotCommand[] commandsArray = listOfCommands.toArray(new BotCommand[0]);
         this.execute(new SetMyCommands(commandsArray));
     }

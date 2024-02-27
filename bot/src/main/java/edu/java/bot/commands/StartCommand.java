@@ -5,17 +5,17 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class StartCommand implements Command {
     private final UserRepository users;
     private static final String COMMAND = "/start";
     private static final String DESCRIPTION = "Начать работу с ботом";
     private static final String HANDLE_TEXT = "Начинаем регистрацию...\nДля получения списка команд используйте /help";
     private static final String REGISTERED_TEXT = "Вы уже были зарегестрированы раньше";
-
-    public StartCommand(UserRepository users) {
-        this.users = users;
-    }
 
     @Override
     public String command() {
