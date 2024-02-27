@@ -13,7 +13,11 @@ public class StackOverflowClient {
 
     public Mono<QuestionResponse> fetchQuestion(long questionId) {
         return stackOverflowWebClient.get()
-            .uri(questionId + "?order=desc&sort=activity&site=stackoverflow")
+            .uri(uriBuilder -> uriBuilder
+                .path("{id}")
+                .queryParam("order", "desc")
+                .queryParam("sort", "activity")
+                .build(questionId))
             .retrieve()
             .bodyToMono(QuestionResponse.class);
     }
