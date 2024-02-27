@@ -1,6 +1,5 @@
 package edu.java.bot.links;
 
-import edu.java.bot.configuration.ApplicationConfig;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -12,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class LinkValidatorService {
-    private final ApplicationConfig applicationConfig;
+    private final List<String> supportedDomains;
 
     public boolean isCorrectUri(String link) {
         try {
@@ -29,7 +28,6 @@ public class LinkValidatorService {
     }
 
     private boolean isValidResource(String link) {
-        List<String> supportedDomains = applicationConfig.supportedDomains();
         try {
             URI uri = new URI(link);
             return supportedDomains.stream()

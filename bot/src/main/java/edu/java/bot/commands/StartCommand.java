@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StartCommand implements Command {
-    private final UserRepository users;
+    private final UserRepository userRepository;
     private static final String COMMAND = "/start";
     private static final String DESCRIPTION = "Начать работу с ботом";
     private static final String HANDLE_TEXT = "Начинаем регистрацию...\nДля получения списка команд используйте /help";
@@ -32,7 +32,7 @@ public class StartCommand implements Command {
         Message message = update.message();
         long chatId = message.chat().id();
         User user = message.from();
-        if (users.isRegistered(user)) {
+        if (userRepository.isRegistered(user)) {
             return new SendMessage(chatId, REGISTERED_TEXT);
         }
 

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ListCommand implements Command {
-    private final LinkRepository links;
+    private final LinkRepository linkRepository;
     private static final String COMMAND = "/list";
     private static final String DESCRIPTION = "Список ссылок";
     private static final String HANDLE_TEXT = "Список ваших отслеживаемых ссылок:\n";
@@ -33,7 +33,7 @@ public class ListCommand implements Command {
     public SendMessage handle(Update update) {
         Message message = update.message();
         long chatId = message.chat().id();
-        Set<Link> userLinks = links.getUserLinks(message.from());
+        Set<Link> userLinks = linkRepository.getUserLinks(message.from());
 
         if (userLinks == null || userLinks.isEmpty()) {
             return new SendMessage(chatId, NOT_LINKED_MESSAGE);

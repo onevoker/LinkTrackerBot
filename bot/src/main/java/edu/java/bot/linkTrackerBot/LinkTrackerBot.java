@@ -10,6 +10,7 @@ import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.bot.exceptions.BlockedChatException;
 import edu.java.bot.processor.UserMessageProcessor;
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -22,11 +23,11 @@ import org.springframework.stereotype.Service;
 @Log4j2
 @RequiredArgsConstructor
 public class LinkTrackerBot implements Bot {
-
     private final UserMessageProcessor userMessageProcessor;
 
     private final ApplicationConfig applicationConfig;
     private TelegramBot bot;
+    private static final String EXECUTED_MESSAGE_FROM_BLOCKED_CHAT = "Разблокировали заблокированный чат";
 
     @Override
     public <T extends BaseRequest<T, R>, R extends BaseResponse> void execute(BaseRequest<T, R> request) {
@@ -35,13 +36,16 @@ public class LinkTrackerBot implements Bot {
 
     @Override
     public int process(List<Update> updates) {
-        for (Update update : updates) {
-            SendMessage response = userMessageProcessor.process(update);
-            SendResponse sendResponse = bot.execute(response);
-            if (!sendResponse.isOk()) {
-                log.error(sendResponse.errorCode() + " - " + sendResponse.description());
-                return UpdatesListener.CONFIRMED_UPDATES_NONE;
+        try {
+            for (Update update : updates) {
+                SendMessage response = userMessageProcessor.process(update);
+                SendResponse sendResponse = bot.execute(response);
+                if (!sendResponse.isOk()) {
+                    log.error(sendResponse.errorCode() + " - " + sendResponse.description());
+                }
             }
+        } catch (BlockedChatException exception) {
+            log.info(EXECUTED_MESSAGE_FROM_BLOCKED_CHAT);
         }
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

@@ -4,7 +4,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.links.InvalidLinkException;
+import edu.java.bot.exceptions.InvalidLinkException;
 import edu.java.bot.links.Link;
 import edu.java.bot.links.LinkFactory;
 import edu.java.bot.repositories.LinkRepository;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UntrackCommand implements Command {
-    private final LinkRepository links;
+    private final LinkRepository linkRepository;
     private final LinkFactory linkFactory;
     private static final int BEGIN_LINK_INDEX = 9;
     private static final String COMMAND = "/untrack";
@@ -51,9 +51,9 @@ public class UntrackCommand implements Command {
             String strLink = message.text().substring(BEGIN_LINK_INDEX);
             try {
                 Link link = linkFactory.createLink(userID, strLink);
-                boolean isInUserLinks = links.isInUserLinks(link);
+                boolean isInUserLinks = linkRepository.isInUserLinks(link);
                 if (isInUserLinks) {
-                    links.deleteUserLink(link);
+                    linkRepository.deleteUserLink(link);
                     answerText = HANDLE_TEXT;
                 } else {
                     answerText = NOT_LINKED_TEXT;
