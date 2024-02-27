@@ -12,7 +12,6 @@ import edu.java.bot.commands.ListCommand;
 import edu.java.bot.commands.StartCommand;
 import edu.java.bot.commands.TrackCommand;
 import edu.java.bot.commands.UntrackCommand;
-import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.links.LinkFactory;
 import edu.java.bot.links.LinkValidatorService;
 import edu.java.bot.processor.UserMessageProcessorImpl;

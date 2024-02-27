@@ -1,6 +1,5 @@
 package bot.linksTest;
 
-import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.exceptions.InvalidLinkException;
 import edu.java.bot.links.Link;
 import edu.java.bot.links.LinkFactory;

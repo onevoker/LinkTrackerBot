@@ -6,7 +6,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.UntrackCommand;
-import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.links.Link;
 import edu.java.bot.links.LinkFactory;
 import edu.java.bot.links.LinkValidatorService;
