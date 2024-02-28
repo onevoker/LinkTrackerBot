@@ -2,9 +2,9 @@ package edu.java.scrapper.clientTest;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.gitHub.client.GitHubClient;
-import edu.java.gitHub.dto.GitHubOwner;
-import edu.java.gitHub.dto.RepositoryResponse;
+import edu.java.scrapper.gitHub.client.GitHubClient;
+import edu.java.scrapper.gitHub.dto.GitHubOwner;
+import edu.java.scrapper.gitHub.dto.RepositoryResponse;
 import java.time.OffsetDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

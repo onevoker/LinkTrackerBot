@@ -6,12 +6,12 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.commands.Command;
-import edu.java.bot.commands.HelpCommand;
-import edu.java.bot.commands.ListCommand;
-import edu.java.bot.commands.StartCommand;
-import edu.java.bot.commands.TrackCommand;
-import edu.java.bot.commands.UntrackCommand;
+import edu.java.bot.commandServices.Command;
+import edu.java.bot.commandServices.HelpCommandService;
+import edu.java.bot.commandServices.ListCommandService;
+import edu.java.bot.commandServices.StartCommandService;
+import edu.java.bot.commandServices.TrackCommandService;
+import edu.java.bot.commandServices.UntrackCommandService;
 import edu.java.bot.exceptions.BlockedChatException;
 import edu.java.bot.links.LinkFactory;
 import edu.java.bot.links.LinkValidatorService;
@@ -60,14 +60,15 @@ public class UserMessageProcessorImplTest {
         LinkRepository linkRepository = new LinkRepository();
         UserRepository userRepository = new UserRepository();
 
-        Command helpCommand = new HelpCommand();
-        Command listCommand = new ListCommand(linkRepository);
-        Command startCommand = new StartCommand(userRepository);
-        Command trackCommand = new TrackCommand(linkRepository, linkFactory);
-        Command untrackCommand = new UntrackCommand(linkRepository, linkFactory);
+        Command helpCommand = new HelpCommandService();
+        Command listCommand = new ListCommandService(linkRepository);
+        Command startCommand = new StartCommandService(userRepository);
+        Command trackCommand = new TrackCommandService(linkRepository, linkFactory);
+        Command untrackCommand = new UntrackCommandService(linkRepository, linkFactory);
+        List<Command> commands = List.of(helpCommand, listCommand, startCommand, trackCommand, untrackCommand);
 
         this.messageProcessor =
-            new UserMessageProcessorImpl(helpCommand, listCommand, startCommand, trackCommand, untrackCommand);
+            new UserMessageProcessorImpl(commands);
     }
 
     @Test
