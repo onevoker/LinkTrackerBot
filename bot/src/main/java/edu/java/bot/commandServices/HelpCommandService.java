@@ -1,9 +1,11 @@
-package edu.java.bot.commands;
+package edu.java.bot.commandServices;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.stereotype.Service;
 
-public class HelpCommand implements Command {
+@Service
+public class HelpCommandService implements CommandService {
     private static final String COMMAND = "/help";
     private static final String DESCRIPTION = "Вам помогут";
     private static final String HANDLE_TEXT =

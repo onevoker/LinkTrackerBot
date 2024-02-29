@@ -1,21 +1,21 @@
-package edu.java.bot.commands;
+package edu.java.bot.commandServices;
 
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-public class StartCommand implements Command {
-    private final UserRepository users;
+@Service
+@RequiredArgsConstructor
+public class StartCommandService implements CommandService {
+    private final UserRepository userRepository;
     private static final String COMMAND = "/start";
     private static final String DESCRIPTION = "Начать работу с ботом";
     private static final String HANDLE_TEXT = "Начинаем регистрацию...\nДля получения списка команд используйте /help";
     private static final String REGISTERED_TEXT = "Вы уже были зарегестрированы раньше";
-
-    public StartCommand(UserRepository users) {
-        this.users = users;
-    }
 
     @Override
     public String command() {
@@ -32,7 +32,7 @@ public class StartCommand implements Command {
         Message message = update.message();
         long chatId = message.chat().id();
         User user = message.from();
-        if (users.isRegistered(user)) {
+        if (userRepository.isRegistered(user)) {
             return new SendMessage(chatId, REGISTERED_TEXT);
         }
 

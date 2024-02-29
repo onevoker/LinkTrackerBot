@@ -1,5 +1,8 @@
 app:
   telegram-token: ${tg-token}
+  supported-domains:
+    - github.com
+    - stackoverflow.com
 
 spring:
   application:

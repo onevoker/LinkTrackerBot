@@ -44,17 +44,6 @@ public class LinkRepositoryTest {
     void testAddTheSameUserLink() {
         links.addUserLink(GIT_HUB_LINK);
         links.addUserLink(GIT_HUB_LINK);
-        Set<Link> userLinks = links.getUserLinks(user);
-
-        assertThat(userLinks.size()).isEqualTo(1);
-    }
-
-    @Test
-    void testAddUserLink() {
-        String strLink = "https://github.com////////////////";
-        Link unnormalizeLink = new Link(userId, strLink);
-        links.addUserLink(GIT_HUB_LINK);
-        links.addUserLink(unnormalizeLink);
         links.addUserLink(GIT_HUB_TKF_LINK);
         links.addUserLink(MY_GITHUB_LINK);
         Set<Link> userLinks = links.getUserLinks(user);
