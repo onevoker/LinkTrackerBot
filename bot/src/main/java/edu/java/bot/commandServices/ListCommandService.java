@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ListCommandService implements Command {
+public class ListCommandService implements CommandService {
     private final LinkRepository linkRepository;
     private static final String COMMAND = "/list";
     private static final String DESCRIPTION = "Список ссылок";

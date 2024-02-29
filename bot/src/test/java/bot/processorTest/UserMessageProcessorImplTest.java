@@ -6,7 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.commandServices.Command;
+import edu.java.bot.commandServices.CommandService;
 import edu.java.bot.commandServices.HelpCommandService;
 import edu.java.bot.commandServices.ListCommandService;
 import edu.java.bot.commandServices.StartCommandService;
@@ -60,12 +60,12 @@ public class UserMessageProcessorImplTest {
         LinkRepository linkRepository = new LinkRepository();
         UserRepository userRepository = new UserRepository();
 
-        Command helpCommand = new HelpCommandService();
-        Command listCommand = new ListCommandService(linkRepository);
-        Command startCommand = new StartCommandService(userRepository);
-        Command trackCommand = new TrackCommandService(linkRepository, linkFactory);
-        Command untrackCommand = new UntrackCommandService(linkRepository, linkFactory);
-        List<Command> commands = List.of(helpCommand, listCommand, startCommand, trackCommand, untrackCommand);
+        CommandService helpCommand = new HelpCommandService();
+        CommandService listCommand = new ListCommandService(linkRepository);
+        CommandService startCommand = new StartCommandService(userRepository);
+        CommandService trackCommand = new TrackCommandService(linkRepository, linkFactory);
+        CommandService untrackCommand = new UntrackCommandService(linkRepository, linkFactory);
+        List<CommandService> commands = List.of(helpCommand, listCommand, startCommand, trackCommand, untrackCommand);
 
         this.messageProcessor =
             new UserMessageProcessorImpl(commands);

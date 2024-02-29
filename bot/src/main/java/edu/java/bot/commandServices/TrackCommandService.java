@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class TrackCommandService implements Command {
+public class TrackCommandService implements CommandService {
     private final LinkRepository linkRepository;
     private final LinkFactory linkFactory;
     private static final int BEGIN_LINK_INDEX = 7;

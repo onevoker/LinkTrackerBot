@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HelpCommandService implements Command {
+public class HelpCommandService implements CommandService {
     private static final String COMMAND = "/help";
     private static final String DESCRIPTION = "Вам помогут";
     private static final String HANDLE_TEXT =

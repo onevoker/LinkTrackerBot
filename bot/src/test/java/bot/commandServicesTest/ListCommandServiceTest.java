@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.commandServices.Command;
+import edu.java.bot.commandServices.CommandService;
 import edu.java.bot.commandServices.ListCommandService;
 import edu.java.bot.links.Link;
 import edu.java.bot.repositories.LinkRepository;
@@ -28,7 +28,7 @@ public class ListCommandServiceTest {
     private Update update;
     private final LinkRepository links = new LinkRepository();
     @InjectMocks
-    private Command listCommand = new ListCommandService(links);
+    private CommandService listCommand = new ListCommandService(links);
     private static final User USER = new User(1L);
 
     @Test

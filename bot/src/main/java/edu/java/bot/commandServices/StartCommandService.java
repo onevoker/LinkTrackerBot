@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class StartCommandService implements Command {
+public class StartCommandService implements CommandService {
     private final UserRepository userRepository;
     private static final String COMMAND = "/start";
     private static final String DESCRIPTION = "Начать работу с ботом";
