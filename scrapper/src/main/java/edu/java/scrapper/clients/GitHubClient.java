@@ -1,6 +1,6 @@
-package edu.java.scrapper.gitHub.client;
+package edu.java.scrapper.clients;
 
-import edu.java.scrapper.gitHub.dto.RepositoryResponse;
+import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;

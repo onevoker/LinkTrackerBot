@@ -1,6 +1,6 @@
-package edu.java.scrapper.stackOverflow.client;
+package edu.java.scrapper.clients;
 
-import edu.java.scrapper.stackOverflow.dto.QuestionResponse;
+import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
