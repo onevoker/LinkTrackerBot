@@ -1,10 +1,8 @@
 package edu.java.scrapper.dto.response;
 
-import jakarta.validation.constraints.Pattern;
+import java.net.URI;
 
 public record LinkResponse(
     int id,
-    @Pattern(regexp = "https?://.*")
-    String url
-) {
+    URI url) {
 }

@@ -9,6 +9,5 @@ public record ApiErrorResponse(
     String code,
     String exceptionName,
     String exceptionMessage,
-    List<String> stacktrace
-) {
+    List<String> stacktrace) {
 }

@@ -8,6 +8,9 @@ app:
     git-hub-base-url: https://api.github.com/repos/
     stack-overflow-base-url: https://api.stackexchange.com/2.3/questions/
 
+  bot-base-url: http://localhost:8090
+
+
 spring:
   application:
     name: scrapper

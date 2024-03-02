@@ -5,6 +5,8 @@ app:
     - github.com
     - stackoverflow.com
 
+  scrapper-base-url: http://localhost:8080
+
 spring:
   application:
     name: bot

@@ -12,7 +12,8 @@ public record ApplicationConfig(
     @NotNull
     @Bean
     Scheduler scheduler,
-    BaseUrls urls
+    BaseUrls urls,
+    String botBaseUrl
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

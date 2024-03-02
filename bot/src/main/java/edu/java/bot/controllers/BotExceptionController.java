@@ -1,12 +1,12 @@
 package edu.java.bot.controllers;
 
 import edu.java.bot.dto.response.ApiErrorResponse;
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import java.util.Arrays;
-import java.util.List;
 
 @RestControllerAdvice
 public class BotExceptionController {

@@ -12,6 +12,7 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
     @Bean
-    List<String> supportedDomains
+    List<String> supportedDomains,
+    String scrapperBaseUrl
 ) {
 }

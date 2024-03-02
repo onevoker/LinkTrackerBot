@@ -6,6 +6,7 @@ import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.dto.response.ListLinksResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import java.net.URI;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LinkController {
     @GetMapping
     public ListLinksResponse getTrackedLinks(@RequestHeader("Tg-Chat-Id") @Positive int chatId) {
-        String url = "https://github.com/onevoker/repos/LinkTrackerBot";
+        URI url = URI.create("https://github.com/onevoker/repos/LinkTrackerBot");
         LinkResponse linkResponse = new LinkResponse(chatId, url);
 
         return new ListLinksResponse(List.of(linkResponse), 1);
@@ -31,7 +32,7 @@ public class LinkController {
         @RequestHeader("Tg-Chat-Id") @Positive int chatId,
         @RequestBody @Valid AddLinkRequest addLinkRequest
     ) {
-        String link = addLinkRequest.link();
+        URI link = addLinkRequest.url();
 
         return new LinkResponse(chatId, link);
     }
@@ -41,6 +42,6 @@ public class LinkController {
         @RequestHeader("Tg-Chat-Id") @Positive int chatId,
         @RequestBody @Valid RemoveLinkRequest removeLinkRequest
     ) {
-        return new LinkResponse(chatId, removeLinkRequest.link());
+        return new LinkResponse(chatId, removeLinkRequest.url());
     }
 }

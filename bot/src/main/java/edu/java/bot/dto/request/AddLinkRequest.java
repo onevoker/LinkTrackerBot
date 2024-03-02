@@ -1,8 +1,6 @@
 package edu.java.bot.dto.request;
 
-import jakarta.validation.constraints.Pattern;
+import java.net.URI;
 
-public record AddLinkRequest(
-    @Pattern(regexp = "https?://.*")
-    String link) {
+public record AddLinkRequest(URI url) {
 }

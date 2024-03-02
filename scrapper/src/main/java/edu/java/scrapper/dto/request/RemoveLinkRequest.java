@@ -1,8 +1,6 @@
 package edu.java.scrapper.dto.request;
 
-import jakarta.validation.constraints.Pattern;
+import java.net.URI;
 
-public record RemoveLinkRequest(
-    @Pattern(regexp = "https?://.*")
-    String link) {
+public record RemoveLinkRequest(URI url) {
 }
