@@ -2,23 +2,86 @@ package edu.java.scrapper.controllers.telegramConrollers;
 
 import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
+import edu.java.scrapper.controllers.exceptions.InvalidLinkResponseException;
+import edu.java.scrapper.controllers.exceptions.LinkWasNotTrackedException;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
 import edu.java.scrapper.controllers.exceptions.ScrapperException;
 import edu.java.scrapper.dto.response.ApiErrorResponse;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 @RestControllerAdvice
 public class ScrapperExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiErrorResponse handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
-        List<String> stackTrace = Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList();
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
         String description = Arrays.toString(exception.getDetailMessageArguments());
         HttpStatusCode statusCode = exception.getStatusCode();
+
+        return ResponseEntity.status(statusCode).body(getDefaultErrorResponse(exception, statusCode, description));
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(HandlerMethodValidationException exception) {
+        String description = Arrays.toString(exception.getDetailMessageArguments());
+        HttpStatusCode statusCode = exception.getStatusCode();
+
+        return ResponseEntity.status(statusCode).body(getDefaultErrorResponse(exception, statusCode, description));
+    }
+
+    @ExceptionHandler(ChatAlreadyRegisteredException.class)
+    public ResponseEntity<ApiErrorResponse> handleChatAlreadyRegistered(ChatAlreadyRegisteredException exception) {
+        return ResponseEntity.status(exception.getStatusCode())
+            .body(getApiErrorResponseForCustomExceptions(exception));
+    }
+
+    @ExceptionHandler(ChatNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleChatNotFound(ChatNotFoundException exception) {
+        return ResponseEntity.status(exception.getStatusCode())
+            .body(getApiErrorResponseForCustomExceptions(exception));
+    }
+
+    @ExceptionHandler(LinkWasTrackedException.class)
+    public ResponseEntity<ApiErrorResponse> handleLinkWasTracked(LinkWasTrackedException exception) {
+        return ResponseEntity.status(exception.getStatusCode())
+            .body(getApiErrorResponseForCustomExceptions(exception));
+    }
+
+    @ExceptionHandler(LinkWasNotTrackedException.class)
+    public ResponseEntity<ApiErrorResponse> handleLinkWasTracked(LinkWasNotTrackedException exception) {
+        return ResponseEntity.status(exception.getStatusCode())
+            .body(getApiErrorResponseForCustomExceptions(exception));
+    }
+
+    @ExceptionHandler(InvalidLinkResponseException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidLink(InvalidLinkResponseException exception) {
+        return ResponseEntity.status(exception.getStatusCode())
+            .body(getApiErrorResponseForCustomExceptions(exception));
+    }
+
+    private ApiErrorResponse getApiErrorResponseForCustomExceptions(ScrapperException exception) {
+        List<String> stackTrace = Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList();
+
+        return ApiErrorResponse.builder()
+            .description(exception.getDescription())
+            .code(exception.getStatusCode().toString())
+            .exceptionName(exception.getClass().getSimpleName())
+            .exceptionMessage(exception.getMessage())
+            .stacktrace(stackTrace)
+            .build();
+    }
+
+    private ApiErrorResponse getDefaultErrorResponse(
+        Exception exception,
+        HttpStatusCode statusCode,
+        String description
+    ) {
+        List<String> stackTrace = Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList();
         String exceptionName = exception.getClass().getSimpleName();
         String exceptionMessage = exception.getMessage();
 
@@ -27,33 +90,6 @@ public class ScrapperExceptionController {
             .code(statusCode.toString())
             .exceptionName(exceptionName)
             .exceptionMessage(exceptionMessage)
-            .stacktrace(stackTrace)
-            .build();
-    }
-
-    @ExceptionHandler(ChatAlreadyRegisteredException.class)
-    public ApiErrorResponse handleChatAlreadyRegistered(ChatAlreadyRegisteredException exception) {
-        return getErrorResponse(exception);
-    }
-
-    @ExceptionHandler(ChatNotFoundException.class)
-    public ApiErrorResponse handleChatNotFound(ChatNotFoundException exception) {
-        return getErrorResponse(exception);
-    }
-
-    @ExceptionHandler(LinkWasTrackedException.class)
-    public ApiErrorResponse handleLinkWasTracked(LinkWasTrackedException exception) {
-        return getErrorResponse(exception);
-    }
-
-    private ApiErrorResponse getErrorResponse(ScrapperException exception) {
-        List<String> stackTrace = Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList();
-
-        return ApiErrorResponse.builder()
-            .description(exception.getDescription())
-            .code(exception.getStatusCode().toString())
-            .exceptionName(exception.getClass().getSimpleName())
-            .exceptionMessage(exception.getMessage())
             .stacktrace(stackTrace)
             .build();
     }

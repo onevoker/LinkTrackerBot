@@ -2,6 +2,7 @@ package edu.java.scrapper.configuration;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
+import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +14,9 @@ public record ApplicationConfig(
     @Bean
     Scheduler scheduler,
     BaseUrls urls,
-    String botBaseUrl
+    String botBaseUrl,
+    @Bean
+    List<String> supportedDomains
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

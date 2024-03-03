@@ -3,48 +3,50 @@ package bot.commandServicesTest;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.commandServices.CommandService;
+import edu.java.bot.clients.ScrapperLinkClient;
 import edu.java.bot.commandServices.ListCommandService;
-import edu.java.bot.links.Link;
-import edu.java.bot.repositories.LinkRepository;
+import edu.java.bot.dto.response.LinkResponse;
+import edu.java.bot.dto.response.ListLinksResponse;
+import java.net.URI;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 public class ListCommandServiceTest {
+    private static final long CHAT_ID = 1L;
     @Mock
     private Message message;
     @Mock
     private Chat chat;
     @Mock
     private Update update;
-    private final LinkRepository links = new LinkRepository();
+    @Mock
+    private ScrapperLinkClient linkClient;
     @InjectMocks
-    private CommandService listCommand = new ListCommandService(links);
-    private static final User USER = new User(1L);
+    private ListCommandService listCommand;
 
     @Test
     void testHandle() {
-        String strLink = "https://github.com/onevoker";
-        Link link = new Link(USER.id(), strLink);
-        links.addUserLink(link);
+        String link = "https://github.com/onevoker";
+        List<LinkResponse> list = List.of(new LinkResponse(CHAT_ID, URI.create(link)));
+        ListLinksResponse listLinksResponse = new ListLinksResponse(list, list.size());
 
         doReturn(message).when(update).message();
-        doReturn(USER).when(message).from();
         doReturn(chat).when(message).chat();
-        doReturn(-1L).when(chat).id();
+        doReturn(CHAT_ID).when(chat).id();
+        doReturn(listLinksResponse).when(linkClient).getTrackedLinks(CHAT_ID);
+        this.listCommand = new ListCommandService(linkClient);
 
         String expectedHandleText = "Список ваших отслеживаемых ссылок:\n1. https://github.com/onevoker\n";
         SendMessage result = listCommand.handle(update);
-        SendMessage expected = new SendMessage(-1L, expectedHandleText);
+        SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }

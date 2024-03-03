@@ -3,16 +3,16 @@ package bot.commandServicesTest;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.clients.ScrapperTelegramChatClient;
 import edu.java.bot.commandServices.StartCommandService;
-import edu.java.bot.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,23 +23,23 @@ public class StartCommandServiceTest {
     private Chat chat;
     @Mock
     private Update update;
-    private final UserRepository users = new UserRepository();
+    @Mock
+    private ScrapperTelegramChatClient chatClient;
 
     @InjectMocks
-    private StartCommandService startCommandService = new StartCommandService(users);
-
-    private static final User USER = new User(1L);
+    private StartCommandService startCommandService;
 
     @Test
     void testHandle() {
         doReturn(message).when(update).message();
         doReturn(chat).when(message).chat();
-        doReturn(USER).when(message).from();
-        doReturn(-1L).when(chat).id();
+        doReturn(1L).when(chat).id();
+        doNothing().when(chatClient).registerChat(1);
+        startCommandService = new StartCommandService(chatClient);
 
         String expectedHandleText = "Начинаем регистрацию...\nДля получения списка команд используйте /help";
         SendMessage result = startCommandService.handle(update);
-        SendMessage expected = new SendMessage(-1L, expectedHandleText);
+        SendMessage expected = new SendMessage(1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }

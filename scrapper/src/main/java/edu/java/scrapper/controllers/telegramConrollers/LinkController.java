@@ -4,10 +4,12 @@ import edu.java.scrapper.dto.request.AddLinkRequest;
 import edu.java.scrapper.dto.request.RemoveLinkRequest;
 import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.dto.response.ListLinksResponse;
+import edu.java.scrapper.linkWorkers.LinkResponseFactory;
+import edu.java.scrapper.repositories.LinkResponseRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import java.net.URI;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,30 +20,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/links")
+@RequiredArgsConstructor
 public class LinkController {
-    @GetMapping
-    public ListLinksResponse getTrackedLinks(@RequestHeader("Tg-Chat-Id") @Positive int chatId) {
-        URI url = URI.create("https://github.com/onevoker/repos/LinkTrackerBot");
-        LinkResponse linkResponse = new LinkResponse(chatId, url);
+    private final LinkResponseRepository linkResponseRepository;
+    private final LinkResponseFactory linkFactory;
 
-        return new ListLinksResponse(List.of(linkResponse), 1);
+    @GetMapping
+    public ListLinksResponse getTrackedLinks(@RequestHeader("Tg-Chat-Id") @Positive long chatId) {
+        return linkResponseRepository.getUserLinks(chatId);
     }
 
     @PostMapping
     public LinkResponse trackLink(
-        @RequestHeader("Tg-Chat-Id") @Positive int chatId,
+        @RequestHeader("Tg-Chat-Id") @Positive long chatId,
         @RequestBody @Valid AddLinkRequest addLinkRequest
     ) {
-        URI link = addLinkRequest.url();
+        URI url = addLinkRequest.url();
+        LinkResponse linkResponse = linkFactory.createLink(chatId, url);
+        linkResponseRepository.addUserLink(linkResponse);
 
-        return new LinkResponse(chatId, link);
+        return linkResponse;
     }
 
     @DeleteMapping
     public LinkResponse untrackLink(
-        @RequestHeader("Tg-Chat-Id") @Positive int chatId,
+        @RequestHeader("Tg-Chat-Id") @Positive long chatId,
         @RequestBody @Valid RemoveLinkRequest removeLinkRequest
     ) {
+        URI url = removeLinkRequest.url();
+        LinkResponse linkResponse = linkFactory.createLink(chatId, url);
+        linkResponseRepository.deleteUserLink(linkResponse);
+
         return new LinkResponse(chatId, removeLinkRequest.url());
     }
 }

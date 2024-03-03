@@ -11,7 +11,7 @@ import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.exceptions.BlockedChatException;
-import edu.java.bot.processor.UserMessageProcessor;
+import edu.java.bot.messageProcessor.UserMessageProcessor;
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;

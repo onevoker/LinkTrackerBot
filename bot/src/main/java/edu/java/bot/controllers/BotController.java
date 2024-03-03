@@ -14,6 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BotController {
     @PostMapping
     public void sendUpdate(@RequestBody @Valid LinkUpdateRequest updateRequest) {
-        log.info("send update");
+        log.info("got updates");
     }
 }

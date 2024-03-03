@@ -1,9 +1,10 @@
-package bot.linksTest;
+package edu.java.scrapper.linkWorkersTest;
 
-import edu.java.bot.exceptions.InvalidLinkException;
-import edu.java.bot.links.Link;
-import edu.java.bot.links.LinkFactory;
-import edu.java.bot.links.LinkValidatorService;
+import edu.java.scrapper.controllers.exceptions.InvalidLinkResponseException;
+import edu.java.scrapper.dto.response.LinkResponse;
+import edu.java.scrapper.linkWorkers.LinkResponseFactory;
+import edu.java.scrapper.linkWorkers.LinkResponseValidatorService;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,18 +14,18 @@ import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class LinkFactoryTest {
-    private static final List<String> supportedDomains = List.of(
+public class LinkResponseFactoryTest {
+    private static final List<String> SUPPORTED_DOMAINS = List.of(
         "github.com",
         "stackoverflow.com"
     );
-    private static final Long userId = 1L;
-    private static LinkFactory linkFactory;
+    private static final int USER_ID = 1;
+    private static LinkResponseFactory linkFactory;
 
     @BeforeAll
     public static void setUp() {
-        LinkValidatorService linkValidatorService = new LinkValidatorService(supportedDomains);
-        linkFactory = new LinkFactory(linkValidatorService);
+        LinkResponseValidatorService linkValidatorService = new LinkResponseValidatorService(SUPPORTED_DOMAINS);
+        linkFactory = new LinkResponseFactory(linkValidatorService);
     }
 
     public static Stream<Arguments> getCorrectUri() {
@@ -40,7 +41,6 @@ public class LinkFactoryTest {
         return Stream.of(
             Arguments.of("https://open.spotify.com"),
             Arguments.of("https://www.youtube.com/"),
-            Arguments.of("https://github.com/32149085901951"),
             Arguments.of("https://translate.yandex.ru/"),
             Arguments.of("link"),
             Arguments.of("14032005"),
@@ -52,14 +52,16 @@ public class LinkFactoryTest {
     @ParameterizedTest
     @MethodSource("getCorrectUri")
     void testCorrectUri(String strLink) {
-        Link link = linkFactory.createLink(userId, strLink);
-        assertThat(link.stringLink()).isEqualTo(strLink);
+        URI url = URI.create(strLink);
+        LinkResponse link = linkFactory.createLink(USER_ID, url);
+        assertThat(link.url().toString()).isEqualTo(strLink);
     }
 
     @ParameterizedTest
     @MethodSource("getUncorrectUri")
     void testUnCorrectUri(String strLink) {
-        var exception = assertThrows(InvalidLinkException.class, () -> linkFactory.createLink(userId, strLink));
-        assertThat(exception.getMessage()).isEqualTo("Invalid link");
+        URI url = URI.create(strLink);
+        var exception = assertThrows(InvalidLinkResponseException.class, () -> linkFactory.createLink(USER_ID, url));
+        assertThat(exception.getMessage()).isEqualTo("Вы указали неправильную ссылку, возможно вам поможет /help");
     }
 }

@@ -3,6 +3,6 @@ package edu.java.bot.dto.response;
 import java.net.URI;
 
 public record LinkResponse(
-    int id,
+    long id,
     URI url) {
 }

@@ -10,6 +10,10 @@ app:
 
   bot-base-url: http://localhost:8090
 
+  supported-domains:
+    - github.com
+    - stackoverflow.com
+
 
 spring:
   application:

@@ -3,14 +3,14 @@ package bot.commandServicesTest;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.clients.ScrapperLinkClient;
 import edu.java.bot.commandServices.TrackCommandService;
-import edu.java.bot.links.LinkFactory;
-import edu.java.bot.links.LinkValidatorService;
-import edu.java.bot.repositories.LinkRepository;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+import edu.java.bot.dto.request.AddLinkRequest;
+import edu.java.bot.dto.response.ApiErrorResponse;
+import edu.java.bot.dto.response.LinkResponse;
+import edu.java.bot.exceptions.ApiException;
+import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,95 +18,78 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
 public class TrackCommandServiceTest {
-    private static final List<String> supportedDomains = List.of(
-        "github.com",
-        "stackoverflow.com"
-    );
+    private static final Long CHAT_ID = 1L;
     @Mock
     private Message message;
     @Mock
     private Chat chat;
     @Mock
     private Update update;
+    @Mock
+    private ScrapperLinkClient linkClient;
     @InjectMocks
     private TrackCommandService trackCommandService;
-    private static final User USER = new User(1L);
-    private static final String GIT_HUB = "https://github.com/onevoker";
-
-    private void setUpMocksWithTrackCommandFromTelegram(String returnedTextFromMessage) {
-        doReturn(message).when(update).message();
-        doReturn(USER).when(message).from();
-        doReturn(returnedTextFromMessage).when(message).text();
-        doReturn(chat).when(message).chat();
-        doReturn(-1L).when(chat).id();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        LinkValidatorService linkValidatorService = new LinkValidatorService(supportedDomains);
-        LinkFactory linkFactory = new LinkFactory(linkValidatorService);
-        LinkRepository linkRepository = new LinkRepository();
-
-        this.trackCommandService = new TrackCommandService(linkRepository, linkFactory);
-    }
+    private static final URI GIT_HUB = URI.create("https://github.com/onevoker/LinkTrackerBot");
 
     @Test
     void testTrackNothing() {
-        setUpMocksWithTrackCommandFromTelegram("/track");
+        String command = "/track";
+        doReturn(message).when(update).message();
+        doReturn(command).when(message).text();
+        doReturn(chat).when(message).chat();
+        doReturn(CHAT_ID).when(chat).id();
 
         String expectedHandleText = "Введите ссылку для отслеживания. Пример ввода: /track ,,ваша_ссылка,,";
         SendMessage result = trackCommandService.handle(update);
-        SendMessage expected = new SendMessage(-1L, expectedHandleText);
-
-        assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
-    }
-
-    @Test
-    void testTrackNotALink() {
-        setUpMocksWithTrackCommandFromTelegram("/track man");
-
-        String expectedHandleText = "Вы указали неправильную ссылку, возможно вам поможет /help";
-        SendMessage result = trackCommandService.handle(update);
-        SendMessage expected = new SendMessage(-1L, expectedHandleText);
+        SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 
     @Test
     void testTrackUncorrectLink() {
-        setUpMocksWithTrackCommandFromTelegram("/track https://open.spotify.com/");
+        String command = "/track man";
+        ApiErrorResponse errorResponse = ApiErrorResponse.builder()
+            .exceptionMessage("Вы указали неправильную ссылку, возможно вам поможет /help")
+            .build();
+        ApiException exception = new ApiException(errorResponse);
+        AddLinkRequest request = new AddLinkRequest(URI.create("man"));
+
+        doReturn(message).when(update).message();
+        doReturn(command).when(message).text();
+        doReturn(chat).when(message).chat();
+        doReturn(CHAT_ID).when(chat).id();
+        doThrow(exception).when(linkClient).trackLink(CHAT_ID, request);
+        trackCommandService = new TrackCommandService(linkClient);
 
         String expectedHandleText = "Вы указали неправильную ссылку, возможно вам поможет /help";
         SendMessage result = trackCommandService.handle(update);
-        SendMessage expected = new SendMessage(-1L, expectedHandleText);
+        SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 
     @Test
-    void testTrackLinkOnce() {
-        setUpMocksWithTrackCommandFromTelegram("/track " + GIT_HUB);
+    void testTrackLink() {
+        String command = "/track " + GIT_HUB;
+        AddLinkRequest request = new AddLinkRequest(GIT_HUB);
+        LinkResponse response = new LinkResponse(CHAT_ID, GIT_HUB);
 
-        String expectedHandleText = "Начали отслеживать данную ссылку";
+        doReturn(message).when(update).message();
+        doReturn(command).when(message).text();
+        doReturn(chat).when(message).chat();
+        doReturn(CHAT_ID).when(chat).id();
+        doReturn(response).when(linkClient).trackLink(CHAT_ID, request);
+        trackCommandService = new TrackCommandService(linkClient);
+
+        String expectedHandleText = "Начали отслеживать данную ссылку: " + GIT_HUB;
         SendMessage result = trackCommandService.handle(update);
-        SendMessage expected = new SendMessage(-1L, expectedHandleText);
+        SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
-    }
-
-    @Test
-    void testTrackLinkTwice() {
-        setUpMocksWithTrackCommandFromTelegram("/track " + GIT_HUB);
-
-        SendMessage firstTracking = trackCommandService.handle(update);
-        SendMessage secondTracking = trackCommandService.handle(update);
-
-        String expectedHandleText = "Ссылка уже добавлена, для просмотра ссылок введите /list";
-        SendMessage expected = new SendMessage(-1L, expectedHandleText);
-
-        assertThat(secondTracking.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }
 }

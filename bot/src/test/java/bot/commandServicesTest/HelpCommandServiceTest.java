@@ -29,7 +29,7 @@ class HelpCommandServiceTest {
     void testHandle() {
         doReturn(message).when(update).message();
         doReturn(chat).when(message).chat();
-        doReturn(-1L).when(chat).id();
+        doReturn(1L).when(chat).id();
 
         String expectedHandleText =
             "На данный момент поддерживается отслеживание ссылок с таких ресурсов как github и stackoverflow\n\n"
@@ -40,7 +40,7 @@ class HelpCommandServiceTest {
                 + "/untrack ,,ссылка,, -- прекратить отслеживание ссылки\n"
                 + "/list -- показать список отслеживаемых ссылок\n";
         SendMessage result = helpCommandService.handle(update);
-        SendMessage expected = new SendMessage(-1L, expectedHandleText);
+        SendMessage expected = new SendMessage(1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
     }

@@ -3,17 +3,17 @@ package edu.java.bot.commandServices;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.links.Link;
-import edu.java.bot.repositories.LinkRepository;
-import java.util.Collection;
-import java.util.Set;
+import edu.java.bot.clients.ScrapperLinkClient;
+import edu.java.bot.dto.response.LinkResponse;
+import edu.java.bot.dto.response.ListLinksResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ListCommandService implements CommandService {
-    private final LinkRepository linkRepository;
+    private final ScrapperLinkClient linkClient;
     private static final String COMMAND = "/list";
     private static final String DESCRIPTION = "Список ссылок";
     private static final String HANDLE_TEXT = "Список ваших отслеживаемых ссылок:\n";
@@ -33,22 +33,24 @@ public class ListCommandService implements CommandService {
     public SendMessage handle(Update update) {
         Message message = update.message();
         long chatId = message.chat().id();
-        Set<Link> userLinks = linkRepository.getUserLinks(message.from());
 
-        if (userLinks == null || userLinks.isEmpty()) {
+        ListLinksResponse userLinks = linkClient.getTrackedLinks(chatId);
+        List<LinkResponse> linkResponseList = userLinks.links();
+
+        if (linkResponseList == null || linkResponseList.isEmpty()) {
             return new SendMessage(chatId, NOT_LINKED_MESSAGE);
         }
 
-        String text = HANDLE_TEXT + getLinksListText(userLinks);
+        String text = HANDLE_TEXT + getLinksListText(linkResponseList);
         return new SendMessage(chatId, text);
     }
 
-    private String getLinksListText(Collection<Link> userLinks) {
+    private String getLinksListText(List<LinkResponse> linkResponseList) {
         StringBuilder text = new StringBuilder();
         int i = 0;
 
-        for (Link link : userLinks) {
-            text.append("%s. ".formatted(++i)).append(link.stringLink()).append("\n");
+        for (LinkResponse link : linkResponseList) {
+            text.append("%s. ".formatted(++i)).append(link.url().toString()).append("\n");
         }
 
         return text.toString();

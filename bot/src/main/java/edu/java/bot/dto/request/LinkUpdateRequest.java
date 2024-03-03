@@ -6,11 +6,11 @@ import java.net.URI;
 import java.util.List;
 
 public record LinkUpdateRequest(
-    int id,
+    long id,
     @NotNull
     URI url,
     @NotBlank
     String description,
     @NotNull
-    List<Integer> tgChatIds) {
+    List<Long> tgChatIds) {
 }

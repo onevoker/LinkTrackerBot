@@ -2,25 +2,23 @@ package edu.java.bot.commandServices;
 
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.exceptions.InvalidLinkException;
-import edu.java.bot.links.Link;
-import edu.java.bot.links.LinkFactory;
-import edu.java.bot.repositories.LinkRepository;
+import edu.java.bot.clients.ScrapperLinkClient;
+import edu.java.bot.dto.request.RemoveLinkRequest;
+import edu.java.bot.dto.response.LinkResponse;
+import edu.java.bot.exceptions.ApiException;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UntrackCommandService implements CommandService {
-    private final LinkRepository linkRepository;
-    private final LinkFactory linkFactory;
+    private final ScrapperLinkClient linkClient;
     private static final int BEGIN_LINK_INDEX = 9;
     private static final String COMMAND = "/untrack";
     private static final String DESCRIPTION = "Прекращение отслеживания ссылки";
-    private static final String HANDLE_TEXT = "Прекратили отслеживание данной ссылки";
-    private static final String NOT_LINKED_TEXT = "Вы не отслеживаете данную ссылку";
+    private static final String HANDLE_TEXT = "Прекратили отслеживание данной ссылки: ";
     private static final String INCORRECT_LINK_TEXT = "Вы указали неправильную ссылку, возможно вам поможет /help";
     private static final String NO_LINK_TEXT = "Укажите что перестать отслеживать. Пример /untrack ,,ваша_ссылка,,";
 
@@ -37,28 +35,27 @@ public class UntrackCommandService implements CommandService {
     @Override
     public SendMessage handle(Update update) {
         Message message = update.message();
-        User user = message.from();
         long chatId = message.chat().id();
-        String answerText = getAnswerText(user, message);
+        String answerText = getAnswerText(message);
 
         return new SendMessage(chatId, answerText);
     }
 
-    private String getAnswerText(User user, Message message) {
-        Long userID = user.id();
+    private String getAnswerText(Message message) {
+        long chatId = message.chat().id();
         String answerText;
         try {
-            String strLink = message.text().substring(BEGIN_LINK_INDEX);
+            String link = message.text().substring(BEGIN_LINK_INDEX);
             try {
-                Link link = linkFactory.createLink(userID, strLink);
-                boolean isInUserLinks = linkRepository.isInUserLinks(link);
-                if (isInUserLinks) {
-                    linkRepository.deleteUserLink(link);
-                    answerText = HANDLE_TEXT;
-                } else {
-                    answerText = NOT_LINKED_TEXT;
+                URI url = URI.create(link);
+                RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest(url);
+                try {
+                    LinkResponse linkResponse = linkClient.untrackLink(chatId, removeLinkRequest);
+                    answerText = HANDLE_TEXT + linkResponse.url();
+                } catch (ApiException exception) {
+                    answerText = exception.getMessage();
                 }
-            } catch (InvalidLinkException exception) {
+            } catch (IllegalArgumentException exception) {
                 answerText = INCORRECT_LINK_TEXT;
             }
         } catch (IndexOutOfBoundsException exception) {
