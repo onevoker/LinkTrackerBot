@@ -1,5 +1,14 @@
 package edu.java.scrapper;
 
+import java.io.File;
+import java.sql.SQLException;
+import liquibase.Contexts;
+import liquibase.LabelExpression;
+import liquibase.Liquibase;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.LiquibaseException;
+import liquibase.resource.SearchPathResourceAccessor;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -21,7 +30,25 @@ public abstract class IntegrationTest {
     }
 
     private static void runMigrations(JdbcDatabaseContainer<?> c) {
-        // ...
+        SingleConnectionDataSource dataSource = new SingleConnectionDataSource();
+        dataSource.setSuppressClose(true);
+        dataSource.setUrl(c.getJdbcUrl());
+        dataSource.setUsername(c.getUsername());
+        dataSource.setPassword(c.getPassword());
+
+        String path = new File(".").toPath().toAbsolutePath().getParent().getParent().resolve("migrations").toString();
+
+        try {
+            Liquibase liquibase = new Liquibase(
+                "master.xml",
+                new SearchPathResourceAccessor(path),
+                new JdbcConnection(dataSource.getConnection())
+            );
+
+            liquibase.update(new Contexts(), new LabelExpression());
+        } catch (LiquibaseException | SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @DynamicPropertySource
