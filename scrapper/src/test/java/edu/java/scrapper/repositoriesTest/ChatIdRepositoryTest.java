@@ -1,6 +1,7 @@
 package edu.java.scrapper.repositoriesTest;
 
 import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
+import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
 import edu.java.scrapper.repositories.ChatIdRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,4 +32,16 @@ public class ChatIdRepositoryTest {
         assertThat(exception.getMessage()).isEqualTo("Вы уже были зарегестрированы раньше");
     }
 
+    @Test
+    void testUnregistered() {
+        chatIdRepository.registerChat(CHAT_ID);
+        assertDoesNotThrow(() -> chatIdRepository.unregisterChat(CHAT_ID));
+    }
+
+    @Test
+    void testUnregisterNotRegistered() {
+        var exception =
+            assertThrows(ChatNotFoundException.class, () -> chatIdRepository.unregisterChat(CHAT_ID));
+        assertThat(exception.getMessage()).isEqualTo("Вы не были зарегестрированы");
+    }
 }

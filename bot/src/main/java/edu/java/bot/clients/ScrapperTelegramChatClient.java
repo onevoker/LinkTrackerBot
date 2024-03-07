@@ -24,4 +24,16 @@ public class ScrapperTelegramChatClient {
             .bodyToMono(Void.class)
             .block();
     }
+
+    public void unregisterChat(long id) {
+        scrapperWebClient.delete()
+            .uri(TELEGRAM_CHAT_ENDPOINT_PATH + id)
+            .retrieve()
+            .onStatus(
+                HttpStatus.NOT_FOUND::equals,
+                response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
+            )
+            .bodyToMono(Void.class)
+            .block();
+    }
 }

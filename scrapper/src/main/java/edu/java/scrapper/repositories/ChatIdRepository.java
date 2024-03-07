@@ -1,6 +1,7 @@
 package edu.java.scrapper.repositories;
 
 import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
+import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
@@ -14,11 +15,22 @@ public class ChatIdRepository {
     }
 
     public void registerChat(long chatId) {
-        boolean answer = chatIds.getOrDefault(chatId, false);
-        if (answer) {
-            chatIds.put(chatId, true);
+        boolean isRegistered = chatIds.getOrDefault(chatId, false);
+        if (isRegistered) {
             throw new ChatAlreadyRegisteredException("Вы уже были зарегестрированы раньше");
+        } else {
+            chatIds.put(chatId, true);
         }
-        chatIds.put(chatId, true);
+    }
+
+    public void unregisterChat(long chatId) {
+        boolean isRegistered = chatIds.getOrDefault(chatId, false);
+
+        if (isRegistered) {
+            chatIds.remove(chatId);
+        } else {
+            throw new ChatNotFoundException("Вы не были зарегестрированы");
+        }
+
     }
 }
