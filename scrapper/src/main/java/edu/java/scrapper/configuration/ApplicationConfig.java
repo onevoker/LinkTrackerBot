@@ -13,14 +13,13 @@ public record ApplicationConfig(
     @NotNull
     @Bean
     Scheduler scheduler,
-    BaseUrls urls,
-    String botBaseUrl,
+    Clients clients,
     @Bean
     List<String> supportedDomains
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 
-    public record BaseUrls(String gitHubBaseUrl, String stackOverflowBaseUrl) {
+    public record Clients(String gitHub, String stackOverflow, String bot) {
     }
 }

@@ -12,7 +12,7 @@ public class ClientConfiguration {
 
     @Bean
     public WebClient gitHubWebClient() {
-        String baseGithubUrl = applicationConfig.urls().gitHubBaseUrl();
+        String baseGithubUrl = applicationConfig.clients().gitHub();
 
         return WebClient.builder()
             .baseUrl(baseGithubUrl)
@@ -21,7 +21,7 @@ public class ClientConfiguration {
 
     @Bean
     public WebClient stackOverflowWebClient() {
-        String baseStackoverflowUrl = applicationConfig.urls().stackOverflowBaseUrl();
+        String baseStackoverflowUrl = applicationConfig.clients().stackOverflow();
 
         return WebClient.builder()
             .baseUrl(baseStackoverflowUrl)
@@ -30,7 +30,7 @@ public class ClientConfiguration {
 
     @Bean
     public WebClient botWebClient() {
-        String baseBotUrl = applicationConfig.botBaseUrl();
+        String baseBotUrl = applicationConfig.clients().bot();
 
         return WebClient.builder()
             .baseUrl(baseBotUrl)

@@ -17,49 +17,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 @RestControllerAdvice
-public class ScrapperExceptionController {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
+public class ScrapperExceptionHandler {
+    @ExceptionHandler({MethodArgumentNotValidException.class, HandlerMethodValidationException.class})
+    public ResponseEntity<ApiErrorResponse> handleNotValidArguments(MethodArgumentNotValidException exception) {
         String description = Arrays.toString(exception.getDetailMessageArguments());
         HttpStatusCode statusCode = exception.getStatusCode();
 
         return ResponseEntity.status(statusCode).body(getDefaultErrorResponse(exception, statusCode, description));
     }
 
-    @ExceptionHandler(HandlerMethodValidationException.class)
-    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(HandlerMethodValidationException exception) {
-        String description = Arrays.toString(exception.getDetailMessageArguments());
-        HttpStatusCode statusCode = exception.getStatusCode();
-
-        return ResponseEntity.status(statusCode).body(getDefaultErrorResponse(exception, statusCode, description));
-    }
-
-    @ExceptionHandler(ChatAlreadyRegisteredException.class)
-    public ResponseEntity<ApiErrorResponse> handleChatAlreadyRegistered(ChatAlreadyRegisteredException exception) {
-        return ResponseEntity.status(exception.getStatusCode())
-            .body(getApiErrorResponseForCustomExceptions(exception));
-    }
-
-    @ExceptionHandler(ChatNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleChatNotFound(ChatNotFoundException exception) {
-        return ResponseEntity.status(exception.getStatusCode())
-            .body(getApiErrorResponseForCustomExceptions(exception));
-    }
-
-    @ExceptionHandler(LinkWasTrackedException.class)
-    public ResponseEntity<ApiErrorResponse> handleLinkWasTracked(LinkWasTrackedException exception) {
-        return ResponseEntity.status(exception.getStatusCode())
-            .body(getApiErrorResponseForCustomExceptions(exception));
-    }
-
-    @ExceptionHandler(LinkWasNotTrackedException.class)
-    public ResponseEntity<ApiErrorResponse> handleLinkWasTracked(LinkWasNotTrackedException exception) {
-        return ResponseEntity.status(exception.getStatusCode())
-            .body(getApiErrorResponseForCustomExceptions(exception));
-    }
-
-    @ExceptionHandler(InvalidLinkResponseException.class)
-    public ResponseEntity<ApiErrorResponse> handleInvalidLink(InvalidLinkResponseException exception) {
+    @ExceptionHandler({
+        ChatAlreadyRegisteredException.class,
+        ChatNotFoundException.class,
+        LinkWasTrackedException.class,
+        LinkWasNotTrackedException.class,
+        InvalidLinkResponseException.class
+    })
+    public ResponseEntity<ApiErrorResponse> handleScrapperExceptions(ScrapperException exception) {
         return ResponseEntity.status(exception.getStatusCode())
             .body(getApiErrorResponseForCustomExceptions(exception));
     }

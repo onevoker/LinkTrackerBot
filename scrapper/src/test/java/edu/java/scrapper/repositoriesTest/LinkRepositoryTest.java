@@ -16,9 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class LinkRepositoryTest {
     private LinkResponseRepository links;
     private static final long CHAT_ID = 1L;
-    private static final URI GIT_HUB = URI.create("https://github.com");
-    private static final URI GIT_HUB_TKF = URI.create("https://github.com/onevoker/Tkf");
-    private static final URI MY_GITHUB = URI.create("https://github.com/onevoker");
     private LinkResponse MY_GITHUB_LINK;
     private LinkResponse GIT_HUB_TKF_LINK;
     private LinkResponse GIT_HUB_LINK;
@@ -26,9 +23,13 @@ public class LinkRepositoryTest {
     @BeforeEach
     void setUp() {
         this.links = new LinkResponseRepository();
-        this.MY_GITHUB_LINK = new LinkResponse(CHAT_ID, MY_GITHUB);
-        this.GIT_HUB_TKF_LINK = new LinkResponse(CHAT_ID, GIT_HUB_TKF);
-        this.GIT_HUB_LINK = new LinkResponse(CHAT_ID, GIT_HUB);
+        URI gitHub = URI.create("https://github.com");
+        URI gitHubTkf = URI.create("https://github.com/onevoker/Tkf");
+        URI myGithub = URI.create("https://github.com/onevoker");
+
+        this.MY_GITHUB_LINK = new LinkResponse(CHAT_ID, myGithub);
+        this.GIT_HUB_TKF_LINK = new LinkResponse(CHAT_ID, gitHubTkf);
+        this.GIT_HUB_LINK = new LinkResponse(CHAT_ID, gitHub);
     }
 
     @Test
@@ -74,9 +75,9 @@ public class LinkRepositoryTest {
         links.addUserLink(MY_GITHUB_LINK);
 
         List<LinkResponse> expectedList = List.of(
-            new LinkResponse(CHAT_ID, GIT_HUB),
-            new LinkResponse(CHAT_ID, GIT_HUB_TKF),
-            new LinkResponse(CHAT_ID, MY_GITHUB)
+            new LinkResponse(CHAT_ID, URI.create("https://github.com")),
+            new LinkResponse(CHAT_ID, URI.create("https://github.com/onevoker/Tkf")),
+            new LinkResponse(CHAT_ID, URI.create("https://github.com/onevoker"))
         );
 
         ListLinksResponse expected = new ListLinksResponse(expectedList, expectedList.size());
