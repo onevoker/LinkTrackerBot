@@ -16,47 +16,44 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class LinkRepositoryTest {
     private LinkResponseRepository links;
     private static final long CHAT_ID = 1L;
-    private LinkResponse MY_GITHUB_LINK;
-    private LinkResponse GIT_HUB_TKF_LINK;
-    private LinkResponse GIT_HUB_LINK;
+    private static final URI GIT_HUB_BASE_URI = URI.create("https://github.com");
+    private static final URI GIT_HUB_REPO_URI = URI.create("https://github.com/onevoker/Tkf");
+    private static final URI MY_GITHUB_PROFILE_URI = URI.create("https://github.com/onevoker");
+    private static final LinkResponse MY_GITHUB_PROFILE_Link = new LinkResponse(CHAT_ID, MY_GITHUB_PROFILE_URI);
+    private static final LinkResponse GIT_HUB_REPO_LINK = new LinkResponse(CHAT_ID, GIT_HUB_REPO_URI);
+    private static final LinkResponse GIT_HUB_BASE_LINK = new LinkResponse(CHAT_ID, GIT_HUB_BASE_URI);
 
     @BeforeEach
     void setUp() {
         this.links = new LinkResponseRepository();
-        URI gitHub = URI.create("https://github.com");
-        URI gitHubTkf = URI.create("https://github.com/onevoker/Tkf");
-        URI myGithub = URI.create("https://github.com/onevoker");
-
-        this.MY_GITHUB_LINK = new LinkResponse(CHAT_ID, myGithub);
-        this.GIT_HUB_TKF_LINK = new LinkResponse(CHAT_ID, gitHubTkf);
-        this.GIT_HUB_LINK = new LinkResponse(CHAT_ID, gitHub);
     }
 
     @Test
     void testAddUserLink() {
-        links.addUserLink(GIT_HUB_LINK);
+        links.addUserLink(GIT_HUB_BASE_LINK);
 
         assertThat(links.getUserLinks(CHAT_ID).size()).isEqualTo(1);
     }
+
     @Test
     void testAddTheSameUserLink() {
-        links.addUserLink(GIT_HUB_LINK);
+        links.addUserLink(GIT_HUB_BASE_LINK);
 
-        var exception = assertThrows(LinkWasTrackedException.class, () -> links.addUserLink(GIT_HUB_LINK));
+        var exception = assertThrows(LinkWasTrackedException.class, () -> links.addUserLink(GIT_HUB_BASE_LINK));
         assertThat(exception.getMessage()).isEqualTo("Ссылка уже добавлена, для просмотра ссылок введите /list");
     }
 
     @Test
     void deleteUserLink() {
-        links.addUserLink(GIT_HUB_LINK);
-        links.addUserLink(GIT_HUB_TKF_LINK);
+        links.addUserLink(GIT_HUB_BASE_LINK);
+        links.addUserLink(GIT_HUB_REPO_LINK);
 
-        links.deleteUserLink(GIT_HUB_LINK);
+        links.deleteUserLink(GIT_HUB_BASE_LINK);
 
         assertAll(
             () -> assertThat(links.getUserLinks(CHAT_ID).size()).isEqualTo(1),
             () -> {
-                links.deleteUserLink(GIT_HUB_TKF_LINK);
+                links.deleteUserLink(GIT_HUB_REPO_LINK);
                 assertThat(links.getUserLinks(CHAT_ID).size()).isEqualTo(0);
             }
         );
@@ -64,20 +61,20 @@ public class LinkRepositoryTest {
 
     @Test
     void deleteNotInRepositoryLink() {
-        var exception = assertThrows(LinkWasNotTrackedException.class, () -> links.deleteUserLink(GIT_HUB_LINK));
+        var exception = assertThrows(LinkWasNotTrackedException.class, () -> links.deleteUserLink(GIT_HUB_BASE_LINK));
         assertThat(exception.getMessage()).isEqualTo("Вы не отслеживаете данную ссылку");
     }
 
     @Test
     void testGetUserLinks() {
-        links.addUserLink(GIT_HUB_LINK);
-        links.addUserLink(GIT_HUB_TKF_LINK);
-        links.addUserLink(MY_GITHUB_LINK);
+        links.addUserLink(GIT_HUB_BASE_LINK);
+        links.addUserLink(GIT_HUB_REPO_LINK);
+        links.addUserLink(MY_GITHUB_PROFILE_Link);
 
         List<LinkResponse> expectedList = List.of(
-            new LinkResponse(CHAT_ID, URI.create("https://github.com")),
-            new LinkResponse(CHAT_ID, URI.create("https://github.com/onevoker/Tkf")),
-            new LinkResponse(CHAT_ID, URI.create("https://github.com/onevoker"))
+            new LinkResponse(CHAT_ID, GIT_HUB_BASE_URI),
+            new LinkResponse(CHAT_ID, GIT_HUB_REPO_URI),
+            new LinkResponse(CHAT_ID, MY_GITHUB_PROFILE_URI)
         );
 
         ListLinksResponse expected = new ListLinksResponse(expectedList, expectedList.size());

@@ -18,8 +18,16 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 
 @RestControllerAdvice
 public class ScrapperExceptionHandler {
-    @ExceptionHandler({MethodArgumentNotValidException.class, HandlerMethodValidationException.class})
-    public ResponseEntity<ApiErrorResponse> handleNotValidArguments(MethodArgumentNotValidException exception) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
+        String description = Arrays.toString(exception.getDetailMessageArguments());
+        HttpStatusCode statusCode = exception.getStatusCode();
+
+        return ResponseEntity.status(statusCode).body(getDefaultErrorResponse(exception, statusCode, description));
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(HandlerMethodValidationException exception) {
         String description = Arrays.toString(exception.getDetailMessageArguments());
         HttpStatusCode statusCode = exception.getStatusCode();
 
