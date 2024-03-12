@@ -4,9 +4,15 @@ app:
     interval: 14s
     force-check-delay: 10s
 
-  urls:
-    git-hub-base-url: https://api.github.com/repos/
-    stack-overflow-base-url: https://api.stackexchange.com/2.3/questions/
+  clients:
+    git-hub: https://api.github.com/repos/
+    stack-overflow: https://api.stackexchange.com/2.3/questions/
+    bot: http://localhost:8090
+
+  supported-domains:
+    - github.com
+    - stackoverflow.com
+
 
 spring:
   application:
@@ -17,3 +23,7 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui

@@ -2,10 +2,10 @@ package edu.java.scrapper.clientTest;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.scrapper.stackOverflow.client.StackOverflowClient;
-import edu.java.scrapper.stackOverflow.dto.Item;
-import edu.java.scrapper.stackOverflow.dto.QuestionResponse;
-import edu.java.scrapper.stackOverflow.dto.StackOverflowOwner;
+import edu.java.scrapper.clients.StackOverflowClient;
+import edu.java.scrapper.dto.stackOverflowDto.Item;
+import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;
+import edu.java.scrapper.dto.stackOverflowDto.StackOverflowOwner;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
