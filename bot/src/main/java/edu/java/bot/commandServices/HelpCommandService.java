@@ -9,13 +9,17 @@ public class HelpCommandService implements CommandService {
     private static final String COMMAND = "/help";
     private static final String DESCRIPTION = "Вам помогут";
     private static final String HANDLE_TEXT =
-        "На данный момент поддерживается отслеживание ссылок с таких ресурсов как github и stackoverflow\n\n"
-            + "Доступные команды:\n"
-            + "/start -- зарегистрировать пользователя\n"
-            + "/help -- сообщение с подробным описанием команд\n"
-            + "/track ,,ссылка,, -- начать отслеживание ссылки\n"
-            + "/untrack ,,ссылка,, -- прекратить отслеживание ссылки\n"
-            + "/list -- показать список отслеживаемых ссылок\n";
+        """
+            На данный момент поддерживается отслеживание ссылок с таких ресурсов как github и stackoverflow
+
+            Доступные команды:
+            /start -- зарегистрировать пользователя
+            /help -- сообщение с подробным описанием команд
+            /track ,,ссылка,, -- начать отслеживание ссылки
+            /untrack ,,ссылка,, -- прекратить отслеживание ссылки
+            /list -- показать список отслеживаемых ссылок
+            /unregister -- удалить все данные(отслеживаемые ссылки), удалить профиль
+            """;
 
     @Override
     public String command() {

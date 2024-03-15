@@ -15,25 +15,20 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LinkResponseFactoryTest {
-    private static final List<String> SUPPORTED_DOMAINS = List.of(
-        "github.com",
-        "stackoverflow.com"
-    );
     private static final int USER_ID = 1;
     private static LinkResponseFactory linkFactory;
 
     @BeforeAll
     public static void setUp() {
-        LinkResponseValidatorService linkValidatorService = new LinkResponseValidatorService(SUPPORTED_DOMAINS);
+        LinkResponseValidatorService linkValidatorService = new LinkResponseValidatorService();
         linkFactory = new LinkResponseFactory(linkValidatorService);
     }
 
     public static Stream<Arguments> getCorrectUri() {
         return Stream.of(
-            Arguments.of("https://github.com/onevoker"),
+            Arguments.of("https://github.com/onevoker/Tkf"),
             Arguments.of("https://github.com/onevoker/LinkTrackerBot"),
-            Arguments.of("https://github.com/iskanred/iu-devops-course"),
-            Arguments.of("https://github.com/onevoker")
+            Arguments.of("https://github.com/iskanred/iu-devops-course")
         );
     }
 

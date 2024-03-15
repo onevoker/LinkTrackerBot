@@ -2,16 +2,23 @@ package edu.java.scrapper.dto.stackOverflowDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record Item(
-    StackOverflowOwner owner,
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Item {
     @JsonProperty("is_answered")
-    boolean isAnswered,
+    private Boolean answered;
+
     @JsonProperty("question_id")
-    long questionId,
+    private long questionId;
+
     @JsonProperty("answer_count")
-    long answerCount,
+    private long answerCount;
+
     @JsonProperty("last_edit_date")
-    OffsetDateTime lastEditDate,
-    String link) {
+    private OffsetDateTime lastEditDate;
 }

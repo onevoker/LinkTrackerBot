@@ -5,7 +5,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.clients.StackOverflowClient;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;
-import edu.java.scrapper.dto.stackOverflowDto.StackOverflowOwner;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -82,26 +81,14 @@ public class StackOverFlowClientTest {
         );
         StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient);
 
-        QuestionResponse response = stackOverflowClient.fetchQuestion(QUESTION_ID).block();
+        QuestionResponse response = stackOverflowClient.fetchQuestion(QUESTION_ID);
         List<Item> actualItems = response.items();
-        StackOverflowOwner expectedOwner = new StackOverflowOwner(15676071, "omkar more");
         boolean expectedIsAnswered = false;
         long expectedQuestionId = 61746598L;
         long expectedAnswerCount = 1L;
         OffsetDateTime expectedLastEditDate = Instant.ofEpochSecond(1589270864).atOffset(ZoneOffset.UTC);
-        String expectedLink =
-            "https://stackoverflow.com/questions/61746598/how-can-i-ask-questions-randomly-to-different-user-in-django";
-        List<Item> expectedItems = List.of(
-            new Item(
-                expectedOwner,
-                expectedIsAnswered,
-                expectedQuestionId,
-                expectedAnswerCount,
-                expectedLastEditDate,
-                expectedLink
-            )
-        );
+        Item expectedItem = new Item(expectedIsAnswered, expectedQuestionId, expectedAnswerCount, expectedLastEditDate);
 
-        assertThat(actualItems).isEqualTo(expectedItems);
+        assertThat(actualItems.getFirst()).isEqualTo(expectedItem);
     }
 }

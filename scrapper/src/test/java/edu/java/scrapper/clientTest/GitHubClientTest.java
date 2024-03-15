@@ -3,7 +3,6 @@ package edu.java.scrapper.clientTest;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.clients.GitHubClient;
-import edu.java.scrapper.dto.gitHubDto.GitHubOwner;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import java.time.OffsetDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +29,7 @@ public class GitHubClientTest {
                 "id": 146644496
             },
             "html_url": "https://github.com/onevoker/LinkTrackerBot",
-            "updated_at": "2024-02-09T13:59:57Z"
+            "pushed_at": "2024-02-09T13:59:57Z"
         }""";
 
     private WebClient webClient;
@@ -51,22 +50,13 @@ public class GitHubClientTest {
         );
         GitHubClient gitHubClient = new GitHubClient(webClient);
 
-        RepositoryResponse response = gitHubClient.fetchRepository("onevoker", "LinkTrackerBot").block();
-        GitHubOwner owner = response.owner();
+        RepositoryResponse response = gitHubClient.fetchRepository("onevoker", "LinkTrackerBot");
         long expectedId = 755139175L;
-        String expectedName = "LinkTrackerBot";
-        String expectedHtmlUrl = "https://github.com/onevoker/LinkTrackerBot";
         OffsetDateTime expectedUpdatedAt = OffsetDateTime.parse("2024-02-09T13:59:57Z");
-        long expectedOwnerId = 146644496L;
-        String expectedOwnerLogin = "onevoker";
 
         assertAll(
-            () -> assertThat(response.id()).isEqualTo(expectedId),
-            () -> assertThat(response.name()).isEqualTo(expectedName),
-            () -> assertThat(response.htmlUrl()).isEqualTo(expectedHtmlUrl),
-            () -> assertThat(response.updatedAt()).isEqualTo(expectedUpdatedAt),
-            () -> assertThat(owner.id()).isEqualTo(expectedOwnerId),
-            () -> assertThat(owner.login()).isEqualTo(expectedOwnerLogin)
+            () -> assertThat(response.getId()).isEqualTo(expectedId),
+            () -> assertThat(response.getPushedAt()).isEqualTo(expectedUpdatedAt)
         );
     }
 }
