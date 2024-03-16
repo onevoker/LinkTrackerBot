@@ -23,7 +23,7 @@ public class JdbcQuestionResponseRepository implements QuestionResponseRepositor
             linkId,
             responseItem.getAnswered(),
             responseItem.getAnswerCount(),
-            responseItem.getLastEditDate()
+            responseItem.getLastActivityDate()
         );
     }
 
@@ -50,10 +50,10 @@ public class JdbcQuestionResponseRepository implements QuestionResponseRepositor
     @Override
     public void update(Item responseItem, Long linkId) {
         jdbcTemplate.update(
-            "UPDATE question_response SET answered = ?, answer_count = ?, last_edit_date = ? WHERE link_id = ?",
+            "UPDATE question_response SET answered = ?, answer_count = ?, last_activity_date = ? WHERE link_id = ?",
             responseItem.getAnswered(),
             responseItem.getAnswerCount(),
-            responseItem.getLastEditDate(),
+            responseItem.getLastActivityDate(),
             linkId
         );
     }

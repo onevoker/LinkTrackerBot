@@ -58,11 +58,11 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
     }
 
     private boolean isNeedToUpdate(Item responseItem, Item questionInRepo) {
-        return responseItem.getLastEditDate().isAfter(questionInRepo.getLastEditDate());
+        return responseItem.getLastActivityDate().isAfter(questionInRepo.getLastActivityDate());
     }
 
     private LinkUpdateRequest getUpdateQuestion(Item responseItem, Long linkId, URI url) {
-        OffsetDateTime lastEditDate = responseItem.getLastEditDate();
+        OffsetDateTime lastEditDate = responseItem.getLastActivityDate();
         questionResponseRepository.update(responseItem, linkId);
         linkRepository.updateLastUpdate(lastEditDate, linkId);
         List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);

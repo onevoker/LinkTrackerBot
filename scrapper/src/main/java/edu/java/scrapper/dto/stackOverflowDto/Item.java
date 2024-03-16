@@ -19,6 +19,6 @@ public class Item {
     @JsonProperty("answer_count")
     private long answerCount;
 
-    @JsonProperty("last_edit_date")
-    private OffsetDateTime lastEditDate;
+    @JsonProperty("last_activity_date")
+    private OffsetDateTime lastActivityDate;
 }

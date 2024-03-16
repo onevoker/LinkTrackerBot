@@ -69,33 +69,12 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         {
             "items": [
                 {
-                    "tags": [
-                        "html",
-                        "django",
-                        "python-3.x",
-                        "django-views",
-                        "django-quiz"
-                    ],
-                    "owner": {
-                       "account_id": 15676071,
-                       "reputation": 125,
-                       "user_id": 11311304,
-                       "user_type": "registered",
-                        "profile_image": "https://www.gravatar.com/avatar/d741f6e44e9e33b3fc044e9c328c487e?s=256&d=identicon&r=PG&f=y&so-version=2",
-                       "display_name": "omkar more",
-                        "link": "https://stackoverflow.com/users/11311304/omkar-more"
-                    },
                     "is_answered": false,
-                    "view_count": 137,
                     "answer_count": 1,
-                    "score": -1,
                     "last_activity_date": 1610103022,
                     "creation_date": 1589270501,
                     "last_edit_date": 1589270864,
-                    "question_id": 61746598,
-                    "content_license": "CC BY-SA 4.0",
-                    "link": "https://stackoverflow.com/questions/61746598/how-can-i-ask-questions-randomly-to-different-user-in-django",
-                    "title": "How can I ask questions randomly to different user in django?"
+                    "question_id": 61746598
                 }
             ],
             "has_more": false,
@@ -107,33 +86,12 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         {
             "items": [
                 {
-                    "tags": [
-                        "html",
-                        "django",
-                        "python-3.x",
-                        "django-views",
-                        "django-quiz"
-                    ],
-                    "owner": {
-                       "account_id": 15676071,
-                       "reputation": 125,
-                       "user_id": 11311304,
-                       "user_type": "registered",
-                        "profile_image": "https://www.gravatar.com/avatar/d741f6e44e9e33b3fc044e9c328c487e?s=256&d=identicon&r=PG&f=y&so-version=2",
-                       "display_name": "omkar more",
-                        "link": "https://stackoverflow.com/users/11311304/omkar-more"
-                    },
                     "is_answered": false,
-                    "view_count": 137,
                     "answer_count": 1,
-                    "score": -1,
-                    "last_activity_date": 1610103022,
+                    "last_activity_date": 1800000000,
                     "creation_date": 1589270501,
-                    "last_edit_date": 1600000000,
-                    "question_id": 61746598,
-                    "content_license": "CC BY-SA 4.0",
-                    "link": "https://stackoverflow.com/questions/61746598/how-can-i-ask-questions-randomly-to-different-user-in-django",
-                    "title": "How can I ask questions randomly to different user in django?"
+                    "last_edit_date": 1589270864,
+                    "question_id": 61746598
                 }
             ],
             "has_more": false,

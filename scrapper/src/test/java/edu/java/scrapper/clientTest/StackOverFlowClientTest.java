@@ -86,7 +86,7 @@ public class StackOverFlowClientTest {
         boolean expectedIsAnswered = false;
         long expectedQuestionId = 61746598L;
         long expectedAnswerCount = 1L;
-        OffsetDateTime expectedLastEditDate = Instant.ofEpochSecond(1589270864).atOffset(ZoneOffset.UTC);
+        OffsetDateTime expectedLastEditDate = Instant.ofEpochSecond(1610103022).atOffset(ZoneOffset.UTC);
         Item expectedItem = new Item(expectedIsAnswered, expectedQuestionId, expectedAnswerCount, expectedLastEditDate);
 
         assertThat(actualItems.getFirst()).isEqualTo(expectedItem);

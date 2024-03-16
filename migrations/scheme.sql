@@ -37,11 +37,11 @@ CREATE TABLE REPOSITORY_RESPONSE
 
 CREATE TABLE QUESTION_RESPONSE
 (
-    question_id    BIGINT,
-    link_id        BIGINT REFERENCES LINK (id) ON DELETE CASCADE,
-    answered       BOOLEAN,
-    answer_count   BIGINT,
-    last_edit_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    question_id        BIGINT,
+    link_id            BIGINT REFERENCES LINK (id) ON DELETE CASCADE,
+    answered           BOOLEAN,
+    answer_count       BIGINT,
+    last_activity_date TIMESTAMP WITH TIME ZONE NOT NULL,
 
     PRIMARY KEY (question_id),
     UNIQUE (link_id)

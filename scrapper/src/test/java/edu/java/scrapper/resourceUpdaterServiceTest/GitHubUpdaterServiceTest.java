@@ -56,7 +56,6 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     private ChatLinkRepository chatLinkRepository;
     @Autowired
     private ChatRepository chatRepository;
-    private GitHubClient gitHubClient;
     private GitHubUpdaterService gitHubUpdaterService;
     private static final Long CHAT_ID = 10L;
     static final String WIRE_MOCK_URL = "http://localhost:8080/repos/";
@@ -98,7 +97,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         stubFor(
             prepareStub(BODY)
         );
-        gitHubClient = new GitHubClient(webClient);
+        GitHubClient gitHubClient = new GitHubClient(webClient);
 
         chatRepository.add(CHAT_ID);
         linkRepository.add(link);
@@ -109,7 +108,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
             gitHubResponseRepository,
             linkRepository,
             chatLinkRepository,
-            gitHubClient
+                gitHubClient
         );
     }
 
@@ -130,7 +129,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
 
         assertThat(noThingToUpdate.isEmpty()).isTrue();
 
-        // меняем дату
+        // changing date
         stubFor(
             prepareStub(UPDATED_BODY)
         );
