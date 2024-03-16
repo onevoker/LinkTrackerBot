@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain.jdbcServicesTest;
+package edu.java.scrapper.domain.servicesTest;
 
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.repositories.jdbc.JdbcChatLinkRepository;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     JdbcChatLinkRepository.class
 })
 @EnableAutoConfiguration(exclude = LiquibaseAutoConfiguration.class)
-public class JdbcTgChatServiceTest extends IntegrationTest {
+public class TelegramChatServiceTest extends IntegrationTest {
     @Autowired
     private ChatRepository chatRepository;
     @Autowired

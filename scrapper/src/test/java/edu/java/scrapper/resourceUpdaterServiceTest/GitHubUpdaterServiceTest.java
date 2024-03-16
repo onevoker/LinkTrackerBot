@@ -106,7 +106,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
             gitHubResponseRepository,
             linkRepository,
             chatLinkRepository,
-                gitHubClient
+            gitHubClient
         );
     }
 

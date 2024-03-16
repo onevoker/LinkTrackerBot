@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain.jdbcServicesTest;
+package edu.java.scrapper.domain.servicesTest;
 
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     LinkResponseValidatorService.class
 })
 @EnableAutoConfiguration(exclude = LiquibaseAutoConfiguration.class)
-public class JdbcLinkServiceTest extends IntegrationTest {
+public class LinkTrackerServiceTest extends IntegrationTest {
     @Autowired
     private ChatRepository chatRepository;
     @Autowired

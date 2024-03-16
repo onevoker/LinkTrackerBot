@@ -125,7 +125,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
             questionResponseRepository,
             linkRepository,
             chatLinkRepository,
-                stackOverflowClient
+            stackOverflowClient
         );
     }
 
