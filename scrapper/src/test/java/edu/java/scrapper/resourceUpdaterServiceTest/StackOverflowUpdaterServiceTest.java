@@ -56,7 +56,6 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     private ChatLinkRepository chatLinkRepository;
     @Autowired
     private ChatRepository chatRepository;
-    private StackOverflowClient stackOverflowClient;
     private StackOverflowUpdaterService stackOverflowUpdaterService;
     private static final Long CHAT_ID = 10L;
     static final String WIRE_MOCK_URL = "http://localhost:8080/2.3/questions/";
@@ -108,27 +107,25 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
                 2024, 3, 15, 21, 10, 40, 0, ZoneOffset.UTC
             )
         );
-    private WebClient webClient;
-    private Long linkId;
 
     @BeforeEach
     void setUp() {
-        webClient = WebClient.builder().baseUrl(WIRE_MOCK_URL).build();
+        WebClient webClient = WebClient.builder().baseUrl(WIRE_MOCK_URL).build();
         stubFor(
             prepareStub(BODY)
         );
-        stackOverflowClient = new StackOverflowClient(webClient);
+        StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient);
 
         chatRepository.add(CHAT_ID);
         linkRepository.add(link);
-        linkId = linkRepository.findAll().getFirst().getId();
+        Long linkId = linkRepository.findAll().getFirst().getId();
         chatLinkRepository.add(new ChatLink(CHAT_ID, linkId));
 
         stackOverflowUpdaterService = new StackOverflowUpdaterService(
             questionResponseRepository,
             linkRepository,
             chatLinkRepository,
-            stackOverflowClient
+                stackOverflowClient
         );
     }
 

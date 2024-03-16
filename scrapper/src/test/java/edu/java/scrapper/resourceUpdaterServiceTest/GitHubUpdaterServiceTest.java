@@ -88,12 +88,10 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         ), OffsetDateTime.of(
             2024, 3, 15, 21, 10, 40, 0, ZoneOffset.UTC
         ));
-    private WebClient webClient;
-    private Long linkId;
 
     @BeforeEach
     void setUp() {
-        webClient = WebClient.builder().baseUrl(WIRE_MOCK_URL).build();
+        WebClient webClient = WebClient.builder().baseUrl(WIRE_MOCK_URL).build();
         stubFor(
             prepareStub(BODY)
         );
@@ -101,7 +99,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
 
         chatRepository.add(CHAT_ID);
         linkRepository.add(link);
-        linkId = linkRepository.findAll().getFirst().getId();
+        Long linkId = linkRepository.findAll().getFirst().getId();
         chatLinkRepository.add(new ChatLink(CHAT_ID, linkId));
 
         gitHubUpdaterService = new GitHubUpdaterService(
