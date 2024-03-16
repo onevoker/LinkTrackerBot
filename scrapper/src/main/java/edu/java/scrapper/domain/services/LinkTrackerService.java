@@ -1,11 +1,11 @@
-package edu.java.scrapper.domain.jdbc.jdbcServices;
+package edu.java.scrapper.domain.services;
 
 import edu.java.scrapper.controllers.exceptions.LinkWasNotTrackedException;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.domain.repositories.ChatLinkRepository;
-import edu.java.scrapper.domain.repositories.LinkRepository;
-import edu.java.scrapper.domain.services.LinkService;
+import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
+import edu.java.scrapper.domain.services.interfaces.LinkService;
 import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.dto.response.ListLinksResponse;
 import edu.java.scrapper.linkWorkers.LinkResponseFactory;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class JdbcLinkService implements LinkService {
+public class LinkTrackerService implements LinkService {
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
     private final LinkResponseFactory linkFactory;

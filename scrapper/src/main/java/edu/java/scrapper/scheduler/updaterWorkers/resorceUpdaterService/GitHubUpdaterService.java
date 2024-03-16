@@ -2,9 +2,9 @@ package edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService;
 
 import edu.java.scrapper.clients.GitHubClient;
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.domain.repositories.ChatLinkRepository;
-import edu.java.scrapper.domain.repositories.GitHubResponseRepository;
-import edu.java.scrapper.domain.repositories.LinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import edu.java.scrapper.linkWorkers.LinkParserUtil;
@@ -55,7 +55,7 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
     }
 
     private boolean isNeedToUpdate(RepositoryResponse response, Link link) {
-        return response.getPushedAt().with(ZoneOffset.UTC).isAfter(link.getLastUpdate());
+        return response.getPushedAt().isAfter(link.getLastUpdate());
     }
 
     private LinkUpdateRequest getUpdateRepo(RepositoryResponse response, Long linkId, URI url) {

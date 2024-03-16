@@ -1,6 +1,6 @@
-package edu.java.scrapper.domain.jdbc.jdbcRepositories;
+package edu.java.scrapper.domain.repositories.jdbc;
 
-import edu.java.scrapper.domain.repositories.QuestionResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

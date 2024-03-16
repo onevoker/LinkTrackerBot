@@ -1,8 +1,8 @@
 package edu.java.scrapper.scheduler.updaterWorkers;
 
 import edu.java.scrapper.configuration.ApplicationConfig;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcLinkRepository;
 import edu.java.scrapper.domain.models.Link;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.ResourceUpdaterService;
 import java.net.URI;

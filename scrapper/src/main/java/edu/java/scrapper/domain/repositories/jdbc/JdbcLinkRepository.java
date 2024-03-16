@@ -1,10 +1,9 @@
-package edu.java.scrapper.domain.jdbc.jdbcRepositories;
+package edu.java.scrapper.domain.repositories.jdbc;
 
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.domain.repositories.LinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import java.net.URI;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -1,8 +1,8 @@
-package edu.java.scrapper.domain.jdbc.jdbcRepositories;
+package edu.java.scrapper.domain.repositories.jdbc;
 
 import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.domain.models.Chat;
-import edu.java.scrapper.domain.repositories.ChatRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;

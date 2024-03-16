@@ -1,6 +1,6 @@
 package edu.java.scrapper.controllers.telegramConrollers;
 
-import edu.java.scrapper.domain.services.TgChatService;
+import edu.java.scrapper.domain.services.interfaces.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/tg-chat")
 @RequiredArgsConstructor
 public class TelegramChatController {
-    private final TgChatService chatService;
+    private final ChatService chatService;
 
     @PostMapping("/{id}")
     public void registerChat(@PathVariable long id) {

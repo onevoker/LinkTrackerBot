@@ -1,18 +1,18 @@
-package edu.java.scrapper.domain.jdbc.jdbcServices;
+package edu.java.scrapper.domain.services;
 
 import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.domain.repositories.ChatLinkRepository;
-import edu.java.scrapper.domain.repositories.ChatRepository;
-import edu.java.scrapper.domain.repositories.LinkRepository;
-import edu.java.scrapper.domain.services.TgChatService;
+import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
+import edu.java.scrapper.domain.services.interfaces.ChatService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class JdbcTgChatService implements TgChatService {
+public class TelegramChatService implements ChatService {
     private final ChatRepository chatRepository;
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;

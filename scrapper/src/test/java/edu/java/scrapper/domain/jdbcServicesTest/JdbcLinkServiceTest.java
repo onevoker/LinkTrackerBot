@@ -2,14 +2,14 @@ package edu.java.scrapper.domain.jdbcServicesTest;
 
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcChatLinkRepository;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcChatRepository;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcLinkRepository;
-import edu.java.scrapper.domain.jdbc.jdbcServices.JdbcLinkService;
-import edu.java.scrapper.domain.repositories.ChatLinkRepository;
-import edu.java.scrapper.domain.repositories.ChatRepository;
-import edu.java.scrapper.domain.repositories.LinkRepository;
-import edu.java.scrapper.domain.services.LinkService;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcChatLinkRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcChatRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
+import edu.java.scrapper.domain.services.LinkTrackerService;
+import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
+import edu.java.scrapper.domain.services.interfaces.LinkService;
 import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.dto.response.ListLinksResponse;
 import edu.java.scrapper.linkWorkers.LinkResponseFactory;
@@ -52,7 +52,7 @@ public class JdbcLinkServiceTest extends IntegrationTest {
     void setUp() {
         chatRepository.add(CHAT_ID);
         LinkResponseFactory linkResponseFactory = new LinkResponseFactory(linkResponseValidatorService);
-        linkService = new JdbcLinkService(linkRepository, chatLinkRepository, linkResponseFactory);
+        linkService = new LinkTrackerService(linkRepository, chatLinkRepository, linkResponseFactory);
     }
 
     @Test

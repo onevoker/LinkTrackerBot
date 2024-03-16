@@ -1,13 +1,13 @@
 package edu.java.scrapper.domain.jdbcRepositoriesTest;
 
 import edu.java.scrapper.IntegrationTest;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcLinkRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.domain.models.Link;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import edu.java.scrapper.domain.repositories.LinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

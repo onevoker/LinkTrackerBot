@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain.repositories;
+package edu.java.scrapper.domain.repositories.interfaces;
 
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import java.util.List;

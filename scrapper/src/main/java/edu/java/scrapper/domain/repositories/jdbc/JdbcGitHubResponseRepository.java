@@ -1,6 +1,6 @@
-package edu.java.scrapper.domain.jdbc.jdbcRepositories;
+package edu.java.scrapper.domain.repositories.jdbc;
 
-import edu.java.scrapper.domain.repositories.GitHubResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

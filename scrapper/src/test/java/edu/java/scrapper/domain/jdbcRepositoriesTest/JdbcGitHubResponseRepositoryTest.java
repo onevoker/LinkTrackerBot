@@ -1,11 +1,11 @@
 package edu.java.scrapper.domain.jdbcRepositoriesTest;
 
 import edu.java.scrapper.IntegrationTest;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcGitHubResponseRepository;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcLinkRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcGitHubResponseRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.domain.repositories.GitHubResponseRepository;
-import edu.java.scrapper.domain.repositories.LinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import java.net.URI;
 import java.time.OffsetDateTime;

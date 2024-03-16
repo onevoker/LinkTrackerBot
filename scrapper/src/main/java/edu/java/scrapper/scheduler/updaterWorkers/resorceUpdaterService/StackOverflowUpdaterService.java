@@ -2,9 +2,9 @@ package edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService;
 
 import edu.java.scrapper.clients.StackOverflowClient;
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.domain.repositories.ChatLinkRepository;
-import edu.java.scrapper.domain.repositories.LinkRepository;
-import edu.java.scrapper.domain.repositories.QuestionResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;

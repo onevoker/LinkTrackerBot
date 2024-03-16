@@ -1,14 +1,14 @@
 package edu.java.scrapper.domain.jdbcServicesTest;
 
 import edu.java.scrapper.IntegrationTest;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcChatLinkRepository;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcChatRepository;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcLinkRepository;
-import edu.java.scrapper.domain.jdbc.jdbcServices.JdbcTgChatService;
-import edu.java.scrapper.domain.repositories.ChatLinkRepository;
-import edu.java.scrapper.domain.repositories.ChatRepository;
-import edu.java.scrapper.domain.repositories.LinkRepository;
-import edu.java.scrapper.domain.services.TgChatService;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcChatLinkRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcChatRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
+import edu.java.scrapper.domain.services.TelegramChatService;
+import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
+import edu.java.scrapper.domain.services.interfaces.ChatService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +33,11 @@ public class JdbcTgChatServiceTest extends IntegrationTest {
     @Autowired
     private ChatLinkRepository chatLinkRepository;
     private static final Long CHAT_ID = 14L;
-    private TgChatService chatService;
+    private ChatService chatService;
 
     @BeforeEach
     void setUp() {
-        chatService = new JdbcTgChatService(chatRepository, linkRepository, chatLinkRepository);
+        chatService = new TelegramChatService(chatRepository, linkRepository, chatLinkRepository);
     }
 
     @Test

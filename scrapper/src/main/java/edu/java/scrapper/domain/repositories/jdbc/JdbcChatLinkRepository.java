@@ -1,9 +1,9 @@
-package edu.java.scrapper.domain.jdbc.jdbcRepositories;
+package edu.java.scrapper.domain.repositories.jdbc;
 
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.domain.repositories.ChatLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

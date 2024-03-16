@@ -1,11 +1,11 @@
 package edu.java.scrapper.domain.jdbcRepositoriesTest;
 
 import edu.java.scrapper.IntegrationTest;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcLinkRepository;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcQuestionResponseRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcQuestionResponseRepository;
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.domain.repositories.LinkRepository;
-import edu.java.scrapper.domain.repositories.QuestionResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import java.net.URI;
 import java.time.OffsetDateTime;

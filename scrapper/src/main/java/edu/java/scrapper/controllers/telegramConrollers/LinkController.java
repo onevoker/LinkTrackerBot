@@ -1,6 +1,6 @@
 package edu.java.scrapper.controllers.telegramConrollers;
 
-import edu.java.scrapper.domain.services.LinkService;
+import edu.java.scrapper.domain.services.interfaces.LinkService;
 import edu.java.scrapper.dto.request.AddLinkRequest;
 import edu.java.scrapper.dto.request.RemoveLinkRequest;
 import edu.java.scrapper.dto.response.LinkResponse;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/links")
 @RequiredArgsConstructor
 public class LinkController {
-    private final LinkService linkUpdatedService;
+    private final LinkService linkService;
 
     @GetMapping
     public ListLinksResponse getTrackedLinks(@RequestHeader("Tg-Chat-Id") @Positive long chatId) {
-        return linkUpdatedService.listAll(chatId);
+        return linkService.listAll(chatId);
     }
 
     @PostMapping
@@ -32,7 +32,7 @@ public class LinkController {
         @RequestHeader("Tg-Chat-Id") @Positive long chatId,
         @RequestBody @Valid AddLinkRequest addLinkRequest
     ) {
-        return linkUpdatedService.add(chatId, addLinkRequest.url());
+        return linkService.add(chatId, addLinkRequest.url());
     }
 
     @DeleteMapping
@@ -40,6 +40,6 @@ public class LinkController {
         @RequestHeader("Tg-Chat-Id") @Positive long chatId,
         @RequestBody @Valid RemoveLinkRequest removeLinkRequest
     ) {
-        return linkUpdatedService.remove(chatId, removeLinkRequest.url());
+        return linkService.remove(chatId, removeLinkRequest.url());
     }
 }
