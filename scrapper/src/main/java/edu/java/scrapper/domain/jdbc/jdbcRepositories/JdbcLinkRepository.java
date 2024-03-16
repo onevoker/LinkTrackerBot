@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Log4j2
 public class JdbcLinkRepository implements LinkRepository {
     private final JdbcTemplate jdbcTemplate;
-    private static final int OLD_LINK_CHECKED_MINUTES = 7;
+    private static final int OLD_LINK_CHECKED_MINUTES = 1;
 
     @Transactional
     @Override

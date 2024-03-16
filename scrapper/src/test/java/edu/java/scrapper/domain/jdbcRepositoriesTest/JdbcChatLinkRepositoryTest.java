@@ -1,4 +1,4 @@
-package edu.java.scrapper.jdbcRepositoriesTest;
+package edu.java.scrapper.domain.jdbcRepositoriesTest;
 
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;

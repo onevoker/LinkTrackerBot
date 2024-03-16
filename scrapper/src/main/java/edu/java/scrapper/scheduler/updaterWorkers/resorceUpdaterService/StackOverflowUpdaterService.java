@@ -61,7 +61,7 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
         return responseItem.getLastEditDate().isAfter(questionInRepo.getLastEditDate());
     }
 
-    private LinkUpdateRequest getUpdateQuestion(Item responseItem, Long linkId, URI url){
+    private LinkUpdateRequest getUpdateQuestion(Item responseItem, Long linkId, URI url) {
         OffsetDateTime lastEditDate = responseItem.getLastEditDate();
         questionResponseRepository.update(responseItem, linkId);
         linkRepository.updateLastUpdate(lastEditDate, linkId);

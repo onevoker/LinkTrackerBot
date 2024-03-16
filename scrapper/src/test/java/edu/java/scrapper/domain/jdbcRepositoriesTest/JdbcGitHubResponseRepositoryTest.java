@@ -1,12 +1,12 @@
-package edu.java.scrapper.jdbcRepositoriesTest;
+package edu.java.scrapper.domain.jdbcRepositoriesTest;
 
 import edu.java.scrapper.IntegrationTest;
+import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcGitHubResponseRepository;
 import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcLinkRepository;
-import edu.java.scrapper.domain.jdbc.jdbcRepositories.JdbcQuestionResponseRepository;
 import edu.java.scrapper.domain.models.Link;
+import edu.java.scrapper.domain.repositories.GitHubResponseRepository;
 import edu.java.scrapper.domain.repositories.LinkRepository;
-import edu.java.scrapper.domain.repositories.QuestionResponseRepository;
-import edu.java.scrapper.dto.stackOverflowDto.Item;
+import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -20,11 +20,11 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest(classes = {JdbcQuestionResponseRepository.class, JdbcLinkRepository.class})
+@SpringBootTest(classes = {JdbcGitHubResponseRepository.class, JdbcLinkRepository.class})
 @EnableAutoConfiguration(exclude = LiquibaseAutoConfiguration.class)
-public class JdbcQuestionResponseRepositoryTest extends IntegrationTest {
+public class JdbcGitHubResponseRepositoryTest extends IntegrationTest {
     @Autowired
-    private QuestionResponseRepository questionResponseRepository;
+    private GitHubResponseRepository gitHubResponseRepository;
     @Autowired
     private LinkRepository linkRepository;
 
@@ -34,10 +34,12 @@ public class JdbcQuestionResponseRepositoryTest extends IntegrationTest {
             OffsetDateTime.now().with(ZoneOffset.UTC),
             OffsetDateTime.now().with(ZoneOffset.UTC)
         );
-    private static final long QUESTION_ID = 1L;
-    private static final boolean ANSWERED = true;
-    private static final Item QUESTION_ITEM = new Item(ANSWERED, QUESTION_ID, 3, OffsetDateTime.of(
-        2024, 3, 14, 12, 13, 20, 0, ZoneOffset.UTC)
+    private static final long REPO_ID = 132412412L;
+    private static final RepositoryResponse RESPONSE = new RepositoryResponse(
+        REPO_ID,
+        OffsetDateTime.of(
+            2024, 3, 14, 12, 13, 20, 0, ZoneOffset.UTC
+        )
     );
     private Long linkId;
 
@@ -51,33 +53,35 @@ public class JdbcQuestionResponseRepositoryTest extends IntegrationTest {
     @Transactional
     @Rollback
     void addAndFindAllTest() {
-        questionResponseRepository.add(QUESTION_ITEM, linkId);
-        assertThat(questionResponseRepository.findAll().getFirst()).isEqualTo(QUESTION_ITEM);
+        gitHubResponseRepository.add(RESPONSE, linkId);
+        assertThat(gitHubResponseRepository.findAll().getFirst()).isEqualTo(RESPONSE);
     }
 
     @Test
     @Transactional
     @Rollback
     void findByLinkIdTest() {
-        questionResponseRepository.add(QUESTION_ITEM, linkId);
+        gitHubResponseRepository.add(RESPONSE, linkId);
 
-        Item result = questionResponseRepository.findByLinkId(linkId).getFirst();
+        RepositoryResponse result = gitHubResponseRepository.findByLinkId(linkId).getFirst();
 
-        assertThat(result).isEqualTo(QUESTION_ITEM);
+        assertThat(result).isEqualTo(RESPONSE);
     }
 
     @Test
     @Transactional
     @Rollback
     void updateTest() {
-        questionResponseRepository.add(QUESTION_ITEM, linkId);
-        long newAnswerCount = 5L;
-        Item newResponse = QUESTION_ITEM;
-        newResponse.setAnswerCount(newAnswerCount);
-        questionResponseRepository.update(newResponse, linkId);
+        gitHubResponseRepository.add(RESPONSE, linkId);
+        OffsetDateTime timeOfUpdate = OffsetDateTime.of(
+            2025, 1, 1, 1, 1, 1, 0, ZoneOffset.UTC
+        );
+        RepositoryResponse newResponse = new RepositoryResponse(REPO_ID, timeOfUpdate);
+        gitHubResponseRepository.update(newResponse, linkId);
 
-        Long answerCountInRepo = questionResponseRepository.findByLinkId(linkId).getFirst().getAnswerCount();
+        OffsetDateTime timeInRepo = gitHubResponseRepository.findByLinkId(linkId).getFirst().getPushedAt();
 
-        assertThat(answerCountInRepo).isEqualTo(newAnswerCount);
+        assertThat(timeInRepo).isEqualTo(timeOfUpdate);
     }
+
 }

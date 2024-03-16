@@ -28,17 +28,10 @@ public class JdbcChatRepository implements ChatRepository {
 
     @Transactional
     @Override
-    public List<Long> remove(Long id) {
-        List<Long> linkIds = jdbcTemplate.query(
-            "SELECT link_id FROM chat_link WHERE chat_id = ?",
-            (rs, rowNum) -> rs.getLong("link_id"),
-            id
-        );
-
+    public int remove(Long id) {
         jdbcTemplate.update("DELETE FROM chat_link WHERE chat_id = ?", id);
-        jdbcTemplate.update("DELETE FROM chat WHERE id = ?", id);
 
-        return linkIds;
+        return jdbcTemplate.update("DELETE FROM chat WHERE id = ?", id);
     }
 
     @Transactional
@@ -46,4 +39,6 @@ public class JdbcChatRepository implements ChatRepository {
     public List<Chat> findAll() {
         return jdbcTemplate.query("SELECT * FROM chat", new BeanPropertyRowMapper<>(Chat.class));
     }
+
+
 }

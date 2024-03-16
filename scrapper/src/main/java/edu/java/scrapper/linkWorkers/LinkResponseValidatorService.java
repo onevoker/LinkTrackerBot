@@ -3,13 +3,11 @@ package edu.java.scrapper.linkWorkers;
 import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-@RequiredArgsConstructor
 public class LinkResponseValidatorService {
     private static final String REGEX_FOR_GIT_HUB_REPO = "https://github\\.com/[^/]+/[^/]+/?";
     private static final String REGEX_FOR_STACK_OVERFLOW_QUESTION =
