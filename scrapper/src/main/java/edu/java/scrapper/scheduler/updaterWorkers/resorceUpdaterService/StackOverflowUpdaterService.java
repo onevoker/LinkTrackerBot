@@ -48,19 +48,19 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
                 }
 
                 Item questionInRepo = responsesInRepo.getFirst();
-                if (isNeedToUpdate(responseItem, questionInRepo)) {
+                if (isNeedToUpdate(responseItem, link)) {
                     requests.add(getUpdateQuestion(responseItem, linkId, url, questionInRepo));
                 }
             }
-            OffsetDateTime lastApiCheck = OffsetDateTime.now().with(ZoneOffset.UTC);
+            OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
             linkRepository.updateLastApiCheck(lastApiCheck, linkId);
         }
 
         return requests;
     }
 
-    private boolean isNeedToUpdate(Item responseItem, Item questionInRepo) {
-        return responseItem.getLastActivityDate().isAfter(questionInRepo.getLastActivityDate());
+    private boolean isNeedToUpdate(Item responseItem, Link link) {
+        return responseItem.getLastActivityDate().isAfter(link.getLastUpdate());
     }
 
     private LinkUpdateRequest getUpdateQuestion(Item responseItem, Long linkId, URI url, Item questionInRepo) {

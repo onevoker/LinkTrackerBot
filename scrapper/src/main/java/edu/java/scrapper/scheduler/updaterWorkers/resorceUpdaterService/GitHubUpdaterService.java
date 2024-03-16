@@ -41,23 +41,21 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
 
                 if (responsesInRepo.isEmpty()) {
                     gitHubResponseRepository.add(response, linkId);
-                    responsesInRepo = gitHubResponseRepository.findByLinkId(linkId);
                 }
 
-                RepositoryResponse responseInRepo = responsesInRepo.getFirst();
-                if (isNeedToUpdate(response, responseInRepo)) {
+                if (isNeedToUpdate(response, link)) {
                     requests.add(getUpdateRepo(response, linkId, url));
                 }
             }
-            OffsetDateTime lastApiCheck = OffsetDateTime.now().with(ZoneOffset.UTC);
+            OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
             linkRepository.updateLastApiCheck(lastApiCheck, linkId);
         }
 
         return requests;
     }
 
-    private boolean isNeedToUpdate(RepositoryResponse response, RepositoryResponse responseInRepo) {
-        return response.getPushedAt().with(ZoneOffset.UTC).isAfter(responseInRepo.getPushedAt().with(ZoneOffset.UTC));
+    private boolean isNeedToUpdate(RepositoryResponse response, Link link) {
+        return response.getPushedAt().with(ZoneOffset.UTC).isAfter(link.getLastUpdate());
     }
 
     private LinkUpdateRequest getUpdateRepo(RepositoryResponse response, Long linkId, URI url) {

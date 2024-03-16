@@ -20,7 +20,7 @@ public class LinkUpdaterScheduler {
 
     @Scheduled(fixedDelayString = "#{scheduler.interval()}")
     public void update() {
-        OffsetDateTime timeNow = OffsetDateTime.now().with(ZoneOffset.UTC);
+        OffsetDateTime timeNow = OffsetDateTime.now(ZoneOffset.UTC);
         List<LinkUpdateRequest> requests = linkUpdaterService.getUpdates(timeNow);
 
         if (!requests.isEmpty()) {

@@ -71,7 +71,7 @@ public class JdbcLinkService implements LinkService {
     }
 
     private void addNoOneTrackedLink(long tgChatId, URI url) {
-        OffsetDateTime timeNow = OffsetDateTime.now().with(ZoneOffset.UTC);
+        OffsetDateTime timeNow = OffsetDateTime.now(ZoneOffset.UTC);
         Link link = new Link(url, timeNow, timeNow);
         linkRepository.add(link);
         Link addedLink = linkRepository.findByUrl(url).getFirst();

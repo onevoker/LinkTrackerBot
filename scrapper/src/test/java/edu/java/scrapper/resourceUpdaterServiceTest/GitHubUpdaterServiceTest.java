@@ -68,7 +68,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
                 "id": 146644496
             },
             "html_url": "https://github.com/onevoker/LinkTrackerBot",
-            "pushed_at": "2024-03-14T13:59:57Z"
+            "pushed_at": "2025-03-14T13:59:57Z"
         }""";
     private static final String UPDATED_BODY = """
         {
@@ -123,9 +123,9 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     @Rollback
     void getUpdatesTest() {
         List<Link> neededToCheckLinks = List.of(linkRepository.findAll().getFirst());
-        List<LinkUpdateRequest> noThingToUpdate = gitHubUpdaterService.getUpdates(neededToCheckLinks);
+        List<LinkUpdateRequest> neededToUpdate = gitHubUpdaterService.getUpdates(neededToCheckLinks);
 
-        assertThat(noThingToUpdate.isEmpty()).isTrue();
+        assertThat(neededToUpdate.getFirst().description()).isEqualTo("Появилось обновление");
 
         // changing date
         stubFor(

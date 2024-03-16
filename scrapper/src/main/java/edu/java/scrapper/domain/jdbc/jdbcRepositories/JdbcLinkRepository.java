@@ -64,11 +64,10 @@ public class JdbcLinkRepository implements LinkRepository {
     @Transactional
     @Override
     public List<Link> findOldCheckedLinks(OffsetDateTime time) {
-        OffsetDateTime neededTime = time.minusMinutes(OLD_LINK_CHECKED_MINUTES).with(ZoneOffset.UTC);
         return jdbcTemplate.query(
             "SELECT * FROM link WHERE last_api_check < ?",
             new BeanPropertyRowMapper<>(Link.class),
-            neededTime
+            time.minusMinutes(OLD_LINK_CHECKED_MINUTES)
         );
     }
 
