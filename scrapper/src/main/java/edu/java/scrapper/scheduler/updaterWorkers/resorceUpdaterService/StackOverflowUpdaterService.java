@@ -25,6 +25,8 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
     private final ChatLinkRepository chatLinkRepository;
     private final StackOverflowClient stackOverflowClient;
     private static final String UPDATE_DESCRIPTION = "Появилось обновление";
+    private static final String ANSWERED_DESCRIPTION = "На вопрос был получен ответ";
+    private static final String ANSWER_COUNT_DESCRIPTION = "Был добавлен ответ на вопрос";
 
     @Override
     public List<LinkUpdateRequest> getUpdates(List<Link> links) {
@@ -47,7 +49,7 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
 
                 Item questionInRepo = responsesInRepo.getFirst();
                 if (isNeedToUpdate(responseItem, questionInRepo)) {
-                    requests.add(getUpdateQuestion(responseItem, linkId, url));
+                    requests.add(getUpdateQuestion(responseItem, linkId, url, questionInRepo));
                 }
             }
             OffsetDateTime lastApiCheck = OffsetDateTime.now().with(ZoneOffset.UTC);
@@ -61,12 +63,26 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
         return responseItem.getLastActivityDate().isAfter(questionInRepo.getLastActivityDate());
     }
 
-    private LinkUpdateRequest getUpdateQuestion(Item responseItem, Long linkId, URI url) {
+    private LinkUpdateRequest getUpdateQuestion(Item responseItem, Long linkId, URI url, Item questionInRepo) {
         OffsetDateTime lastEditDate = responseItem.getLastActivityDate();
         questionResponseRepository.update(responseItem, linkId);
         linkRepository.updateLastUpdate(lastEditDate, linkId);
         List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
+        String messageForUser = getUpdateMessage(responseItem, questionInRepo);
 
-        return new LinkUpdateRequest(url, UPDATE_DESCRIPTION, tgChatIdsForUpdate);
+        return new LinkUpdateRequest(url, messageForUser, tgChatIdsForUpdate);
+    }
+
+    private String getUpdateMessage(Item responseItem, Item questionInRepo) {
+        StringBuilder updateMessage = new StringBuilder(UPDATE_DESCRIPTION);
+
+        if (responseItem.getAnswerCount() != questionInRepo.getAnswerCount()) {
+            updateMessage.append("\n").append(ANSWER_COUNT_DESCRIPTION);
+        }
+        if (responseItem.getAnswered() != questionInRepo.getAnswered()) {
+            updateMessage.append("\n").append(ANSWERED_DESCRIPTION);
+        }
+
+        return updateMessage.toString();
     }
 }

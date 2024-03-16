@@ -85,8 +85,8 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         {
             "items": [
                 {
-                    "is_answered": false,
-                    "answer_count": 1,
+                    "is_answered": true,
+                    "answer_count": 3,
                     "last_activity_date": 1800000000,
                     "creation_date": 1589270501,
                     "last_edit_date": 1589270864,
@@ -146,7 +146,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
 
         assertThat(noThingToUpdate.isEmpty()).isTrue();
 
-        // меняем дату
+        // changing date, answer_count and is_answered
         stubFor(
             prepareStub(UPDATED_BODY)
         );
@@ -158,7 +158,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         assertThat(repoAfterTest.isEmpty()).isFalse();
         assertThat(res.getFirst()).isEqualTo(new LinkUpdateRequest(
             url,
-            "Появилось обновление",
+            "Появилось обновление\nБыл добавлен ответ на вопрос\nНа вопрос был получен ответ",
             List.of(CHAT_ID)
         ));
     }
