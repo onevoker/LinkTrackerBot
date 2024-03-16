@@ -11,7 +11,7 @@ public interface ChatLinkRepository {
 
     List<ChatLink> findAll();
 
-    List<Link> getLinksByTgChatId(Long tgChatId);
+    List<Link> findLinksByTgChatId(Long tgChatId);
 
-    List<Long> getTgChatIds(Long linkId);
+    List<Long> findTgChatIds(Long linkId);
 }

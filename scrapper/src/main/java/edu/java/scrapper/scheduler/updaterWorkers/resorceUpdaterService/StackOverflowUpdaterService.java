@@ -47,15 +47,7 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
 
                 Item questionInRepo = responsesInRepo.getFirst();
                 if (isNeedToUpdate(responseItem, questionInRepo)) {
-                    OffsetDateTime lastEditDate = responseItem.getLastEditDate();
-                    questionResponseRepository.update(responseItem, linkId);
-                    linkRepository.updateLastUpdate(lastEditDate, linkId);
-
-                    List<Long> tgChatIdsForUpdate = chatLinkRepository.getTgChatIds(linkId);
-                    LinkUpdateRequest linkUpdateRequest =
-                        new LinkUpdateRequest(url, UPDATE_DESCRIPTION, tgChatIdsForUpdate);
-
-                    requests.add(linkUpdateRequest);
+                    requests.add(getUpdateQuestion(responseItem, linkId, url));
                 }
             }
             OffsetDateTime lastApiCheck = OffsetDateTime.now().with(ZoneOffset.UTC);
@@ -67,5 +59,14 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
 
     private boolean isNeedToUpdate(Item responseItem, Item questionInRepo) {
         return responseItem.getLastEditDate().isAfter(questionInRepo.getLastEditDate());
+    }
+
+    private LinkUpdateRequest getUpdateQuestion(Item responseItem, Long linkId, URI url){
+        OffsetDateTime lastEditDate = responseItem.getLastEditDate();
+        questionResponseRepository.update(responseItem, linkId);
+        linkRepository.updateLastUpdate(lastEditDate, linkId);
+        List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
+
+        return new LinkUpdateRequest(url, UPDATE_DESCRIPTION, tgChatIdsForUpdate);
     }
 }

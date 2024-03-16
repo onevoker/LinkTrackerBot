@@ -28,7 +28,7 @@ public class JdbcTgChatService implements TgChatService {
             throw new ChatNotFoundException("Вы не были зарегестрированы");
         }
         for (long linkId : linkIds) {
-            List<Long> tgChatIds = chatLinkRepository.getTgChatIds(linkId);
+            List<Long> tgChatIds = chatLinkRepository.findTgChatIds(linkId);
             if (tgChatIds.isEmpty()) {
                 linkRepository.remove(linkId);
             }

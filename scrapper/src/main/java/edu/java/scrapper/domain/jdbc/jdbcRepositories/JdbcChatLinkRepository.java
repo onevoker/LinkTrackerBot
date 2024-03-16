@@ -51,7 +51,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     @Transactional
     @Override
-    public List<Link> getLinksByTgChatId(Long tgChatId) {
+    public List<Link> findLinksByTgChatId(Long tgChatId) {
         return jdbcTemplate.query(
             "SELECT * FROM link WHERE id IN (SELECT link_id FROM chat_link WHERE chat_id = ?)",
             new BeanPropertyRowMapper<>(Link.class),
@@ -61,7 +61,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     @Transactional
     @Override
-    public List<Long> getTgChatIds(Long linkId) {
+    public List<Long> findTgChatIds(Long linkId) {
         return jdbcTemplate.query(
             "SELECT chat_id FROM chat_link WHERE link_id = ?",
             (rs, rowNum) -> rs.getLong("chat_id"),

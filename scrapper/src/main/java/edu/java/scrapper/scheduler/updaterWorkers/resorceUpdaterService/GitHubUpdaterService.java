@@ -46,15 +46,7 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
 
                 RepositoryResponse responseInRepo = responsesInRepo.getFirst();
                 if (isNeedToUpdate(response, responseInRepo)) {
-                    OffsetDateTime updatedAt = response.getPushedAt().with(ZoneOffset.UTC);
-                    gitHubResponseRepository.update(response, linkId);
-                    linkRepository.updateLastUpdate(updatedAt, linkId);
-
-                    List<Long> tgChatIdsForUpdate = chatLinkRepository.getTgChatIds(linkId);
-                    LinkUpdateRequest linkUpdateRequest =
-                        new LinkUpdateRequest(url, UPDATE_DESCRIPTION, tgChatIdsForUpdate);
-
-                    requests.add(linkUpdateRequest);
+                    requests.add(getUpdateRepo(response, linkId, url));
                 }
             }
             OffsetDateTime lastApiCheck = OffsetDateTime.now().with(ZoneOffset.UTC);
@@ -66,5 +58,14 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
 
     private boolean isNeedToUpdate(RepositoryResponse response, RepositoryResponse responseInRepo) {
         return response.getPushedAt().with(ZoneOffset.UTC).isAfter(responseInRepo.getPushedAt().with(ZoneOffset.UTC));
+    }
+
+    private LinkUpdateRequest getUpdateRepo(RepositoryResponse response, Long linkId, URI url) {
+        OffsetDateTime updatedAt = response.getPushedAt().with(ZoneOffset.UTC);
+        gitHubResponseRepository.update(response, linkId);
+        linkRepository.updateLastUpdate(updatedAt, linkId);
+        List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
+
+        return new LinkUpdateRequest(url, UPDATE_DESCRIPTION, tgChatIdsForUpdate);
     }
 }

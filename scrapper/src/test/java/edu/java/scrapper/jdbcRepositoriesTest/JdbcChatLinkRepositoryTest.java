@@ -96,12 +96,12 @@ public class JdbcChatLinkRepositoryTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    void getLinksByTgChatIdTest() {
+    void findLinksByTgChatIdTest() {
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
         chatLinkRepository.add(chatLink);
 
-        List<Link> result = chatLinkRepository.getLinksByTgChatId(CHAT_ID);
+        List<Link> result = chatLinkRepository.findLinksByTgChatId(CHAT_ID);
         Link expectedLink = LINK;
         expectedLink.setId(linkId);
         List<Link> expected = List.of(expectedLink);
@@ -114,12 +114,12 @@ public class JdbcChatLinkRepositoryTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    void getTgChatIdsTest() {
+    void findTgChatIdsTest() {
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
         chatLinkRepository.add(chatLink);
 
-        List<Long> result = chatLinkRepository.getTgChatIds(linkId);
+        List<Long> result = chatLinkRepository.findTgChatIds(linkId);
         List<Long> expected = List.of(CHAT_ID);
 
         assertThat(result).isEqualTo(expected);

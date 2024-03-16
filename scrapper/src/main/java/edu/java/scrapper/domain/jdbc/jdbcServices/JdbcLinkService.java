@@ -31,12 +31,7 @@ public class JdbcLinkService implements LinkService {
         List<Link> linkInLinkRepos = linkRepository.findByUrl(linkUrl);
 
         if (linkInLinkRepos.isEmpty()) {
-            OffsetDateTime timeNow = OffsetDateTime.now().with(ZoneOffset.UTC);
-            Link link = new Link(linkUrl, timeNow, timeNow);
-            linkRepository.add(link);
-            Link addedLink = linkRepository.findByUrl(linkUrl).getFirst();
-            ChatLink chatLink = new ChatLink(tgChatId, addedLink.getId());
-            chatLinkRepository.add(chatLink);
+            addNoOneTrackedLink(tgChatId, linkUrl);
         } else {
             ChatLink chatLink = new ChatLink(tgChatId, linkInLinkRepos.getFirst().getId());
             chatLinkRepository.add(chatLink);
@@ -46,7 +41,6 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     public LinkResponse remove(long tgChatId, URI url) {
-        LinkResponse linkResponse = linkFactory.createLink(tgChatId, url);
         Link addedLink = linkRepository.findByUrl(url).getFirst();
         Long linkId = addedLink.getId();
         ChatLink chatLink = new ChatLink(tgChatId, linkId);
@@ -56,17 +50,17 @@ public class JdbcLinkService implements LinkService {
             throw new LinkWasNotTrackedException("Вы не отслеживаете данную ссылку");
         }
 
-        List<Long> tgChatIds = chatLinkRepository.getTgChatIds(linkId);
+        List<Long> tgChatIds = chatLinkRepository.findTgChatIds(linkId);
         if (tgChatIds.isEmpty()) {
             linkRepository.remove(linkId);
         }
 
-        return linkResponse;
+        return linkFactory.createLink(tgChatId, url);
     }
 
     @Override
     public ListLinksResponse listAll(long tgChatId) {
-        List<Link> links = chatLinkRepository.getLinksByTgChatId(tgChatId);
+        List<Link> links = chatLinkRepository.findLinksByTgChatId(tgChatId);
         List<LinkResponse> linkResponses = new ArrayList<>();
 
         for (var link : links) {
@@ -74,5 +68,14 @@ public class JdbcLinkService implements LinkService {
         }
 
         return new ListLinksResponse(linkResponses, linkResponses.size());
+    }
+
+    private void addNoOneTrackedLink(long tgChatId, URI url) {
+        OffsetDateTime timeNow = OffsetDateTime.now().with(ZoneOffset.UTC);
+        Link link = new Link(url, timeNow, timeNow);
+        linkRepository.add(link);
+        Link addedLink = linkRepository.findByUrl(url).getFirst();
+        ChatLink chatLink = new ChatLink(tgChatId, addedLink.getId());
+        chatLinkRepository.add(chatLink);
     }
 }
