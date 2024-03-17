@@ -3,8 +3,8 @@ package edu.java.scrapper.linkWorkersTest;
 import edu.java.scrapper.linkWorkers.LinkParserUtil;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class LinkParserUtilTest {
     private static final String preparedRepo = "https://github.com/%s/%s";

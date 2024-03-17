@@ -1,10 +1,10 @@
-CREATE TABLE CHAT
+CREATE TABLE chat
 (
     id BIGINT,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE LINK
+CREATE TABLE link
 (
     id             BIGSERIAL,
     url            VARCHAR(255)             NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE LINK
     UNIQUE (url)
 );
 
-CREATE TABLE CHAT_LINK
+CREATE TABLE chat_link
 (
     id      BIGSERIAL,
     chat_id BIGINT REFERENCES CHAT (id),
@@ -25,7 +25,7 @@ CREATE TABLE CHAT_LINK
     CONSTRAINT unique_chat_link_pair UNIQUE (chat_id, link_id)
 );
 
-CREATE TABLE REPOSITORY_RESPONSE
+CREATE TABLE repository_response
 (
     id        BIGINT,
     link_id   BIGINT REFERENCES LINK (id) ON DELETE CASCADE,
@@ -35,7 +35,7 @@ CREATE TABLE REPOSITORY_RESPONSE
     UNIQUE (link_id)
 );
 
-CREATE TABLE QUESTION_RESPONSE
+CREATE TABLE question_response
 (
     question_id        BIGINT,
     link_id            BIGINT REFERENCES LINK (id) ON DELETE CASCADE,

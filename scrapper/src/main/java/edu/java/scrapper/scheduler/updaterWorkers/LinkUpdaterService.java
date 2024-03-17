@@ -2,7 +2,7 @@ package edu.java.scrapper.scheduler.updaterWorkers;
 
 import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.ResourceUpdaterService;
 import java.net.URI;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LinkUpdaterService {
     private final ApplicationConfig applicationConfig;
-    private final JdbcLinkRepository linkRepository;
+    private final LinkRepository linkRepository;
     private final ResourceUpdaterService stackOverflowUpdaterService;
     private final ResourceUpdaterService gitHubUpdaterService;
 

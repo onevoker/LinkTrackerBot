@@ -1,8 +1,6 @@
-package edu.java.scrapper.domain.jdbcRepositoriesTest;
+package edu.java.scrapper.domain.repositoriesTest;
 
 import edu.java.scrapper.IntegrationTest;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcGitHubResponseRepository;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
@@ -13,16 +11,11 @@ import java.time.ZoneOffset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest(classes = {JdbcGitHubResponseRepository.class, JdbcLinkRepository.class})
-@EnableAutoConfiguration(exclude = LiquibaseAutoConfiguration.class)
-public class JdbcGitHubResponseRepositoryTest extends IntegrationTest {
+public class GitHubResponseRepositoryTest extends IntegrationTest {
     @Autowired
     private GitHubResponseRepository gitHubResponseRepository;
     @Autowired
@@ -31,14 +24,14 @@ public class JdbcGitHubResponseRepositoryTest extends IntegrationTest {
     private static final Link LINK =
         new Link(
             URI.create("https://github.com/onevoker"),
-            OffsetDateTime.now().with(ZoneOffset.UTC),
-            OffsetDateTime.now().with(ZoneOffset.UTC)
+            OffsetDateTime.now(ZoneOffset.UTC),
+            OffsetDateTime.now(ZoneOffset.UTC)
         );
     private static final long REPO_ID = 132412412L;
     private static final RepositoryResponse RESPONSE = new RepositoryResponse(
         REPO_ID,
         OffsetDateTime.of(
-            2024, 3, 14, 12, 13, 20, 0, ZoneOffset.UTC
+            2024, 3, 14, 12, 13, 20, 0, ZoneOffset.ofHours(3)
         )
     );
     private Long linkId;
@@ -54,7 +47,7 @@ public class JdbcGitHubResponseRepositoryTest extends IntegrationTest {
     @Rollback
     void addAndFindAllTest() {
         gitHubResponseRepository.add(RESPONSE, linkId);
-        assertThat(gitHubResponseRepository.findAll().getFirst()).isEqualTo(RESPONSE);
+        assertThat(RESPONSE).isEqualTo(gitHubResponseRepository.findAll().getFirst());
     }
 
     @Test

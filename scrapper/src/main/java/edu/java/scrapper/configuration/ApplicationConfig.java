@@ -13,8 +13,6 @@ public record ApplicationConfig(
     @Bean
     Scheduler scheduler,
     Clients clients,
-    @Bean
-    DataSourceValues dataSourceValues,
     String authorizationGitHubToken,
     String gitHubDomain,
     String stackOverflowDomain
@@ -23,8 +21,5 @@ public record ApplicationConfig(
     }
 
     public record Clients(String gitHub, String stackOverflow, String bot) {
-    }
-
-    public record DataSourceValues(String driverClassName, String url, String username, String password) {
     }
 }

@@ -2,13 +2,10 @@ package edu.java.scrapper.domain.servicesTest;
 
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcChatLinkRepository;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcChatRepository;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
-import edu.java.scrapper.domain.services.LinkTrackerService;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
+import edu.java.scrapper.domain.services.LinkTrackerService;
 import edu.java.scrapper.domain.services.interfaces.LinkService;
 import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.dto.response.ListLinksResponse;
@@ -18,22 +15,12 @@ import java.net.URI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(classes = {
-    JdbcChatRepository.class,
-    JdbcLinkRepository.class,
-    JdbcChatLinkRepository.class,
-    LinkResponseValidatorService.class
-})
-@EnableAutoConfiguration(exclude = LiquibaseAutoConfiguration.class)
 public class LinkTrackerServiceTest extends IntegrationTest {
     @Autowired
     private ChatRepository chatRepository;

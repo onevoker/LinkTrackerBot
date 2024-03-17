@@ -20,7 +20,7 @@ public class LinkResponseFactory {
         throw new InvalidLinkResponseException("Вы указали неправильную ссылку, возможно вам поможет /help");
     }
 
-    private URI normalizeUrl(String link) {
+    public URI normalizeUrl(String link) {
         String normalizedUrl = link.replaceAll("/+$", "");
         return URI.create(normalizedUrl);
     }

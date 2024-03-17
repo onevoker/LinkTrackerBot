@@ -10,15 +10,13 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+//@Repository
 @RequiredArgsConstructor
 @Log4j2
 public class JdbcLinkRepository implements LinkRepository {
     private final JdbcTemplate jdbcTemplate;
-    private static final int OLD_LINK_CHECKED_MINUTES = 1;
 
     @Transactional
     @Override
@@ -66,7 +64,7 @@ public class JdbcLinkRepository implements LinkRepository {
         return jdbcTemplate.query(
             "SELECT * FROM link WHERE last_api_check < ?",
             new BeanPropertyRowMapper<>(Link.class),
-            time.minusMinutes(OLD_LINK_CHECKED_MINUTES)
+            time
         );
     }
 

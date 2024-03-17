@@ -6,10 +6,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+//@Repository
 @RequiredArgsConstructor
 public class JdbcQuestionResponseRepository implements QuestionResponseRepository {
     private final JdbcTemplate jdbcTemplate;

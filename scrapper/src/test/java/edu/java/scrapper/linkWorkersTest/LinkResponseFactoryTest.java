@@ -5,7 +5,6 @@ import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.linkWorkers.LinkResponseFactory;
 import edu.java.scrapper.linkWorkers.LinkResponseValidatorService;
 import java.net.URI;
-import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -2,7 +2,7 @@ app:
   scheduler:
     enable: true
     interval: 14s
-    force-check-delay: 10s
+    force-check-delay: 60s
 
   clients:
     git-hub: https://api.github.com/repos/
@@ -11,19 +11,19 @@ app:
 
   git-hub-domain: github.com
   stack-overflow-domain: stackoverflow.com
-
-  data_source_values:
-    driver_class_name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/scrapper
-    username: postgres
-    password: postgres
-
   authorization-git-hub-token: ${access-token}
 
 
 spring:
+  liquibase:
+    enabled: false
   application:
     name: scrapper
+  datasource:
+    driver_class_name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
 
 server:
   port: 8080

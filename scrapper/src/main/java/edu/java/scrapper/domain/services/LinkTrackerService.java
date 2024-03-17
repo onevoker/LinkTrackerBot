@@ -23,6 +23,7 @@ public class LinkTrackerService implements LinkService {
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
     private final LinkResponseFactory linkFactory;
+    private static final String NOT_TRACKED_MESSAGE = "Вы не отслеживаете данную ссылку";
 
     @Override
     public LinkResponse add(long tgChatId, URI url) {
@@ -41,13 +42,19 @@ public class LinkTrackerService implements LinkService {
 
     @Override
     public LinkResponse remove(long tgChatId, URI url) {
-        Link addedLink = linkRepository.findByUrl(url).getFirst();
-        Long linkId = addedLink.getId();
+        URI linkUrl = linkFactory.normalizeUrl(url.toString());
+        List<Link> linkInRepo = linkRepository.findByUrl(linkUrl);
+
+        if (linkInRepo.isEmpty()) {
+            throw new LinkWasNotTrackedException(NOT_TRACKED_MESSAGE);
+        }
+
+        Long linkId = linkInRepo.getFirst().getId();
         ChatLink chatLink = new ChatLink(tgChatId, linkId);
         int size = chatLinkRepository.remove(chatLink);
 
         if (size == 0) {
-            throw new LinkWasNotTrackedException("Вы не отслеживаете данную ссылку");
+            throw new LinkWasNotTrackedException(NOT_TRACKED_MESSAGE);
         }
 
         List<Long> tgChatIds = chatLinkRepository.findTgChatIds(linkId);
@@ -55,7 +62,7 @@ public class LinkTrackerService implements LinkService {
             linkRepository.remove(linkId);
         }
 
-        return linkFactory.createLink(tgChatId, url);
+        return new LinkResponse(tgChatId, linkUrl);
     }
 
     @Override

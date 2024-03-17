@@ -5,10 +5,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.clients.GitHubClient;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcChatLinkRepository;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcChatRepository;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcGitHubResponseRepository;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
@@ -26,9 +22,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -38,13 +31,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest(classes = {
-    JdbcGitHubResponseRepository.class,
-    JdbcLinkRepository.class,
-    JdbcChatLinkRepository.class,
-    JdbcChatRepository.class
-})
-@EnableAutoConfiguration(exclude = LiquibaseAutoConfiguration.class)
 @WireMockTest(httpPort = 8080)
 @ExtendWith(WireMockExtension.class)
 public class GitHubUpdaterServiceTest extends IntegrationTest {

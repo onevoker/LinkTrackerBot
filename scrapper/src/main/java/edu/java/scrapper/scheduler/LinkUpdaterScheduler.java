@@ -1,8 +1,10 @@
 package edu.java.scrapper.scheduler;
 
 import edu.java.scrapper.clients.BotClient;
+import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import edu.java.scrapper.scheduler.updaterWorkers.LinkUpdaterService;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -15,12 +17,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class LinkUpdaterScheduler {
+    private final ApplicationConfig applicationConfig;
     private final BotClient botClient;
     private final LinkUpdaterService linkUpdaterService;
 
     @Scheduled(fixedDelayString = "#{scheduler.interval()}")
     public void update() {
-        OffsetDateTime timeNow = OffsetDateTime.now(ZoneOffset.UTC);
+        Duration checkingDuration = applicationConfig.scheduler().forceCheckDelay();
+        OffsetDateTime timeNow = OffsetDateTime.now(ZoneOffset.UTC).minusSeconds(checkingDuration.toSeconds());
         List<LinkUpdateRequest> requests = linkUpdaterService.getUpdates(timeNow);
 
         if (!requests.isEmpty()) {

@@ -1,27 +1,21 @@
-package edu.java.scrapper.domain.jdbcRepositoriesTest;
+package edu.java.scrapper.domain.repositoriesTest;
 
 import edu.java.scrapper.IntegrationTest;
-import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.domain.models.Link;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@SpringBootTest(classes = JdbcLinkRepository.class)
-@EnableAutoConfiguration(exclude = LiquibaseAutoConfiguration.class)
-public class JdbcLinkRepositoryTest extends IntegrationTest {
+public class LinkRepositoryTest extends IntegrationTest {
     @Autowired
     private LinkRepository linkRepository;
     private static final Link LINK =
