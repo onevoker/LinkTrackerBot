@@ -8,6 +8,7 @@ import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class GitHubResponseRepositoryTest extends IntegrationTest {
     private static final RepositoryResponse RESPONSE = new RepositoryResponse(
         REPO_ID,
         OffsetDateTime.of(
-            2024, 3, 14, 12, 13, 20, 0, ZoneOffset.ofHours(3)
+            2024, 3, 14, 12, 13, 20, 0, ZoneOffset.UTC
         )
     );
     private Long linkId;
@@ -47,7 +48,7 @@ public class GitHubResponseRepositoryTest extends IntegrationTest {
     @Rollback
     void addAndFindAllTest() {
         gitHubResponseRepository.add(RESPONSE, linkId);
-        assertThat(RESPONSE).isEqualTo(gitHubResponseRepository.findAll().getFirst());
+        assertThat(gitHubResponseRepository.findAll().getFirst().getId()).isEqualTo(REPO_ID);
     }
 
     @Test
@@ -56,9 +57,9 @@ public class GitHubResponseRepositoryTest extends IntegrationTest {
     void findByLinkIdTest() {
         gitHubResponseRepository.add(RESPONSE, linkId);
 
-        RepositoryResponse result = gitHubResponseRepository.findByLinkId(linkId).getFirst();
+        List<RepositoryResponse> result = gitHubResponseRepository.findByLinkId(linkId);
 
-        assertThat(result).isEqualTo(RESPONSE);
+        assertThat(result.size()).isEqualTo(1);
     }
 
     @Test

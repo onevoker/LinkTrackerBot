@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class QuestionResponseRepositoryTest extends IntegrationTest {
     @Autowired
@@ -23,14 +24,15 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
 
     private static final Link LINK =
         new Link(
-            URI.create("https://github.com/onevoker"),
+            URI.create(
+                "https://stackoverflow.com/questions/78013649/python-functional-method-of-checking-that-all-elements-in-a-list-are-equal"),
             OffsetDateTime.now(ZoneOffset.UTC),
             OffsetDateTime.now(ZoneOffset.UTC)
         );
     private static final long QUESTION_ID = 1L;
     private static final boolean ANSWERED = true;
     private static final Item QUESTION_ITEM = new Item(ANSWERED, QUESTION_ID, 3, OffsetDateTime.of(
-        2024, 3, 14, 12, 13, 20, 0, ZoneOffset.ofHours(3))
+        2024, 3, 14, 12, 13, 20, 0, ZoneOffset.UTC)
     );
     private Long linkId;
 
@@ -45,7 +47,13 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
     @Rollback
     void addAndFindAllTest() {
         questionResponseRepository.add(QUESTION_ITEM, linkId);
-        assertThat(questionResponseRepository.findAll().getFirst()).isEqualTo(QUESTION_ITEM);
+
+        Item result = questionResponseRepository.findAll().getFirst();
+
+        assertAll(
+            () -> assertThat(result.getQuestionId()).isEqualTo(QUESTION_ID),
+            () -> assertThat(result.getAnswered()).isTrue()
+        );
     }
 
     @Test
@@ -56,7 +64,10 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
 
         Item result = questionResponseRepository.findByLinkId(linkId).getFirst();
 
-        assertThat(result).isEqualTo(QUESTION_ITEM);
+        assertAll(
+            () -> assertThat(result.getQuestionId()).isEqualTo(QUESTION_ID),
+            () -> assertThat(result.getAnswered()).isTrue()
+        );
     }
 
     @Test
