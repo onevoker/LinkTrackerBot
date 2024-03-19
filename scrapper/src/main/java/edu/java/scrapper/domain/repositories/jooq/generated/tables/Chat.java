@@ -61,7 +61,7 @@ public class Chat extends TableImpl<ChatRecord> {
      * The column <code>CHAT.ID</code>.
      */
     public final TableField<ChatRecord, Long> ID =
-        createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+        createField(DSL.name("ID"), SQLDataType.BIGINT.nullable(false), this, "");
 
     private Chat(Name alias, Table<ChatRecord> aliased) {
         this(alias, aliased, null);
@@ -89,7 +89,7 @@ public class Chat extends TableImpl<ChatRecord> {
      * Create a <code>CHAT</code> table reference
      */
     public Chat() {
-        this(DSL.name("chat"), null);
+        this(DSL.name("CHAT"), null);
     }
 
     public <O extends Record> Chat(Table<O> child, ForeignKey<O, ChatRecord> key) {

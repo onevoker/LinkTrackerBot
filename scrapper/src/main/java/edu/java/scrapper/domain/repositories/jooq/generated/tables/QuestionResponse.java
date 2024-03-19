@@ -64,31 +64,31 @@ public class QuestionResponse extends TableImpl<QuestionResponseRecord> {
      * The column <code>QUESTION_RESPONSE.QUESTION_ID</code>.
      */
     public final TableField<QuestionResponseRecord, Long> QUESTION_ID =
-        createField(DSL.name("question_id"), SQLDataType.BIGINT.nullable(false), this, "");
+        createField(DSL.name("QUESTION_ID"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>QUESTION_RESPONSE.LINK_ID</code>.
      */
     public final TableField<QuestionResponseRecord, Long> LINK_ID =
-        createField(DSL.name("link_id"), SQLDataType.BIGINT, this, "");
+        createField(DSL.name("LINK_ID"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>QUESTION_RESPONSE.ANSWERED</code>.
      */
     public final TableField<QuestionResponseRecord, Boolean> ANSWERED =
-        createField(DSL.name("answered"), SQLDataType.BOOLEAN, this, "");
+        createField(DSL.name("ANSWERED"), SQLDataType.BOOLEAN, this, "");
 
     /**
      * The column <code>QUESTION_RESPONSE.ANSWER_COUNT</code>.
      */
     public final TableField<QuestionResponseRecord, Long> ANSWER_COUNT =
-        createField(DSL.name("answer_count"), SQLDataType.BIGINT, this, "");
+        createField(DSL.name("ANSWER_COUNT"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>QUESTION_RESPONSE.LAST_ACTIVITY_DATE</code>.
      */
     public final TableField<QuestionResponseRecord, OffsetDateTime> LAST_ACTIVITY_DATE =
-        createField(DSL.name("last_activity_date"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+        createField(DSL.name("LAST_ACTIVITY_DATE"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
 
     private QuestionResponse(Name alias, Table<QuestionResponseRecord> aliased) {
         this(alias, aliased, null);
@@ -116,7 +116,7 @@ public class QuestionResponse extends TableImpl<QuestionResponseRecord> {
      * Create a <code>QUESTION_RESPONSE</code> table reference
      */
     public QuestionResponse() {
-        this(DSL.name("question_response"), null);
+        this(DSL.name("QUESTION_RESPONSE"), null);
     }
 
     public <O extends Record> QuestionResponse(Table<O> child, ForeignKey<O, QuestionResponseRecord> key) {

@@ -65,25 +65,25 @@ public class Link extends TableImpl<LinkRecord> {
      * The column <code>LINK.ID</code>.
      */
     public final TableField<LinkRecord, Long> ID =
-        createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+        createField(DSL.name("ID"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>LINK.URL</code>.
      */
     public final TableField<LinkRecord, String> URL =
-        createField(DSL.name("url"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+        createField(DSL.name("URL"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>LINK.LAST_UPDATE</code>.
      */
     public final TableField<LinkRecord, OffsetDateTime> LAST_UPDATE =
-        createField(DSL.name("last_update"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+        createField(DSL.name("LAST_UPDATE"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
 
     /**
      * The column <code>LINK.LAST_API_CHECK</code>.
      */
     public final TableField<LinkRecord, OffsetDateTime> LAST_API_CHECK =
-        createField(DSL.name("last_api_check"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+        createField(DSL.name("LAST_API_CHECK"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
 
     private Link(Name alias, Table<LinkRecord> aliased) {
         this(alias, aliased, null);
@@ -111,7 +111,7 @@ public class Link extends TableImpl<LinkRecord> {
      * Create a <code>LINK</code> table reference
      */
     public Link() {
-        this(DSL.name("link"), null);
+        this(DSL.name("LINK"), null);
     }
 
     public <O extends Record> Link(Table<O> child, ForeignKey<O, LinkRecord> key) {

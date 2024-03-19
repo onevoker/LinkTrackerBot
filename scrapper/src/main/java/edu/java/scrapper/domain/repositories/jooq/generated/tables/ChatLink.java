@@ -64,19 +64,19 @@ public class ChatLink extends TableImpl<ChatLinkRecord> {
      * The column <code>CHAT_LINK.ID</code>.
      */
     public final TableField<ChatLinkRecord, Long> ID =
-        createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+        createField(DSL.name("ID"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>CHAT_LINK.CHAT_ID</code>.
      */
     public final TableField<ChatLinkRecord, Long> CHAT_ID =
-        createField(DSL.name("chat_id"), SQLDataType.BIGINT, this, "");
+        createField(DSL.name("CHAT_ID"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>CHAT_LINK.LINK_ID</code>.
      */
     public final TableField<ChatLinkRecord, Long> LINK_ID =
-        createField(DSL.name("link_id"), SQLDataType.BIGINT, this, "");
+        createField(DSL.name("LINK_ID"), SQLDataType.BIGINT, this, "");
 
     private ChatLink(Name alias, Table<ChatLinkRecord> aliased) {
         this(alias, aliased, null);
@@ -104,7 +104,7 @@ public class ChatLink extends TableImpl<ChatLinkRecord> {
      * Create a <code>CHAT_LINK</code> table reference
      */
     public ChatLink() {
-        this(DSL.name("chat_link"), null);
+        this(DSL.name("CHAT_LINK"), null);
     }
 
     public <O extends Record> ChatLink(Table<O> child, ForeignKey<O, ChatLinkRecord> key) {

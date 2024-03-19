@@ -1,4 +1,4 @@
-package edu.java.scrapper.jooqCodegen;
+package edu.java.jooqCodegen;
 
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.Configuration;

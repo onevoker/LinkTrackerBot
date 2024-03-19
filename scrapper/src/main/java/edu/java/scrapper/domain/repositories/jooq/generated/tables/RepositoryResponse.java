@@ -64,19 +64,19 @@ public class RepositoryResponse extends TableImpl<RepositoryResponseRecord> {
      * The column <code>REPOSITORY_RESPONSE.ID</code>.
      */
     public final TableField<RepositoryResponseRecord, Long> ID =
-        createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+        createField(DSL.name("ID"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>REPOSITORY_RESPONSE.LINK_ID</code>.
      */
     public final TableField<RepositoryResponseRecord, Long> LINK_ID =
-        createField(DSL.name("link_id"), SQLDataType.BIGINT, this, "");
+        createField(DSL.name("LINK_ID"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>REPOSITORY_RESPONSE.PUSHED_AT</code>.
      */
     public final TableField<RepositoryResponseRecord, OffsetDateTime> PUSHED_AT =
-        createField(DSL.name("pushed_at"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+        createField(DSL.name("PUSHED_AT"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
 
     private RepositoryResponse(Name alias, Table<RepositoryResponseRecord> aliased) {
         this(alias, aliased, null);
@@ -104,7 +104,7 @@ public class RepositoryResponse extends TableImpl<RepositoryResponseRecord> {
      * Create a <code>REPOSITORY_RESPONSE</code> table reference
      */
     public RepositoryResponse() {
-        this(DSL.name("repository_response"), null);
+        this(DSL.name("REPOSITORY_RESPONSE"), null);
     }
 
     public <O extends Record> RepositoryResponse(Table<O> child, ForeignKey<O, RepositoryResponseRecord> key) {
