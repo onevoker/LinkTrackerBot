@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcChatRepository implements ChatRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Transactional
     @Override
     public void add(Long id) {
         try {
@@ -33,7 +32,6 @@ public class JdbcChatRepository implements ChatRepository {
         return jdbcTemplate.update("DELETE FROM chat WHERE id = ?", id);
     }
 
-    @Transactional
     @Override
     public List<Chat> findAll() {
         return jdbcTemplate.query("SELECT * FROM chat", new BeanPropertyRowMapper<>(Chat.class));

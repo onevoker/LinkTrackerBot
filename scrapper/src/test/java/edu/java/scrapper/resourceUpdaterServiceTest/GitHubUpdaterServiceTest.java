@@ -13,6 +13,7 @@ import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
+import edu.java.scrapper.linkWorkers.LinkParserService;
 import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.GitHubUpdaterService;
 import java.net.URI;
 import java.time.OffsetDateTime;
@@ -22,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -43,6 +43,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     @Autowired
     private ChatRepository chatRepository;
     private GitHubUpdaterService gitHubUpdaterService;
+    private static final LinkParserService LINK_PARSER_SERVICE = new LinkParserService();
     private static final Long CHAT_ID = 10L;
     static final String WIRE_MOCK_URL = "http://localhost:8080/repos/";
     private static final String BODY = """
@@ -89,6 +90,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         chatLinkRepository.add(new ChatLink(CHAT_ID, linkId));
 
         gitHubUpdaterService = new GitHubUpdaterService(
+            LINK_PARSER_SERVICE,
             gitHubResponseRepository,
             linkRepository,
             chatLinkRepository,
@@ -98,7 +100,6 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void getUpdatesTestBeforeProcessing() {
         List<RepositoryResponse> repositoriesBeforeTest = gitHubResponseRepository.findAll();
         assertThat(repositoriesBeforeTest.isEmpty()).isTrue();
@@ -106,7 +107,6 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void getUpdatesTest() {
         List<Link> neededToCheckLinks = List.of(linkRepository.findAll().getFirst());
         List<LinkUpdateRequest> neededToUpdate = gitHubUpdaterService.getUpdates(neededToCheckLinks);

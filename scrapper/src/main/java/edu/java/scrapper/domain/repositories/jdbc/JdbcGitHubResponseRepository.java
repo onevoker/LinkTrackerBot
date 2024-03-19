@@ -6,14 +6,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Transactional;
 
 //@Repository
 @RequiredArgsConstructor
 public class JdbcGitHubResponseRepository implements GitHubResponseRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Transactional
     @Override
     public void add(RepositoryResponse response, Long linkId) {
         jdbcTemplate.update(
@@ -24,7 +22,6 @@ public class JdbcGitHubResponseRepository implements GitHubResponseRepository {
         );
     }
 
-    @Transactional
     @Override
     public List<RepositoryResponse> findAll() {
         return jdbcTemplate.query(
@@ -33,7 +30,6 @@ public class JdbcGitHubResponseRepository implements GitHubResponseRepository {
         );
     }
 
-    @Transactional
     @Override
     public List<RepositoryResponse> findByLinkId(Long linkId) {
         return jdbcTemplate.query(
@@ -43,7 +39,6 @@ public class JdbcGitHubResponseRepository implements GitHubResponseRepository {
         );
     }
 
-    @Transactional
     @Override
     public void update(RepositoryResponse response, Long linkId) {
         jdbcTemplate.update(

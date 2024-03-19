@@ -11,7 +11,6 @@ import java.time.ZoneOffset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -44,7 +43,6 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void addAndFindAllTest() {
         questionResponseRepository.add(QUESTION_ITEM, linkId);
 
@@ -58,7 +56,6 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void findByLinkIdTest() {
         questionResponseRepository.add(QUESTION_ITEM, linkId);
 
@@ -72,7 +69,6 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void updateTest() {
         questionResponseRepository.add(QUESTION_ITEM, linkId);
         long newAnswerCount = 5L;

@@ -9,14 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Transactional;
 
 //@Repository
 @RequiredArgsConstructor
 public class JdbcChatLinkRepository implements ChatLinkRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Transactional
     @Override
     public void add(ChatLink chatLink) {
         try {
@@ -30,7 +28,6 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
         }
     }
 
-    @Transactional
     @Override
     public int remove(ChatLink chatLink) {
         return jdbcTemplate.update(
@@ -40,13 +37,11 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
         );
     }
 
-    @Transactional
     @Override
     public List<ChatLink> findAll() {
         return jdbcTemplate.query("SELECT * FROM chat_link", new BeanPropertyRowMapper<>(ChatLink.class));
     }
 
-    @Transactional
     @Override
     public List<Link> findLinksByTgChatId(Long tgChatId) {
         return jdbcTemplate.query(
@@ -56,7 +51,6 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
         );
     }
 
-    @Transactional
     @Override
     public List<Long> findTgChatIds(Long linkId) {
         return jdbcTemplate.query(

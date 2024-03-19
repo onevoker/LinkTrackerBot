@@ -10,7 +10,6 @@ import lombok.extern.log4j.Log4j2;
 import org.jooq.DSLContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.LINK;
 
 @Repository
@@ -19,7 +18,6 @@ import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.LINK;
 public class JooqLinkRepository implements LinkRepository {
     private final DSLContext dsl;
 
-    @Transactional
     @Override
     public void add(Link link) {
         String url = link.getUrl().toString();
@@ -34,7 +32,6 @@ public class JooqLinkRepository implements LinkRepository {
         }
     }
 
-    @Transactional
     @Override
     public void remove(Long id) {
         dsl.deleteFrom(LINK)
@@ -42,14 +39,12 @@ public class JooqLinkRepository implements LinkRepository {
             .execute();
     }
 
-    @Transactional
     @Override
     public List<Link> findAll() {
         return dsl.selectFrom(LINK)
             .fetchInto(Link.class);
     }
 
-    @Transactional
     @Override
     public List<Link> findByUrl(URI url) {
         return dsl.selectFrom(LINK)
@@ -57,7 +52,6 @@ public class JooqLinkRepository implements LinkRepository {
             .fetchInto(Link.class);
     }
 
-    @Transactional
     @Override
     public List<Link> findOldCheckedLinks(OffsetDateTime time) {
         return dsl.selectFrom(LINK)
@@ -65,7 +59,6 @@ public class JooqLinkRepository implements LinkRepository {
             .fetchInto(Link.class);
     }
 
-    @Transactional
     @Override
     public void updateLastUpdate(OffsetDateTime time, Long id) {
         dsl.update(LINK)
@@ -74,7 +67,6 @@ public class JooqLinkRepository implements LinkRepository {
             .execute();
     }
 
-    @Transactional
     @Override
     public void updateLastApiCheck(OffsetDateTime time, Long id) {
         dsl.update(LINK)

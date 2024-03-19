@@ -7,7 +7,6 @@ import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,7 +18,6 @@ public class ChatRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void addTest() {
         chatRepository.add(CHAT_ID);
         assertThat(chatRepository.findAll().size()).isEqualTo(1);
@@ -29,7 +27,6 @@ public class ChatRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void removeTest() {
         chatRepository.add(CHAT_ID);
         chatRepository.remove(CHAT_ID);
@@ -39,7 +36,6 @@ public class ChatRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void findAllTest() {
         chatRepository.add(1L);
         chatRepository.add(CHAT_ID);

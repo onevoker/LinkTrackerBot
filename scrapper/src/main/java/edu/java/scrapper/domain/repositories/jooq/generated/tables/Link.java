@@ -71,7 +71,7 @@ public class Link extends TableImpl<LinkRecord> {
      * The column <code>LINK.URL</code>.
      */
     public final TableField<LinkRecord, String> URL =
-        createField(DSL.name("URL"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+        createField(DSL.name("URL"), SQLDataType.VARCHAR(1000000000).nullable(false), this, "");
 
     /**
      * The column <code>LINK.LAST_UPDATE</code>.

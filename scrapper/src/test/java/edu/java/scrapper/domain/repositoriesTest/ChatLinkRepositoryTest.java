@@ -14,7 +14,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -43,7 +42,6 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void addTest() {
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
@@ -57,7 +55,6 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void removeTest() {
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
@@ -71,7 +68,6 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void findAllTest() {
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
@@ -87,7 +83,6 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void findLinksByTgChatIdTest() {
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
@@ -105,7 +100,6 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void findTgChatIdsTest() {
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);

@@ -8,7 +8,8 @@ import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseReposito
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;
-import edu.java.scrapper.linkWorkers.LinkParserUtil;
+import edu.java.scrapper.linkWorkers.LinkParserService;
+import edu.java.scrapper.linkWorkers.dto.StackOverflowLinkQuestionData;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class StackOverflowUpdaterService implements ResourceUpdaterService {
+    private final LinkParserService linkParserService;
     private final QuestionResponseRepository questionResponseRepository;
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
@@ -35,7 +37,8 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
         for (var link : links) {
             URI url = link.getUrl();
             Long linkId = link.getId();
-            long questionId = LinkParserUtil.getQuestionId(url);
+            StackOverflowLinkQuestionData linkQuestionData = linkParserService.getStackOverflowLinkQuestionData(url);
+            long questionId = linkQuestionData.questionId();
 
             if (questionId != 0L) {
                 QuestionResponse response = stackOverflowClient.fetchQuestion(questionId);

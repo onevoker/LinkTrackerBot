@@ -1,31 +1,40 @@
 package edu.java.scrapper.linkWorkers;
 
+import edu.java.scrapper.linkWorkers.dto.GitHubLinkRepoData;
+import edu.java.scrapper.linkWorkers.dto.StackOverflowLinkQuestionData;
 import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.stereotype.Service;
 
-public class LinkParserUtil {
+@Service
+public class LinkParserService {
     private static final String REGEX_FOR_OWNER = "https://github\\.com/(.*?)/";
     private static final String REGEX_FOR_REPO = "https://github\\.com/.*?/(.*)";
     private static final String REGEX_FOR_QUESTION_ID = "https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)";
 
-    private LinkParserUtil() {
+    public GitHubLinkRepoData getGitHubLinkRepoData(URI url) {
+        return new GitHubLinkRepoData(getGitHubOwner(url), getGitHubRepo(url));
     }
 
-    public static String getGitHubOwner(URI url) {
+    public StackOverflowLinkQuestionData getStackOverflowLinkQuestionData(URI url) {
+        return new StackOverflowLinkQuestionData(getQuestionId(url));
+    }
+
+    private String getGitHubOwner(URI url) {
         return urlMatcher(url, REGEX_FOR_OWNER);
     }
 
-    public static String getGitHubRepo(URI url) {
+    private String getGitHubRepo(URI url) {
         return urlMatcher(url, REGEX_FOR_REPO);
     }
 
-    public static long getQuestionId(URI url) {
+    private long getQuestionId(URI url) {
         String res = urlMatcher(url, REGEX_FOR_QUESTION_ID);
         return res.isEmpty() ? 0L : Long.parseLong(res);
     }
 
-    private static String urlMatcher(URI url, String regex) {
+    private String urlMatcher(URI url, String regex) {
         String link = url.toString();
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(link);

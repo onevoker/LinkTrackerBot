@@ -12,7 +12,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -45,7 +44,6 @@ public class GitHubResponseRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void addAndFindAllTest() {
         gitHubResponseRepository.add(RESPONSE, linkId);
         assertThat(gitHubResponseRepository.findAll().getFirst().getId()).isEqualTo(REPO_ID);
@@ -53,7 +51,6 @@ public class GitHubResponseRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void findByLinkIdTest() {
         gitHubResponseRepository.add(RESPONSE, linkId);
 
@@ -64,7 +61,6 @@ public class GitHubResponseRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void updateTest() {
         gitHubResponseRepository.add(RESPONSE, linkId);
         OffsetDateTime timeOfUpdate = OffsetDateTime.of(

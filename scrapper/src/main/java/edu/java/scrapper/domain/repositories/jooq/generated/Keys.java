@@ -41,14 +41,12 @@ public class Keys {
 
     public static final UniqueKey<ChatRecord> CONSTRAINT_1 =
         Internal.createUniqueKey(Chat.CHAT, DSL.name("CONSTRAINT_1"), new TableField[] {Chat.CHAT.ID}, true);
-    public static final UniqueKey<ChatLinkRecord> CONSTRAINT_868 = Internal.createUniqueKey(
-        ChatLink.CHAT_LINK,
+    public static final UniqueKey<ChatLinkRecord> CONSTRAINT_868 = Internal.createUniqueKey(ChatLink.CHAT_LINK,
         DSL.name("CONSTRAINT_868"),
         new TableField[] {ChatLink.CHAT_LINK.ID},
         true
     );
-    public static final UniqueKey<ChatLinkRecord> UNIQUE_CHAT_LINK_PAIR = Internal.createUniqueKey(
-        ChatLink.CHAT_LINK,
+    public static final UniqueKey<ChatLinkRecord> UNIQUE_CHAT_LINK_PAIR = Internal.createUniqueKey(ChatLink.CHAT_LINK,
         DSL.name("UNIQUE_CHAT_LINK_PAIR"),
         new TableField[] {ChatLink.CHAT_LINK.CHAT_ID, ChatLink.CHAT_LINK.LINK_ID},
         true
@@ -58,29 +56,25 @@ public class Keys {
     public static final UniqueKey<LinkRecord> CONSTRAINT_23 =
         Internal.createUniqueKey(Link.LINK, DSL.name("CONSTRAINT_23"), new TableField[] {Link.LINK.URL}, true);
     public static final UniqueKey<QuestionResponseRecord> CONSTRAINT_D3 =
-        Internal.createUniqueKey(
-            QuestionResponse.QUESTION_RESPONSE,
+        Internal.createUniqueKey(QuestionResponse.QUESTION_RESPONSE,
             DSL.name("CONSTRAINT_D3"),
             new TableField[] {QuestionResponse.QUESTION_RESPONSE.QUESTION_ID},
             true
         );
     public static final UniqueKey<QuestionResponseRecord> CONSTRAINT_D39 =
-        Internal.createUniqueKey(
-            QuestionResponse.QUESTION_RESPONSE,
+        Internal.createUniqueKey(QuestionResponse.QUESTION_RESPONSE,
             DSL.name("CONSTRAINT_D39"),
             new TableField[] {QuestionResponse.QUESTION_RESPONSE.LINK_ID},
             true
         );
     public static final UniqueKey<RepositoryResponseRecord> CONSTRAINT_98 =
-        Internal.createUniqueKey(
-            RepositoryResponse.REPOSITORY_RESPONSE,
+        Internal.createUniqueKey(RepositoryResponse.REPOSITORY_RESPONSE,
             DSL.name("CONSTRAINT_98"),
             new TableField[] {RepositoryResponse.REPOSITORY_RESPONSE.ID},
             true
         );
     public static final UniqueKey<RepositoryResponseRecord> CONSTRAINT_98B =
-        Internal.createUniqueKey(
-            RepositoryResponse.REPOSITORY_RESPONSE,
+        Internal.createUniqueKey(RepositoryResponse.REPOSITORY_RESPONSE,
             DSL.name("CONSTRAINT_98B"),
             new TableField[] {RepositoryResponse.REPOSITORY_RESPONSE.LINK_ID},
             true
@@ -91,8 +85,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final ForeignKey<ChatLinkRecord, ChatRecord> CONSTRAINT_8 =
-        Internal.createForeignKey(
-            ChatLink.CHAT_LINK,
+        Internal.createForeignKey(ChatLink.CHAT_LINK,
             DSL.name("CONSTRAINT_8"),
             new TableField[] {ChatLink.CHAT_LINK.CHAT_ID},
             Keys.CONSTRAINT_1,
@@ -100,8 +93,7 @@ public class Keys {
             true
         );
     public static final ForeignKey<ChatLinkRecord, LinkRecord> CONSTRAINT_86 =
-        Internal.createForeignKey(
-            ChatLink.CHAT_LINK,
+        Internal.createForeignKey(ChatLink.CHAT_LINK,
             DSL.name("CONSTRAINT_86"),
             new TableField[] {ChatLink.CHAT_LINK.LINK_ID},
             Keys.CONSTRAINT_2,

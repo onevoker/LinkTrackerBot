@@ -15,7 +15,6 @@ import java.net.URI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -44,7 +43,6 @@ public class LinkTrackerServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void addTest() {
         LinkResponse result = linkService.add(CHAT_ID, URL);
 
@@ -61,7 +59,6 @@ public class LinkTrackerServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void removeTest() {
         linkService.add(CHAT_ID, URL);
         LinkResponse result = linkService.remove(CHAT_ID, URL);
@@ -75,7 +72,6 @@ public class LinkTrackerServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void listAllTest() {
         long newChatId = 15L;
         URI newUrl = URI.create("https://github.com/onevoker/Tkf");

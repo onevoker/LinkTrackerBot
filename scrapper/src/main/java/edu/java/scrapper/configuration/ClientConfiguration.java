@@ -16,12 +16,11 @@ import reactor.netty.http.client.HttpClient;
 @RequiredArgsConstructor
 public class ClientConfiguration {
     private final ApplicationConfig applicationConfig;
-    private static final String HEADER_NAME = "onevoker";
-    private static final int RESPONSE_TIMEOUT = 15;
 
     @Bean
     public WebClient gitHubWebClient() {
-        HttpClient httpClient = HttpClient.create().responseTimeout(Duration.ofSeconds(RESPONSE_TIMEOUT));
+        HttpClient httpClient =
+            HttpClient.create().responseTimeout(Duration.ofSeconds(applicationConfig.gitHubResponseTimeout()));
         ReactorClientHttpConnector connector = new ReactorClientHttpConnector(httpClient);
         String baseGithubUrl = applicationConfig.clients().gitHub();
 
@@ -54,7 +53,7 @@ public class ClientConfiguration {
         return ExchangeFilterFunction.ofRequestProcessor(
             clientRequest -> {
                 ClientRequest authorizedRequest = ClientRequest.from(clientRequest)
-                    .header(HttpHeaders.AUTHORIZATION, HEADER_NAME + token)
+                    .header(HttpHeaders.AUTHORIZATION, applicationConfig.gitHubHeaderName() + token)
                     .build();
                 return Mono.just(authorizedRequest);
             });

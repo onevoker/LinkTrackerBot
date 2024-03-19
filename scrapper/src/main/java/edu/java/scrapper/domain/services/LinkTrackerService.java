@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class LinkTrackerService implements LinkService {
     private final LinkResponseFactory linkFactory;
     private static final String NOT_TRACKED_MESSAGE = "Вы не отслеживаете данную ссылку";
 
+    @Transactional
     @Override
     public LinkResponse add(long tgChatId, URI url) {
         LinkResponse linkResponse = linkFactory.createLink(tgChatId, url);
@@ -34,12 +36,14 @@ public class LinkTrackerService implements LinkService {
         if (linkInLinkRepos.isEmpty()) {
             addNoOneTrackedLink(tgChatId, linkUrl);
         } else {
-            ChatLink chatLink = new ChatLink(tgChatId, linkInLinkRepos.getFirst().getId());
+            long linkId = linkInLinkRepos.getFirst().getId();
+            ChatLink chatLink = new ChatLink(tgChatId, linkId);
             chatLinkRepository.add(chatLink);
         }
         return linkResponse;
     }
 
+    @Transactional
     @Override
     public LinkResponse remove(long tgChatId, URI url) {
         URI linkUrl = linkFactory.normalizeUrl(url.toString());

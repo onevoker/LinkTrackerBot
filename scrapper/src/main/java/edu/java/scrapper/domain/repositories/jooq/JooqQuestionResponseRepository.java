@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.QUESTION_RESPONSE;
 
 @Repository
@@ -14,7 +13,6 @@ import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.QUESTI
 public class JooqQuestionResponseRepository implements QuestionResponseRepository {
     private final DSLContext dsl;
 
-    @Transactional
     @Override
     public void add(Item responseItem, Long linkId) {
         dsl.insertInto(
@@ -35,14 +33,12 @@ public class JooqQuestionResponseRepository implements QuestionResponseRepositor
             .execute();
     }
 
-    @Transactional
     @Override
     public List<Item> findAll() {
         return dsl.selectFrom(QUESTION_RESPONSE)
             .fetchInto(Item.class);
     }
 
-    @Transactional
     @Override
     public List<Item> findByLinkId(Long linkId) {
         return dsl.selectFrom(QUESTION_RESPONSE)
@@ -50,7 +46,6 @@ public class JooqQuestionResponseRepository implements QuestionResponseRepositor
             .fetchInto(Item.class);
     }
 
-    @Transactional
     @Override
     public void update(Item responseItem, Long linkId) {
         dsl.update(QUESTION_RESPONSE)

@@ -15,7 +15,9 @@ public record ApplicationConfig(
     Clients clients,
     String authorizationGitHubToken,
     String gitHubDomain,
-    String stackOverflowDomain
+    String stackOverflowDomain,
+    String gitHubHeaderName,
+    int gitHubResponseTimeout
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

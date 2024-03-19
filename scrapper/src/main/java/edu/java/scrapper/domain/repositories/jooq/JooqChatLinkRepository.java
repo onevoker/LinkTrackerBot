@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.CHAT_LINK;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.LINK;
 
@@ -18,7 +17,6 @@ import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.LINK;
 public class JooqChatLinkRepository implements ChatLinkRepository {
     private final DSLContext dsl;
 
-    @Transactional
     @Override
     public void add(ChatLink chatLink) {
         try {
@@ -30,7 +28,6 @@ public class JooqChatLinkRepository implements ChatLinkRepository {
         }
     }
 
-    @Transactional
     @Override
     public int remove(ChatLink chatLink) {
         return dsl.deleteFrom(CHAT_LINK)
@@ -39,19 +36,17 @@ public class JooqChatLinkRepository implements ChatLinkRepository {
             .execute();
     }
 
-    @Transactional
     @Override
     public List<ChatLink> findAll() {
         return dsl.selectFrom(CHAT_LINK)
             .fetchInto(ChatLink.class);
     }
 
-    @Transactional
     @Override
     public List<Link> findLinksByTgChatId(Long tgChatId) {
         return dsl.selectFrom(LINK)
             .where(LINK.ID.in(
-                dsl.select(CHAT_LINK.LINK_ID)
+                    dsl.select(CHAT_LINK.LINK_ID)
                         .from(CHAT_LINK)
                         .where(CHAT_LINK.CHAT_ID.eq(tgChatId))
                 )
@@ -59,7 +54,6 @@ public class JooqChatLinkRepository implements ChatLinkRepository {
             .fetchInto(Link.class);
     }
 
-    @Transactional
     @Override
     public List<Long> findTgChatIds(Long linkId) {
         return dsl.select(CHAT_LINK.CHAT_ID)

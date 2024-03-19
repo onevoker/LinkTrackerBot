@@ -13,6 +13,7 @@ import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
+import edu.java.scrapper.linkWorkers.LinkParserService;
 import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.StackOverflowUpdaterService;
 import java.net.URI;
 import java.time.OffsetDateTime;
@@ -22,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -43,6 +43,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     @Autowired
     private ChatRepository chatRepository;
     private StackOverflowUpdaterService stackOverflowUpdaterService;
+    private static final LinkParserService LINK_PARSER_SERVICE = new LinkParserService();
     private static final Long CHAT_ID = 10L;
     static final String WIRE_MOCK_URL = "http://localhost:8080/2.3/questions/";
     private static final long QUESTION_ID = 61746598L;
@@ -108,6 +109,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         chatLinkRepository.add(new ChatLink(CHAT_ID, linkId));
 
         stackOverflowUpdaterService = new StackOverflowUpdaterService(
+            LINK_PARSER_SERVICE,
             questionResponseRepository,
             linkRepository,
             chatLinkRepository,
@@ -117,7 +119,6 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void getUpdatesTestBeforeProcessing() {
         List<Item> repositoriesBeforeTest = questionResponseRepository.findAll();
         assertThat(repositoriesBeforeTest.isEmpty()).isTrue();
@@ -125,7 +126,6 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void getUpdatesTest() {
         List<Link> neededToCheckLinks = List.of(linkRepository.findAll().getFirst());
         List<LinkUpdateRequest> noThingToUpdate = stackOverflowUpdaterService.getUpdates(neededToCheckLinks);

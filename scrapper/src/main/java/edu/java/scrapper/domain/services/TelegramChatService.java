@@ -9,6 +9,7 @@ import edu.java.scrapper.domain.services.interfaces.ChatService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class TelegramChatService implements ChatService {
         chatRepository.add(tgChatId);
     }
 
+    @Transactional
     @Override
     public void unregister(long tgChatId) {
         List<Link> links = chatLinkRepository.findLinksByTgChatId(tgChatId);

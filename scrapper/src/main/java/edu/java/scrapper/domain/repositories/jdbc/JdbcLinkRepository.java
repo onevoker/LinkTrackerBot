@@ -10,7 +10,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Transactional;
 
 //@Repository
 @RequiredArgsConstructor
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcLinkRepository implements LinkRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Transactional
     @Override
     public void add(Link link) {
         String url = link.getUrl().toString();
@@ -36,19 +34,16 @@ public class JdbcLinkRepository implements LinkRepository {
         }
     }
 
-    @Transactional
     @Override
     public void remove(Long id) {
         jdbcTemplate.update("DELETE FROM link WHERE id = ?", id);
     }
 
-    @Transactional
     @Override
     public List<Link> findAll() {
         return jdbcTemplate.query("SELECT * FROM link", new BeanPropertyRowMapper<>(Link.class));
     }
 
-    @Transactional
     @Override
     public List<Link> findByUrl(URI url) {
         return jdbcTemplate.query(
@@ -58,7 +53,6 @@ public class JdbcLinkRepository implements LinkRepository {
         );
     }
 
-    @Transactional
     @Override
     public List<Link> findOldCheckedLinks(OffsetDateTime time) {
         return jdbcTemplate.query(
@@ -68,13 +62,11 @@ public class JdbcLinkRepository implements LinkRepository {
         );
     }
 
-    @Transactional
     @Override
     public void updateLastUpdate(OffsetDateTime time, Long id) {
         jdbcTemplate.update("UPDATE link SET last_update = ? WHERE id = ?", time, id);
     }
 
-    @Transactional
     @Override
     public void updateLastApiCheck(OffsetDateTime time, Long id) {
         jdbcTemplate.update("UPDATE link SET last_api_check = ? WHERE id = ?", time, id);

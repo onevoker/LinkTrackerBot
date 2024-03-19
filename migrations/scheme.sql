@@ -7,7 +7,7 @@ CREATE TABLE chat
 CREATE TABLE link
 (
     id             BIGSERIAL,
-    url            VARCHAR(255)             NOT NULL,
+    url            text             NOT NULL,
     last_update    TIMESTAMP WITH TIME ZONE NOT NULL,
     last_api_check TIMESTAMP WITH TIME ZONE NOT NULL,
 

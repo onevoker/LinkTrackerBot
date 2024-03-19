@@ -9,9 +9,11 @@ app:
     stack-overflow: https://api.stackexchange.com/2.3/questions/
     bot: http://localhost:8090
 
-  git-hub-domain: github.com
   stack-overflow-domain: stackoverflow.com
+  git-hub-domain: github.com
+  git-hub-header-name: onevoker
   authorization-git-hub-token: ${access-token}
+  git-hub-response-timeout: 15
 
 
 spring:

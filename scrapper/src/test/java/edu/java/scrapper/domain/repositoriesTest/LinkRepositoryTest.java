@@ -9,7 +9,6 @@ import java.time.ZoneOffset;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,7 +26,6 @@ public class LinkRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void addTest() {
         linkRepository.add(LINK);
         assertThat(linkRepository.findAll().size()).isEqualTo(1);
@@ -36,7 +34,6 @@ public class LinkRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void removeTest() {
         linkRepository.add(LINK);
         assertThat(linkRepository.findAll().size()).isEqualTo(1);
@@ -46,7 +43,6 @@ public class LinkRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void findAllTest() {
         linkRepository.add(LINK);
         List<Link> links = linkRepository.findAll();
@@ -63,7 +59,6 @@ public class LinkRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Rollback
     void findByUrlTest() {
         linkRepository.add(LINK);
         URI addedUrl = URI.create("https://github.com/onevoker/LinkTrackerBot");

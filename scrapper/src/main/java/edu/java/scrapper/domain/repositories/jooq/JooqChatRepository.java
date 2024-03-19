@@ -17,7 +17,6 @@ import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.CHAT_L
 public class JooqChatRepository implements ChatRepository {
     private final DSLContext dsl;
 
-    @Transactional
     @Override
     public void add(Long id) {
         try {
@@ -41,7 +40,6 @@ public class JooqChatRepository implements ChatRepository {
             .execute();
     }
 
-    @Transactional
     @Override
     public List<Chat> findAll() {
         return dsl.selectFrom(CHAT)

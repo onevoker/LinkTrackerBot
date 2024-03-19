@@ -7,7 +7,8 @@ import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
-import edu.java.scrapper.linkWorkers.LinkParserUtil;
+import edu.java.scrapper.linkWorkers.LinkParserService;
+import edu.java.scrapper.linkWorkers.dto.GitHubLinkRepoData;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GitHubUpdaterService implements ResourceUpdaterService {
+    private final LinkParserService linkParserService;
     private final GitHubResponseRepository gitHubResponseRepository;
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
@@ -32,8 +34,10 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
         for (var link : links) {
             URI url = link.getUrl();
             Long linkId = link.getId();
-            String owner = LinkParserUtil.getGitHubOwner(url);
-            String repo = LinkParserUtil.getGitHubRepo(url);
+
+            GitHubLinkRepoData linkRepoData = linkParserService.getGitHubLinkRepoData(url);
+            String owner = linkRepoData.owner();
+            String repo = linkRepoData.repo();
 
             if (!owner.isBlank() && !repo.isBlank()) {
                 RepositoryResponse response = gitHubClient.fetchRepository(owner, repo);
