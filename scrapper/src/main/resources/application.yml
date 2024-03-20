@@ -8,6 +8,11 @@ app:
     git-hub: https://api.github.com/repos/
     stack-overflow: https://api.stackexchange.com/2.3/questions/
     bot: http://localhost:8090
+  git-hub-regexp:
+    regexp-for-git-hub-owner: https://github\.com/(.*?)/
+    regexp-for-git-hub-repo: https://github\.com/.*?/(.*)
+  stack-overflow-regexp:
+    regexp-for-stack-overflow-question-id: https://stackoverflow\.com/questions/(\d+)/([\w-]+)
 
   stack-overflow-domain: stackoverflow.com
   git-hub-domain: github.com

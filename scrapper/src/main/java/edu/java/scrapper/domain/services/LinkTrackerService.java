@@ -8,7 +8,6 @@ import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.services.interfaces.LinkService;
 import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.dto.response.ListLinksResponse;
-import edu.java.scrapper.linkWorkers.LinkResponseFactory;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -23,31 +22,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class LinkTrackerService implements LinkService {
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
-    private final LinkResponseFactory linkFactory;
     private static final String NOT_TRACKED_MESSAGE = "Вы не отслеживаете данную ссылку";
 
     @Transactional
     @Override
     public LinkResponse add(long tgChatId, URI url) {
-        LinkResponse linkResponse = linkFactory.createLink(tgChatId, url);
-        URI linkUrl = linkResponse.url();
-        List<Link> linkInLinkRepos = linkRepository.findByUrl(linkUrl);
+        List<Link> linkInLinkRepos = linkRepository.findByUrl(url);
 
         if (linkInLinkRepos.isEmpty()) {
-            addNoOneTrackedLink(tgChatId, linkUrl);
+            addNoOneTrackedLink(tgChatId, url);
         } else {
             long linkId = linkInLinkRepos.getFirst().getId();
             ChatLink chatLink = new ChatLink(tgChatId, linkId);
             chatLinkRepository.add(chatLink);
         }
-        return linkResponse;
+        return new LinkResponse(tgChatId, url);
     }
 
     @Transactional
     @Override
     public LinkResponse remove(long tgChatId, URI url) {
-        URI linkUrl = linkFactory.normalizeUrl(url.toString());
-        List<Link> linkInRepo = linkRepository.findByUrl(linkUrl);
+        List<Link> linkInRepo = linkRepository.findByUrl(url);
 
         if (linkInRepo.isEmpty()) {
             throw new LinkWasNotTrackedException(NOT_TRACKED_MESSAGE);
@@ -66,7 +61,7 @@ public class LinkTrackerService implements LinkService {
             linkRepository.remove(linkId);
         }
 
-        return new LinkResponse(tgChatId, linkUrl);
+        return new LinkResponse(tgChatId, url);
     }
 
     @Override

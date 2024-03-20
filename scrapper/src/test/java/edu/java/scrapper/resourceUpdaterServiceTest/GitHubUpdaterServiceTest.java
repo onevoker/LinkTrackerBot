@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.clients.GitHubClient;
+import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
@@ -13,7 +14,7 @@ import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
-import edu.java.scrapper.linkWorkers.LinkParserService;
+import edu.java.scrapper.linkParser.services.GitHubParserService;
 import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.GitHubUpdaterService;
 import java.net.URI;
 import java.time.OffsetDateTime;
@@ -43,7 +44,11 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     @Autowired
     private ChatRepository chatRepository;
     private GitHubUpdaterService gitHubUpdaterService;
-    private static final LinkParserService LINK_PARSER_SERVICE = new LinkParserService();
+    private static final ApplicationConfig.GitHubRegexp regexp = new ApplicationConfig.GitHubRegexp(
+        "https://github\\.com/(.*?)/",
+        "https://github\\.com/.*?/(.*)"
+    );
+    private static final GitHubParserService LINK_PARSER_SERVICE = new GitHubParserService(regexp);
     private static final Long CHAT_ID = 10L;
     static final String WIRE_MOCK_URL = "http://localhost:8080/repos/";
     private static final String BODY = """
@@ -109,7 +114,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     @Transactional
     void getUpdatesTest() {
         List<Link> neededToCheckLinks = List.of(linkRepository.findAll().getFirst());
-        List<LinkUpdateRequest> neededToUpdate = gitHubUpdaterService.getUpdates(neededToCheckLinks);
+        List<LinkUpdateRequest> neededToUpdate = gitHubUpdaterService.getListLinkUpdateRequests(neededToCheckLinks);
 
         assertThat(neededToUpdate.getFirst().description()).isEqualTo("Появилось обновление");
 
@@ -119,7 +124,8 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         );
 
         List<RepositoryResponse> repoAfterTest = gitHubResponseRepository.findAll();
-        List<LinkUpdateRequest> res = gitHubUpdaterService.getUpdates(List.of(linkRepository.findAll().getFirst()));
+        List<LinkUpdateRequest> res =
+            gitHubUpdaterService.getListLinkUpdateRequests(List.of(linkRepository.findAll().getFirst()));
 
         assertThat(repoAfterTest.isEmpty()).isFalse();
         assertThat(res.getFirst()).isEqualTo(new LinkUpdateRequest(

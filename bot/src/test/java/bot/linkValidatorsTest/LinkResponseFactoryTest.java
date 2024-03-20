@@ -1,25 +1,34 @@
-package edu.java.scrapper.linkWorkersTest;
+package bot.linkValidatorsTest;
 
-import edu.java.scrapper.controllers.exceptions.InvalidLinkResponseException;
-import edu.java.scrapper.dto.response.LinkResponse;
-import edu.java.scrapper.linkWorkers.LinkResponseFactory;
-import edu.java.scrapper.linkWorkers.LinkResponseValidatorService;
+import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.bot.dto.response.LinkResponse;
+import edu.java.bot.exceptions.InvalidLinkException;
+import edu.java.bot.linkValidators.LinkResponseFactory;
+import edu.java.bot.linkValidators.LinkResponseValidatorService;
 import java.net.URI;
+import java.time.Duration;
+import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertThrows;
 
 public class LinkResponseFactoryTest {
+    private static final ApplicationConfig applicationConfig = new ApplicationConfig(
+        null,
+        null,
+        List.of("https://github\\.com/[^/]+/[^/]+/?", "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"),
+        Duration.ofSeconds(15)
+    );
     private static final int USER_ID = 1;
     private static LinkResponseFactory linkFactory;
 
     @BeforeAll
     public static void setUp() {
-        LinkResponseValidatorService linkValidatorService = new LinkResponseValidatorService();
+        LinkResponseValidatorService linkValidatorService = new LinkResponseValidatorService(applicationConfig);
         linkFactory = new LinkResponseFactory(linkValidatorService);
     }
 
@@ -55,7 +64,7 @@ public class LinkResponseFactoryTest {
     @MethodSource("getUncorrectUri")
     void testUnCorrectUri(String strLink) {
         URI url = URI.create(strLink);
-        var exception = assertThrows(InvalidLinkResponseException.class, () -> linkFactory.createLink(USER_ID, url));
+        var exception = assertThrows(InvalidLinkException.class, () -> linkFactory.createLink(USER_ID, url));
         assertThat(exception.getMessage()).isEqualTo("Вы указали неправильную ссылку, возможно вам поможет /help");
     }
 }

@@ -1,7 +1,7 @@
-package edu.java.scrapper.linkWorkers;
+package edu.java.bot.linkValidators;
 
-import edu.java.scrapper.controllers.exceptions.InvalidLinkResponseException;
-import edu.java.scrapper.dto.response.LinkResponse;
+import edu.java.bot.dto.response.LinkResponse;
+import edu.java.bot.exceptions.InvalidLinkException;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,10 +17,10 @@ public class LinkResponseFactory {
             URI normalizedUrl = normalizeUrl(url.toString());
             return new LinkResponse(chatId, normalizedUrl);
         }
-        throw new InvalidLinkResponseException("Вы указали неправильную ссылку, возможно вам поможет /help");
+        throw new InvalidLinkException("Вы указали неправильную ссылку, возможно вам поможет /help");
     }
 
-    public URI normalizeUrl(String link) {
+    private URI normalizeUrl(String link) {
         String normalizedUrl = link.replaceAll("/+$", "");
         return URI.create(normalizedUrl);
     }

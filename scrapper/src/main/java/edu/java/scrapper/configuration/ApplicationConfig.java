@@ -17,11 +17,20 @@ public record ApplicationConfig(
     String gitHubDomain,
     String stackOverflowDomain,
     String gitHubHeaderName,
-    int gitHubResponseTimeout
+    int gitHubResponseTimeout,
+    @Bean
+    GitHubRegexp gitHubRegexp,
+    @Bean
+    StackOverflowRegexp stackOverflowRegexp
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 
     public record Clients(String gitHub, String stackOverflow, String bot) {
     }
+
+    public record GitHubRegexp(String regexpForGitHubOwner, String regexpForGitHubRepo) {
+    }
+
+    public record StackOverflowRegexp(String regexpForStackOverflowQuestionId){}
 }

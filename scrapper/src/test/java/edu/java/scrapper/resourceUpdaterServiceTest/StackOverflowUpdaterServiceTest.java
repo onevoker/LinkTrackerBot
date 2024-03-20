@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.clients.StackOverflowClient;
+import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
@@ -13,7 +14,7 @@ import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
-import edu.java.scrapper.linkWorkers.LinkParserService;
+import edu.java.scrapper.linkParser.services.StackOverflowParserService;
 import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.StackOverflowUpdaterService;
 import java.net.URI;
 import java.time.OffsetDateTime;
@@ -43,7 +44,10 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     @Autowired
     private ChatRepository chatRepository;
     private StackOverflowUpdaterService stackOverflowUpdaterService;
-    private static final LinkParserService LINK_PARSER_SERVICE = new LinkParserService();
+    private static final ApplicationConfig.StackOverflowRegexp regexp = new ApplicationConfig.StackOverflowRegexp(
+        "https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)"
+    );
+    private static final StackOverflowParserService LINK_PARSER_SERVICE = new StackOverflowParserService(regexp);
     private static final Long CHAT_ID = 10L;
     static final String WIRE_MOCK_URL = "http://localhost:8080/2.3/questions/";
     private static final long QUESTION_ID = 61746598L;
@@ -128,7 +132,8 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     @Transactional
     void getUpdatesTest() {
         List<Link> neededToCheckLinks = List.of(linkRepository.findAll().getFirst());
-        List<LinkUpdateRequest> noThingToUpdate = stackOverflowUpdaterService.getUpdates(neededToCheckLinks);
+        List<LinkUpdateRequest> noThingToUpdate =
+            stackOverflowUpdaterService.getListLinkUpdateRequests(neededToCheckLinks);
 
         assertThat(noThingToUpdate.isEmpty()).isTrue();
 
@@ -139,7 +144,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
 
         List<Item> repoAfterTest = questionResponseRepository.findAll();
         List<LinkUpdateRequest> res =
-            stackOverflowUpdaterService.getUpdates(List.of(linkRepository.findAll().getFirst()));
+            stackOverflowUpdaterService.getListLinkUpdateRequests(List.of(linkRepository.findAll().getFirst()));
 
         assertThat(repoAfterTest.isEmpty()).isFalse();
         assertThat(res.getFirst()).isEqualTo(new LinkUpdateRequest(

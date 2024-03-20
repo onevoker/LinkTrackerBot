@@ -2,7 +2,6 @@ package edu.java.scrapper.controllers.telegramConrollers;
 
 import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
-import edu.java.scrapper.controllers.exceptions.InvalidLinkResponseException;
 import edu.java.scrapper.controllers.exceptions.LinkWasNotTrackedException;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
 import edu.java.scrapper.controllers.exceptions.ScrapperException;
@@ -38,8 +37,7 @@ public class ScrapperExceptionHandler {
         ChatAlreadyRegisteredException.class,
         ChatNotFoundException.class,
         LinkWasTrackedException.class,
-        LinkWasNotTrackedException.class,
-        InvalidLinkResponseException.class
+        LinkWasNotTrackedException.class
     })
     public ResponseEntity<ApiErrorResponse> handleScrapperExceptions(ScrapperException exception) {
         return ResponseEntity.status(exception.getStatusCode())

@@ -5,5 +5,5 @@ import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import java.util.List;
 
 public interface ResourceUpdaterService {
-    List<LinkUpdateRequest> getUpdates(List<Link> links);
+    List<LinkUpdateRequest> getListLinkUpdateRequests(List<Link> links);
 }

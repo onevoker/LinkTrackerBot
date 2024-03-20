@@ -38,8 +38,9 @@ public class LinkUpdaterService {
             }
         }
 
-        List<LinkUpdateRequest> gitHubUpdates = gitHubUpdaterService.getUpdates(gitHubLinks);
-        List<LinkUpdateRequest> stackOverflowUpdates = stackOverflowUpdaterService.getUpdates(stackOverflowLinks);
+        List<LinkUpdateRequest> gitHubUpdates = gitHubUpdaterService.getListLinkUpdateRequests(gitHubLinks);
+        List<LinkUpdateRequest> stackOverflowUpdates =
+            stackOverflowUpdaterService.getListLinkUpdateRequests(stackOverflowLinks);
 
         List<LinkUpdateRequest> allUpdates = new ArrayList<>(gitHubUpdates.size() + stackOverflowUpdates.size());
         allUpdates.addAll(gitHubUpdates);

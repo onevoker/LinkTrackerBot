@@ -9,8 +9,7 @@ import edu.java.scrapper.domain.services.LinkTrackerService;
 import edu.java.scrapper.domain.services.interfaces.LinkService;
 import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.dto.response.ListLinksResponse;
-import edu.java.scrapper.linkWorkers.LinkResponseFactory;
-import edu.java.scrapper.linkWorkers.LinkResponseValidatorService;
+
 import java.net.URI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,8 +26,6 @@ public class LinkTrackerServiceTest extends IntegrationTest {
     private LinkRepository linkRepository;
     @Autowired
     private ChatLinkRepository chatLinkRepository;
-    @Autowired
-    private LinkResponseValidatorService linkResponseValidatorService;
     private static final Long CHAT_ID = 14L;
     private static final URI URL = URI.create("https://github.com/onevoker/LinkTrackerBot");
 
@@ -37,8 +34,7 @@ public class LinkTrackerServiceTest extends IntegrationTest {
     @BeforeEach
     void setUp() {
         chatRepository.add(CHAT_ID);
-        LinkResponseFactory linkResponseFactory = new LinkResponseFactory(linkResponseValidatorService);
-        linkService = new LinkTrackerService(linkRepository, chatLinkRepository, linkResponseFactory);
+        linkService = new LinkTrackerService(linkRepository, chatLinkRepository);
     }
 
     @Test

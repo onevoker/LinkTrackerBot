@@ -7,8 +7,8 @@ import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
-import edu.java.scrapper.linkWorkers.LinkParserService;
-import edu.java.scrapper.linkWorkers.dto.GitHubLinkRepoData;
+import edu.java.scrapper.linkParser.dto.GitHubLinkData;
+import edu.java.scrapper.linkParser.services.GitHubParserService;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GitHubUpdaterService implements ResourceUpdaterService {
-    private final LinkParserService linkParserService;
+    private final GitHubParserService gitHubParserService;
     private final GitHubResponseRepository gitHubResponseRepository;
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
@@ -28,14 +28,14 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
     private static final String UPDATE_DESCRIPTION = "Появилось обновление";
 
     @Override
-    public List<LinkUpdateRequest> getUpdates(List<Link> links) {
+    public List<LinkUpdateRequest> getListLinkUpdateRequests(List<Link> links) {
         List<LinkUpdateRequest> requests = new ArrayList<>();
 
         for (var link : links) {
             URI url = link.getUrl();
             Long linkId = link.getId();
 
-            GitHubLinkRepoData linkRepoData = linkParserService.getGitHubLinkRepoData(url);
+            GitHubLinkData linkRepoData = gitHubParserService.getLinkData(url);
             String owner = linkRepoData.owner();
             String repo = linkRepoData.repo();
 

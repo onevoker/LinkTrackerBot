@@ -8,8 +8,8 @@ import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseReposito
 import edu.java.scrapper.dto.request.LinkUpdateRequest;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;
-import edu.java.scrapper.linkWorkers.LinkParserService;
-import edu.java.scrapper.linkWorkers.dto.StackOverflowLinkQuestionData;
+import edu.java.scrapper.linkParser.dto.StackOverflowLinkQuestionData;
+import edu.java.scrapper.linkParser.services.StackOverflowParserService;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class StackOverflowUpdaterService implements ResourceUpdaterService {
-    private final LinkParserService linkParserService;
+    private final StackOverflowParserService stackOverflowParserService;
     private final QuestionResponseRepository questionResponseRepository;
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
@@ -31,13 +31,13 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
     private static final String ANSWER_COUNT_DESCRIPTION = "Был добавлен ответ на вопрос";
 
     @Override
-    public List<LinkUpdateRequest> getUpdates(List<Link> links) {
+    public List<LinkUpdateRequest> getListLinkUpdateRequests(List<Link> links) {
         List<LinkUpdateRequest> requests = new ArrayList<>();
 
         for (var link : links) {
             URI url = link.getUrl();
             Long linkId = link.getId();
-            StackOverflowLinkQuestionData linkQuestionData = linkParserService.getStackOverflowLinkQuestionData(url);
+            StackOverflowLinkQuestionData linkQuestionData = stackOverflowParserService.getLinkData(url);
             long questionId = linkQuestionData.questionId();
 
             if (questionId != 0L) {
