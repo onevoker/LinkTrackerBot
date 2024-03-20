@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
     private final GitHubClient gitHubClient;
     private static final String UPDATE_DESCRIPTION = "Появилось обновление";
 
+    @Transactional
     @Override
     public List<LinkUpdateRequest> getListLinkUpdateRequests(List<Link> links) {
         List<LinkUpdateRequest> requests = new ArrayList<>();

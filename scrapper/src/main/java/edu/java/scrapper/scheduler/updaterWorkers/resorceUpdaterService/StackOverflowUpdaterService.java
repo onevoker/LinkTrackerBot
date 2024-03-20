@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
     private static final String ANSWERED_DESCRIPTION = "На вопрос был получен ответ";
     private static final String ANSWER_COUNT_DESCRIPTION = "Был добавлен ответ на вопрос";
 
+    @Transactional
     @Override
     public List<LinkUpdateRequest> getListLinkUpdateRequests(List<Link> links) {
         List<LinkUpdateRequest> requests = new ArrayList<>();
