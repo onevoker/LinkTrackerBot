@@ -13,7 +13,7 @@ import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
-import edu.java.scrapper.dto.request.LinkUpdateRequest;
+import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.linkParser.services.GitHubParserService;
 import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.GitHubUpdaterService;
 import java.net.URI;
@@ -114,7 +114,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     @Transactional
     void getUpdatesTest() {
         List<Link> neededToCheckLinks = List.of(linkRepository.findAll().getFirst());
-        List<LinkUpdateRequest> neededToUpdate = gitHubUpdaterService.getListLinkUpdateRequests(neededToCheckLinks);
+        List<LinkUpdateResponse> neededToUpdate = gitHubUpdaterService.getListLinkUpdateResponses(neededToCheckLinks);
 
         assertThat(neededToUpdate.getFirst().description()).isEqualTo("Появилось обновление");
 
@@ -124,11 +124,11 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         );
 
         List<RepositoryResponse> repoAfterTest = gitHubResponseRepository.findAll();
-        List<LinkUpdateRequest> res =
-            gitHubUpdaterService.getListLinkUpdateRequests(List.of(linkRepository.findAll().getFirst()));
+        List<LinkUpdateResponse> res =
+            gitHubUpdaterService.getListLinkUpdateResponses(List.of(linkRepository.findAll().getFirst()));
 
         assertThat(repoAfterTest.isEmpty()).isFalse();
-        assertThat(res.getFirst()).isEqualTo(new LinkUpdateRequest(
+        assertThat(res.getFirst()).isEqualTo(new LinkUpdateResponse(
             URL,
             "Появилось обновление",
             List.of(CHAT_ID)

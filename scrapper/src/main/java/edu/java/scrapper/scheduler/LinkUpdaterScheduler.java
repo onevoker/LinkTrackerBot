@@ -2,7 +2,7 @@ package edu.java.scrapper.scheduler;
 
 import edu.java.scrapper.clients.BotClient;
 import edu.java.scrapper.configuration.ApplicationConfig;
-import edu.java.scrapper.dto.request.LinkUpdateRequest;
+import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.scheduler.updaterWorkers.LinkUpdaterService;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -25,7 +25,7 @@ public class LinkUpdaterScheduler {
     public void update() {
         Duration checkingDuration = applicationConfig.scheduler().forceCheckDelay();
         OffsetDateTime timeNow = OffsetDateTime.now(ZoneOffset.UTC).minusSeconds(checkingDuration.toSeconds());
-        List<LinkUpdateRequest> requests = linkUpdaterService.getUpdates(timeNow);
+        List<LinkUpdateResponse> requests = linkUpdaterService.getUpdates(timeNow);
 
         if (!requests.isEmpty()) {
             for (var request : requests) {

@@ -1,9 +1,9 @@
 package edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService;
 
 import edu.java.scrapper.domain.models.Link;
-import edu.java.scrapper.dto.request.LinkUpdateRequest;
+import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import java.util.List;
 
 public interface ResourceUpdaterService {
-    List<LinkUpdateRequest> getListLinkUpdateRequests(List<Link> links);
+    List<LinkUpdateResponse> getListLinkUpdateResponses(List<Link> links);
 }

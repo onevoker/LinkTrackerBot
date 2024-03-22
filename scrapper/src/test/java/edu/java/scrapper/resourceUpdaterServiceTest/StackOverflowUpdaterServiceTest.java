@@ -12,7 +12,7 @@ import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
-import edu.java.scrapper.dto.request.LinkUpdateRequest;
+import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import edu.java.scrapper.linkParser.services.StackOverflowParserService;
 import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.StackOverflowUpdaterService;
@@ -132,8 +132,8 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     @Transactional
     void getUpdatesTest() {
         List<Link> neededToCheckLinks = List.of(linkRepository.findAll().getFirst());
-        List<LinkUpdateRequest> noThingToUpdate =
-            stackOverflowUpdaterService.getListLinkUpdateRequests(neededToCheckLinks);
+        List<LinkUpdateResponse> noThingToUpdate =
+            stackOverflowUpdaterService.getListLinkUpdateResponses(neededToCheckLinks);
 
         assertThat(noThingToUpdate.isEmpty()).isTrue();
 
@@ -143,11 +143,11 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         );
 
         List<Item> repoAfterTest = questionResponseRepository.findAll();
-        List<LinkUpdateRequest> res =
-            stackOverflowUpdaterService.getListLinkUpdateRequests(List.of(linkRepository.findAll().getFirst()));
+        List<LinkUpdateResponse> res =
+            stackOverflowUpdaterService.getListLinkUpdateResponses(List.of(linkRepository.findAll().getFirst()));
 
         assertThat(repoAfterTest.isEmpty()).isFalse();
-        assertThat(res.getFirst()).isEqualTo(new LinkUpdateRequest(
+        assertThat(res.getFirst()).isEqualTo(new LinkUpdateResponse(
             url,
             "Появилось обновление\nБыл добавлен ответ на вопрос\nНа вопрос был получен ответ",
             List.of(CHAT_ID)

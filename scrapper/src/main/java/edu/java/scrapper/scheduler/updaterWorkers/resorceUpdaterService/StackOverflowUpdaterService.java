@@ -5,7 +5,7 @@ import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
-import edu.java.scrapper.dto.request.LinkUpdateRequest;
+import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;
 import edu.java.scrapper.linkParser.dto.StackOverflowLinkQuestionData;
@@ -33,8 +33,8 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
 
     @Transactional
     @Override
-    public List<LinkUpdateRequest> getListLinkUpdateRequests(List<Link> links) {
-        List<LinkUpdateRequest> requests = new ArrayList<>();
+    public List<LinkUpdateResponse> getListLinkUpdateResponses(List<Link> links) {
+        List<LinkUpdateResponse> requests = new ArrayList<>();
 
         for (var link : links) {
             URI url = link.getUrl();
@@ -68,14 +68,14 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
         return responseItem.getLastActivityDate().isAfter(link.getLastUpdate());
     }
 
-    private LinkUpdateRequest getUpdateQuestion(Item responseItem, Long linkId, URI url, Item questionInRepo) {
+    private LinkUpdateResponse getUpdateQuestion(Item responseItem, Long linkId, URI url, Item questionInRepo) {
         OffsetDateTime lastEditDate = responseItem.getLastActivityDate();
         questionResponseRepository.update(responseItem, linkId);
         linkRepository.updateLastUpdate(lastEditDate, linkId);
         List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
         String messageForUser = getUpdateMessage(responseItem, questionInRepo);
 
-        return new LinkUpdateRequest(url, messageForUser, tgChatIdsForUpdate);
+        return new LinkUpdateResponse(url, messageForUser, tgChatIdsForUpdate);
     }
 
     private String getUpdateMessage(Item responseItem, Item questionInRepo) {

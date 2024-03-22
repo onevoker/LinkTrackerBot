@@ -6,7 +6,7 @@ import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
-import edu.java.scrapper.dto.request.LinkUpdateRequest;
+import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.linkParser.dto.GitHubLinkData;
 import edu.java.scrapper.linkParser.services.GitHubParserService;
 import java.net.URI;
@@ -30,8 +30,8 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
 
     @Transactional
     @Override
-    public List<LinkUpdateRequest> getListLinkUpdateRequests(List<Link> links) {
-        List<LinkUpdateRequest> requests = new ArrayList<>();
+    public List<LinkUpdateResponse> getListLinkUpdateResponses(List<Link> links) {
+        List<LinkUpdateResponse> requests = new ArrayList<>();
 
         for (var link : links) {
             URI url = link.getUrl();
@@ -64,12 +64,12 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
         return response.getPushedAt().isAfter(link.getLastUpdate());
     }
 
-    private LinkUpdateRequest getUpdateRepo(RepositoryResponse response, Long linkId, URI url) {
+    private LinkUpdateResponse getUpdateRepo(RepositoryResponse response, Long linkId, URI url) {
         OffsetDateTime updatedAt = response.getPushedAt().with(ZoneOffset.UTC);
         gitHubResponseRepository.update(response, linkId);
         linkRepository.updateLastUpdate(updatedAt, linkId);
         List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
 
-        return new LinkUpdateRequest(url, UPDATE_DESCRIPTION, tgChatIdsForUpdate);
+        return new LinkUpdateResponse(url, UPDATE_DESCRIPTION, tgChatIdsForUpdate);
     }
 }

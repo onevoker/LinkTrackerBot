@@ -1,7 +1,7 @@
 package edu.java.scrapper.clients;
 
 import edu.java.scrapper.clients.exceptions.ApiException;
-import edu.java.scrapper.dto.request.LinkUpdateRequest;
+import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.dto.response.ApiErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ public class BotClient {
     private final WebClient botWebClient;
     private static final String UPDATE_ENDPOINT = "/updates";
 
-    public void sendUpdate(LinkUpdateRequest updateRequest) {
+    public void sendUpdate(LinkUpdateResponse updateRequest) {
         botWebClient.post()
             .uri(UPDATE_ENDPOINT)
             .body(BodyInserters.fromValue(updateRequest))

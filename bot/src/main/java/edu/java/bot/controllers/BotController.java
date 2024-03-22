@@ -1,7 +1,7 @@
 package edu.java.bot.controllers;
 
 import edu.java.bot.botServices.BotUpdaterService;
-import edu.java.bot.dto.request.LinkUpdateRequest;
+import edu.java.bot.dto.response.LinkUpdateResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,7 +18,7 @@ public class BotController {
     private final BotUpdaterService botUpdaterService;
 
     @PostMapping
-    public void sendUpdate(@RequestBody @Valid LinkUpdateRequest updateRequest) {
-        botUpdaterService.sendUpdates(updateRequest);
+    public void sendUpdate(@RequestBody @Valid LinkUpdateResponse update) {
+        botUpdaterService.sendUpdate(update);
     }
 }

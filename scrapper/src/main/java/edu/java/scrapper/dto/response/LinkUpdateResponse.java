@@ -1,9 +1,9 @@
-package edu.java.scrapper.dto.request;
+package edu.java.scrapper.dto.response;
 
 import java.net.URI;
 import java.util.List;
 
-public record LinkUpdateRequest(
+public record LinkUpdateResponse(
 
     URI url,
 
