@@ -15,10 +15,10 @@ public class BotClient {
     private final WebClient botWebClient;
     private static final String UPDATE_ENDPOINT = "/updates";
 
-    public void sendUpdate(LinkUpdateResponse updateRequest) {
+    public void sendUpdate(LinkUpdateResponse update) {
         botWebClient.post()
             .uri(UPDATE_ENDPOINT)
-            .body(BodyInserters.fromValue(updateRequest))
+            .body(BodyInserters.fromValue(update))
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
