@@ -1,8 +1,8 @@
 package edu.java.scrapper.clients;
 
 import edu.java.scrapper.clients.exceptions.ApiException;
-import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.dto.response.ApiErrorResponse;
+import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
