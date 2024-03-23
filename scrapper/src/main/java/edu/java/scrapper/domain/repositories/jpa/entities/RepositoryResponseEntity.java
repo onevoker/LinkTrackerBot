@@ -1,6 +1,5 @@
 package edu.java.scrapper.domain.repositories.jpa.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -26,6 +25,5 @@ public class RepositoryResponseEntity {
     @JoinColumn(name = "link_id", nullable = false)
     private LinkEntity link;
 
-    @Column(name = "pushed_at", nullable = false)
     private OffsetDateTime pushedAt;
 }

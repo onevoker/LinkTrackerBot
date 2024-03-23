@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain.repositories.jpa;
 
-import edu.java.scrapper.domain.ModelsMapper;
 import edu.java.scrapper.domain.models.Link;
+import edu.java.scrapper.domain.modelsMapper.ModelsMapper;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.repositories.jpa.entities.LinkEntity;
 import edu.java.scrapper.domain.repositories.jpa.repos.JpaLinkEntityRepository;

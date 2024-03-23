@@ -1,6 +1,6 @@
 package edu.java.scrapper.domain.repositories.jpa;
 
-import edu.java.scrapper.domain.ModelsMapper;
+import edu.java.scrapper.domain.modelsMapper.ModelsMapper;
 import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
 import edu.java.scrapper.domain.repositories.jpa.entities.ItemEntity;
 import edu.java.scrapper.domain.repositories.jpa.repos.JpaQuestionResponseEntityRepository;

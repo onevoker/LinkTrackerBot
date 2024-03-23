@@ -1,9 +1,9 @@
 package edu.java.scrapper.domain.repositories.jpa;
 
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
-import edu.java.scrapper.domain.ModelsMapper;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
+import edu.java.scrapper.domain.modelsMapper.ModelsMapper;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.jpa.entities.ChatLinkEntity;
 import edu.java.scrapper.domain.repositories.jpa.repos.JpaChatLinkEntityRepository;

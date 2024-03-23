@@ -1,6 +1,6 @@
 package edu.java.scrapper.configuration;
 
-import edu.java.scrapper.domain.ModelsMapper;
+import edu.java.scrapper.domain.modelsMapper.ModelsMapper;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;

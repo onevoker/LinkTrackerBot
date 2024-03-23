@@ -1,8 +1,8 @@
 package edu.java.scrapper.domain.repositories.jpa;
 
 import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
-import edu.java.scrapper.domain.ModelsMapper;
 import edu.java.scrapper.domain.models.Chat;
+import edu.java.scrapper.domain.modelsMapper.ModelsMapper;
 import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import edu.java.scrapper.domain.repositories.jpa.entities.ChatEntity;
 import edu.java.scrapper.domain.repositories.jpa.repos.JpaChatEntityRepository;
