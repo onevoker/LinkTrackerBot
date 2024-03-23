@@ -8,11 +8,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Repository;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.CHAT_LINK;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.LINK;
 
-@Repository
 @RequiredArgsConstructor
 public class JooqChatLinkRepository implements ChatLinkRepository {
     private final DSLContext dsl;

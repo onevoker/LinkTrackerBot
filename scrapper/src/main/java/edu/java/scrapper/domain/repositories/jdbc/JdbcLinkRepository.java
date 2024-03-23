@@ -11,7 +11,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-//@Repository
 @RequiredArgsConstructor
 @Log4j2
 public class JdbcLinkRepository implements LinkRepository {

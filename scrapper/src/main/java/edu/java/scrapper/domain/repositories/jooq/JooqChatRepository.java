@@ -7,12 +7,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.CHAT;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.CHAT_LINK;
 
-@Repository
 @RequiredArgsConstructor
 public class JooqChatRepository implements ChatRepository {
     private final DSLContext dsl;

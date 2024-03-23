@@ -31,6 +31,7 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
     private static final Link LINK =
         new Link(
             URI.create("https://github.com/onevoker/LinkTrackerBot"),
+            OffsetDateTime.of(2024, 3, 13, 1, 42, 0, 0, ZoneOffset.UTC),
             OffsetDateTime.of(2024, 3, 13, 1, 42, 0, 0, ZoneOffset.UTC)
         );
 
