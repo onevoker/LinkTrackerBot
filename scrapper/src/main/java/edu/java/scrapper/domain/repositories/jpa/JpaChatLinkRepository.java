@@ -48,8 +48,7 @@ public class JpaChatLinkRepository implements ChatLinkRepository {
 
     @Override
     public List<Link> findLinksByTgChatId(Long tgChatId) {
-        List<ChatLinkEntity> chatLinkEntities = chatLinkEntityRepository.findByChatId(tgChatId);
-        return chatLinkEntities.stream()
+        return chatLinkEntityRepository.findByChatId(tgChatId).stream()
             .map(chatLinkEntity -> mapper.getLink(chatLinkEntity.getLink()))
             .collect(Collectors.toList());
 
