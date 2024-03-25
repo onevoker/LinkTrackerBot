@@ -2,7 +2,6 @@ package edu.java.scrapper.configuration;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
-import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
@@ -14,12 +13,24 @@ public record ApplicationConfig(
     @Bean
     Scheduler scheduler,
     Clients clients,
+    String authorizationGitHubToken,
+    String gitHubDomain,
+    String stackOverflowDomain,
+    String gitHubHeaderName,
+    int gitHubResponseTimeout,
     @Bean
-    List<String> supportedDomains
+    GitHubRegexp gitHubRegexp,
+    @Bean
+    StackOverflowRegexp stackOverflowRegexp
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 
     public record Clients(String gitHub, String stackOverflow, String bot) {
     }
+
+    public record GitHubRegexp(String regexpForGitHubOwner, String regexpForGitHubRepo) {
+    }
+
+    public record StackOverflowRegexp(String regexpForStackOverflowQuestionId){}
 }

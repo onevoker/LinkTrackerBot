@@ -6,11 +6,14 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.clients.ScrapperLinkClient;
 import edu.java.bot.commandServices.TrackCommandService;
+import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.dto.request.AddLinkRequest;
-import edu.java.bot.dto.response.ApiErrorResponse;
 import edu.java.bot.dto.response.LinkResponse;
-import edu.java.bot.exceptions.ApiException;
+import edu.java.bot.linkValidators.LinkResponseFactory;
+import edu.java.bot.linkValidators.LinkResponseValidatorService;
 import java.net.URI;
+import java.time.Duration;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
 public class TrackCommandServiceTest {
@@ -33,6 +35,16 @@ public class TrackCommandServiceTest {
     private ScrapperLinkClient linkClient;
     @InjectMocks
     private TrackCommandService trackCommandService;
+    private static final ApplicationConfig applicationConfig = new ApplicationConfig(
+        null,
+        null,
+        List.of("https://github\\.com/[^/]+/[^/]+/?", "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"),
+        Duration.ofSeconds(15)
+    );
+
+    private static final LinkResponseValidatorService linkValidatorService =
+        new LinkResponseValidatorService(applicationConfig);
+    private static final LinkResponseFactory linkFactory = new LinkResponseFactory(linkValidatorService);
     private static final URI GIT_HUB = URI.create("https://github.com/onevoker/LinkTrackerBot");
 
     @Test
@@ -53,18 +65,12 @@ public class TrackCommandServiceTest {
     @Test
     void testTrackUncorrectLink() {
         String command = "/track man";
-        ApiErrorResponse errorResponse = ApiErrorResponse.builder()
-            .exceptionMessage("Вы указали неправильную ссылку, возможно вам поможет /help")
-            .build();
-        ApiException exception = new ApiException(errorResponse);
-        AddLinkRequest request = new AddLinkRequest(URI.create("man"));
 
         doReturn(message).when(update).message();
         doReturn(command).when(message).text();
         doReturn(chat).when(message).chat();
         doReturn(CHAT_ID).when(chat).id();
-        doThrow(exception).when(linkClient).trackLink(CHAT_ID, request);
-        trackCommandService = new TrackCommandService(linkClient);
+        trackCommandService = new TrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Вы указали неправильную ссылку, возможно вам поможет /help";
         SendMessage result = trackCommandService.handle(update);
@@ -84,7 +90,7 @@ public class TrackCommandServiceTest {
         doReturn(chat).when(message).chat();
         doReturn(CHAT_ID).when(chat).id();
         doReturn(response).when(linkClient).trackLink(CHAT_ID, request);
-        trackCommandService = new TrackCommandService(linkClient);
+        trackCommandService = new TrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Начали отслеживать данную ссылку: " + GIT_HUB;
         SendMessage result = trackCommandService.handle(update);

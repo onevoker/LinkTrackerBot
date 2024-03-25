@@ -1,14 +1,12 @@
 package edu.java.scrapper.controllers.telegramConrollers;
 
+import edu.java.scrapper.domain.services.interfaces.LinkService;
 import edu.java.scrapper.dto.request.AddLinkRequest;
 import edu.java.scrapper.dto.request.RemoveLinkRequest;
 import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.dto.response.ListLinksResponse;
-import edu.java.scrapper.linkWorkers.LinkResponseFactory;
-import edu.java.scrapper.repositories.LinkResponseRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/links")
 @RequiredArgsConstructor
 public class LinkController {
-    private final LinkResponseRepository linkResponseRepository;
-    private final LinkResponseFactory linkFactory;
+    private final LinkService linkService;
 
     @GetMapping
     public ListLinksResponse getTrackedLinks(@RequestHeader("Tg-Chat-Id") @Positive long chatId) {
-        return linkResponseRepository.getUserLinks(chatId);
+        return linkService.listAll(chatId);
     }
 
     @PostMapping
@@ -35,11 +32,7 @@ public class LinkController {
         @RequestHeader("Tg-Chat-Id") @Positive long chatId,
         @RequestBody @Valid AddLinkRequest addLinkRequest
     ) {
-        URI url = addLinkRequest.url();
-        LinkResponse linkResponse = linkFactory.createLink(chatId, url);
-        linkResponseRepository.addUserLink(linkResponse);
-
-        return linkResponse;
+        return linkService.add(chatId, addLinkRequest.url());
     }
 
     @DeleteMapping
@@ -47,10 +40,6 @@ public class LinkController {
         @RequestHeader("Tg-Chat-Id") @Positive long chatId,
         @RequestBody @Valid RemoveLinkRequest removeLinkRequest
     ) {
-        URI url = removeLinkRequest.url();
-        LinkResponse linkResponse = linkFactory.createLink(chatId, url);
-        linkResponseRepository.deleteUserLink(linkResponse);
-
-        return new LinkResponse(chatId, removeLinkRequest.url());
+        return linkService.remove(chatId, removeLinkRequest.url());
     }
 }

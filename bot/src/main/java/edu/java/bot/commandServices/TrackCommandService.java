@@ -7,6 +7,8 @@ import edu.java.bot.clients.ScrapperLinkClient;
 import edu.java.bot.dto.request.AddLinkRequest;
 import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.exceptions.ApiException;
+import edu.java.bot.exceptions.InvalidLinkException;
+import edu.java.bot.linkValidators.LinkResponseFactory;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TrackCommandService implements CommandService {
     private final ScrapperLinkClient linkClient;
+    private final LinkResponseFactory linkResponseFactory;
     private static final int BEGIN_LINK_INDEX = 7;
     private static final String COMMAND = "/track";
     private static final String DESCRIPTION = "Отслеживание ссылки";
@@ -48,7 +51,8 @@ public class TrackCommandService implements CommandService {
             String link = message.text().substring(BEGIN_LINK_INDEX);
             try {
                 URI url = URI.create(link);
-                AddLinkRequest addLinkRequest = new AddLinkRequest(url);
+                LinkResponse response = linkResponseFactory.createLink(chatId, url);
+                AddLinkRequest addLinkRequest = new AddLinkRequest(response.url());
                 try {
                     LinkResponse linkResponse = linkClient.trackLink(chatId, addLinkRequest);
                     answerText = HANDLE_TEXT + linkResponse.url();
@@ -57,6 +61,8 @@ public class TrackCommandService implements CommandService {
                 }
             } catch (IllegalArgumentException exception) {
                 answerText = INVALID_LINK_TEXT;
+            } catch (InvalidLinkException exception) {
+                answerText = exception.getMessage();
             }
         } catch (IndexOutOfBoundsException exception) {
             answerText = NO_LINK_TEXT;

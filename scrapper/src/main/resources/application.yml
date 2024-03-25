@@ -2,21 +2,35 @@ app:
   scheduler:
     enable: true
     interval: 14s
-    force-check-delay: 10s
+    force-check-delay: 60s
 
   clients:
     git-hub: https://api.github.com/repos/
     stack-overflow: https://api.stackexchange.com/2.3/questions/
     bot: http://localhost:8090
+  git-hub-regexp:
+    regexp-for-git-hub-owner: https://github\.com/(.*?)/
+    regexp-for-git-hub-repo: https://github\.com/.*?/(.*)
+  stack-overflow-regexp:
+    regexp-for-stack-overflow-question-id: https://stackoverflow\.com/questions/(\d+)/([\w-]+)
 
-  supported-domains:
-    - github.com
-    - stackoverflow.com
+  stack-overflow-domain: stackoverflow.com
+  git-hub-domain: github.com
+  git-hub-header-name: onevoker
+  authorization-git-hub-token: ${access-token}
+  git-hub-response-timeout: 15
 
 
 spring:
+  liquibase:
+    enabled: false
   application:
     name: scrapper
+  datasource:
+    driver_class_name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
 
 server:
   port: 8080
