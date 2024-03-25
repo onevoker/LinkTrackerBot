@@ -5,10 +5,8 @@ import edu.java.scrapper.dto.stackOverflowDto.Item;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.springframework.stereotype.Repository;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.QUESTION_RESPONSE;
 
-@Repository
 @RequiredArgsConstructor
 public class JooqQuestionResponseRepository implements QuestionResponseRepository {
     private final DSLContext dsl;

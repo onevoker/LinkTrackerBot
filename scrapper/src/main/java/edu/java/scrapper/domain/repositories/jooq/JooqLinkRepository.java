@@ -9,10 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jooq.DSLContext;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Repository;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.LINK;
 
-@Repository
 @RequiredArgsConstructor
 @Log4j2
 public class JooqLinkRepository implements LinkRepository {

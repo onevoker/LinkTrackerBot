@@ -5,10 +5,8 @@ import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.springframework.stereotype.Repository;
 import static edu.java.scrapper.domain.repositories.jooq.generated.Tables.REPOSITORY_RESPONSE;
 
-@Repository
 @RequiredArgsConstructor
 public class JooqGitHubResponseRepository implements GitHubResponseRepository {
     private final DSLContext dsl;

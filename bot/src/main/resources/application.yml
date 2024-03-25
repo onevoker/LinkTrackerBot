@@ -2,9 +2,9 @@ app:
   telegram-token: ${tg-token}
   scrapper-base-url: http://localhost:8080
   validator-regexp:
-    - https://github\\.com/[^/]+/[^/]+/?
-    - https://stackoverflow\\.com/questions/\\d+/[^/]+/?
-    - https://open.spotify.com/collection/tracks
+    - "https://github\\.com/[^/]+/[^/]+/?"
+    - "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"
+    - "https://open.spotify.com/collection/tracks"
   response-timeout: 15s
 
 spring:

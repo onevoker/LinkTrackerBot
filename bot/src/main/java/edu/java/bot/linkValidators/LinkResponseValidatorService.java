@@ -21,11 +21,11 @@ public class LinkResponseValidatorService {
     private static final String NOT_FOUND_MESSAGE = "Вы указали неправильную ссылку, возможно вам поможет /help";
 
     public boolean isCorrectUri(URI url) {
-        if (isValidResource(url)) {
-            pingLink(url);
-            return true;
+        if (!isValidResource(url)) {
+            return false;
         }
-        return false;
+        pingLink(url);
+        return true;
     }
 
     private void pingLink(URI url) {
