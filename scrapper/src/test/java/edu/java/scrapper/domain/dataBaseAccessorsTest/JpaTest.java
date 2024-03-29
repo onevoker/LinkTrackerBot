@@ -14,11 +14,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(properties = "app.database-access-type=jpa")
-@DirtiesContext
+@SpringBootTest(properties = {"file= ./src/resources/application.yml", "app.database-access-type=jpa"})
 @Transactional
 public class JpaTest {
     @Autowired
