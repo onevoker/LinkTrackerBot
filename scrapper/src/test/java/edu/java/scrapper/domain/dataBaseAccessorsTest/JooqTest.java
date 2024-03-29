@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-@TestPropertySource(properties = "app.database-access-type=jdbc")
+@TestPropertySource(properties = "app.database-access-type=jooq")
 @SpringBootTest
 @Transactional
 public class JooqTest {
