@@ -22,7 +22,7 @@ public record ApplicationConfig(
     GitHubRegexp gitHubRegexp,
     @Bean
     StackOverflowRegexp stackOverflowRegexp,
-    String dataBaseAccessType
+    String databaseAccessType
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(properties = "app.data-base-access-type = jdbc")
+@SpringBootTest(properties = "app.database-access-type = jdbc")
 @Transactional
 public class JdbcTest {
     @Autowired
