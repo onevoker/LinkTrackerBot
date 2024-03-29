@@ -1,5 +1,6 @@
 package edu.java.scrapper.domain.dataBaseAccessorsTest;
 
+import edu.java.scrapper.ScrapperApplication;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
@@ -18,7 +19,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 @TestPropertySource(properties = "app.database-access-type=jdbc")
-@SpringBootTest
+@SpringBootTest(classes = ScrapperApplication.class)
 @Transactional
 public class JdbcTest {
     @Autowired
