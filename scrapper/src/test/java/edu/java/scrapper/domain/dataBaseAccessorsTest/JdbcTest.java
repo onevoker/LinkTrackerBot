@@ -1,11 +1,10 @@
 package edu.java.scrapper.domain.dataBaseAccessorsTest;
 
-import edu.java.scrapper.ScrapperApplication;
-import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
-import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
-import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
-import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
-import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcChatLinkRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcChatRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcGitHubResponseRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcLinkRepository;
+import edu.java.scrapper.domain.repositories.jdbc.JdbcQuestionResponseRepository;
 import edu.java.scrapper.domain.repositoriesTest.ChatLinkRepositoryTest;
 import edu.java.scrapper.domain.repositoriesTest.ChatRepositoryTest;
 import edu.java.scrapper.domain.repositoriesTest.GitHubResponseRepositoryTest;
@@ -19,19 +18,19 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 @TestPropertySource(properties = "app.database-access-type=jdbc")
-@SpringBootTest(classes = ScrapperApplication.class)
+@SpringBootTest
 @Transactional
 public class JdbcTest {
     @Autowired
-    private ChatLinkRepository jdbcChatLinkRepository;
+    private JdbcChatLinkRepository jdbcChatLinkRepository;
     @Autowired
-    private ChatRepository jdbcChatRepository;
+    private JdbcChatRepository jdbcChatRepository;
     @Autowired
-    private GitHubResponseRepository jdbcGitHubResponseRepository;
+    private JdbcGitHubResponseRepository jdbcGitHubResponseRepository;
     @Autowired
-    private LinkRepository jdbcLinkRepository;
+    private JdbcLinkRepository jdbcLinkRepository;
     @Autowired
-    private QuestionResponseRepository jdbcQuestionResponseRepository;
+    private JdbcQuestionResponseRepository jdbcQuestionResponseRepository;
 
     @Nested
     class JdbcChatLinkRepositoryTest {
