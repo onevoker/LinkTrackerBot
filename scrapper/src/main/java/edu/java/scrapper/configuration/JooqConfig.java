@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jooq")
 public class JooqConfig {
     @Autowired
-    DSLContext dsl;
+    private DSLContext dsl;
 
     @Bean
     public ChatLinkRepository jooqChatLinkRepository() {

@@ -13,12 +13,15 @@ import edu.java.scrapper.domain.repositoriesTest.QuestionResponseRepositoryTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jooq.DefaultConfigurationCustomizer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(properties = "app.data-base-access-type = jooq")
 @Transactional
 public class JooqTest {
+    @Autowired
+    private DefaultConfigurationCustomizer postgresJooqCustomizer;
     @Autowired
     private ChatLinkRepository jooqChatLinkRepository;
     @Autowired

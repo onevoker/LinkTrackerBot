@@ -25,17 +25,17 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jpa")
 public class JpaConfig {
     @Autowired
-    JpaChatEntityRepository chatEntityRepository;
+    private JpaChatEntityRepository chatEntityRepository;
     @Autowired
-    JpaChatLinkEntityRepository chatLinkEntityRepository;
+    private JpaChatLinkEntityRepository chatLinkEntityRepository;
     @Autowired
-    JpaLinkEntityRepository linkEntityRepository;
+    private JpaLinkEntityRepository linkEntityRepository;
     @Autowired
-    JpaQuestionResponseEntityRepository questionResponseEntityRepository;
+    private JpaQuestionResponseEntityRepository questionResponseEntityRepository;
     @Autowired
-    JpaRepositoryResponseEntityRepository repositoryResponseEntityRepository;
+    private JpaRepositoryResponseEntityRepository repositoryResponseEntityRepository;
     @Autowired
-    ModelsMapper mapper;
+    private ModelsMapper mapper;
 
     @Bean
     public ChatLinkRepository jpaChatLinkRepository() {
