@@ -82,7 +82,7 @@ public class JpaTest {
     }
 
     @Nested
-    class JooqGitHubResponseRepositoryTest {
+    class JpaGitHubResponseRepositoryTest {
         private final GitHubResponseRepositoryTest jpaGitHubResponseRepositoryTest =
             new GitHubResponseRepositoryTest(jpaGitHubResponseRepository, jpaLinkRepository);
 
@@ -103,7 +103,7 @@ public class JpaTest {
     }
 
     @Nested
-    class JooqLinkRepositoryTest {
+    class JpaLinkRepositoryTest {
         private final LinkRepositoryTest jpaLinkRepositoryTest = new LinkRepositoryTest(jpaLinkRepository);
 
         @Test
@@ -128,7 +128,7 @@ public class JpaTest {
     }
 
     @Nested
-    class JooqQuestionResponseRepositoryTest {
+    class JpaQuestionResponseRepositoryTest {
         private final QuestionResponseRepositoryTest jpaQuestionResponseRepositoryTest =
             new QuestionResponseRepositoryTest(jpaQuestionResponseRepository, jpaLinkRepository);
 
