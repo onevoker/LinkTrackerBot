@@ -1,6 +1,7 @@
 package edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService;
 
 import edu.java.scrapper.clients.GitHubClient;
+import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
@@ -12,7 +13,6 @@ import edu.java.scrapper.linkParser.services.GitHubParserService;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class GitHubUpdaterService implements ResourceUpdaterService {
+    private final ApplicationConfig applicationConfig;
     private final GitHubParserService gitHubParserService;
     private final GitHubResponseRepository gitHubResponseRepository;
     private final LinkRepository linkRepository;
@@ -30,34 +31,37 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
 
     @Transactional
     @Override
-    public List<LinkUpdateResponse> getListLinkUpdateResponses(List<Link> links) {
-        List<LinkUpdateResponse> requests = new ArrayList<>();
+    public LinkUpdateResponse getLinkUpdateResponse(Link link) {
+        LinkUpdateResponse updateResponse = null;
 
-        for (var link : links) {
-            URI url = link.getUrl();
-            Long linkId = link.getId();
+        URI url = link.getUrl();
+        Long linkId = link.getId();
 
-            GitHubLinkData linkRepoData = gitHubParserService.getLinkData(url);
-            String owner = linkRepoData.owner();
-            String repo = linkRepoData.repo();
+        GitHubLinkData linkRepoData = gitHubParserService.getLinkData(url);
+        String owner = linkRepoData.owner();
+        String repo = linkRepoData.repo();
 
-            if (!owner.isBlank() && !repo.isBlank()) {
-                RepositoryResponse response = gitHubClient.fetchRepository(owner, repo);
-                List<RepositoryResponse> responsesInRepo = gitHubResponseRepository.findByLinkId(linkId);
+        if (!owner.isBlank() && !repo.isBlank()) {
+            RepositoryResponse response = gitHubClient.fetchRepository(owner, repo);
+            List<RepositoryResponse> responsesInRepo = gitHubResponseRepository.findByLinkId(linkId);
 
-                if (responsesInRepo.isEmpty()) {
-                    gitHubResponseRepository.add(response, linkId);
-                }
-
-                if (isNeedToUpdate(response, link)) {
-                    requests.add(getUpdateRepo(response, linkId, url));
-                }
+            if (responsesInRepo.isEmpty()) {
+                gitHubResponseRepository.add(response, linkId);
             }
-            OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
-            linkRepository.updateLastApiCheck(lastApiCheck, linkId);
-        }
 
-        return requests;
+            if (isNeedToUpdate(response, link)) {
+                updateResponse = getUpdateRepo(response, linkId, url);
+            }
+        }
+        OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
+        linkRepository.updateLastApiCheck(lastApiCheck, linkId);
+
+        return updateResponse;
+    }
+
+    @Override
+    public String getSupportedLinksDomain() {
+        return applicationConfig.gitHubDomain();
     }
 
     private boolean isNeedToUpdate(RepositoryResponse response, Link link) {

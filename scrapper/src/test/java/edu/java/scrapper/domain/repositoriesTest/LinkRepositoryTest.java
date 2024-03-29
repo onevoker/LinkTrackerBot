@@ -7,17 +7,14 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@Transactional
+@RequiredArgsConstructor
 public class LinkRepositoryTest extends IntegrationTest {
-    @Autowired
-    private LinkRepository linkRepository;
+    private final LinkRepository linkRepository;
     private static final Link LINK =
         new Link(
             URI.create("https://github.com/onevoker"),
@@ -25,24 +22,24 @@ public class LinkRepositoryTest extends IntegrationTest {
             OffsetDateTime.now().with(ZoneOffset.UTC)
         );
 
-    @Test
-    void addTest() {
+    public void addTest() {
         linkRepository.add(LINK);
+
         assertThat(linkRepository.findAll().size()).isEqualTo(1);
         assertDoesNotThrow(() -> linkRepository.add(LINK));
     }
 
-    @Test
-    void removeTest() {
+    public void removeTest() {
         linkRepository.add(LINK);
         assertThat(linkRepository.findAll().size()).isEqualTo(1);
+
         linkRepository.remove(linkRepository.findAll().getFirst().getId());
         assertThat(linkRepository.findAll().size()).isEqualTo(0);
     }
 
-    @Test
-    void findAllTest() {
+    public void findAllTest() {
         linkRepository.add(LINK);
+
         List<Link> links = linkRepository.findAll();
         Link expected = new Link(
             LINK.getUrl(),
@@ -55,9 +52,9 @@ public class LinkRepositoryTest extends IntegrationTest {
         assertThat(links.size()).isEqualTo(1);
     }
 
-    @Test
-    void findByUrlTest() {
+    public void findByUrlTest() {
         linkRepository.add(LINK);
+
         URI addedUrl = URI.create("https://github.com/onevoker/LinkTrackerBot");
         Link oneMoreLink = new Link(
             addedUrl,

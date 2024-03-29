@@ -5,36 +5,33 @@ import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.domain.models.Chat;
 import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import java.util.List;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Transactional
+@RequiredArgsConstructor
 public class ChatRepositoryTest extends IntegrationTest {
-    @Autowired
-    private ChatRepository chatRepository;
+    private final ChatRepository chatRepository;
     private static final Long CHAT_ID = 14L;
 
-    @Test
-    void addTest() {
+    public void addTest() {
         chatRepository.add(CHAT_ID);
+
         assertThat(chatRepository.findAll().size()).isEqualTo(1);
         var exception = assertThrows(ChatAlreadyRegisteredException.class, () -> chatRepository.add(CHAT_ID));
+
         assertThat(exception.getMessage()).isEqualTo("Вы уже были зарегестрированы раньше");
     }
 
-    @Test
-    void removeTest() {
+    public void removeTest() {
         chatRepository.add(CHAT_ID);
+
         chatRepository.remove(CHAT_ID);
 
         assertThat(chatRepository.findAll().size()).isEqualTo(0);
     }
 
-    @Test
-    void findAllTest() {
+    public void findAllTest() {
         chatRepository.add(1L);
         chatRepository.add(CHAT_ID);
 
