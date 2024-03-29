@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(properties = {"file= ./src/resources/application.yml", "app.database-access-type=jooq"})
+@SpringBootTest(properties = {"file= ./scrapper/src/main/resources/application.yml", "app.database-access-type=jooq"})
 @Transactional
 public class JooqTest {
     @Autowired
