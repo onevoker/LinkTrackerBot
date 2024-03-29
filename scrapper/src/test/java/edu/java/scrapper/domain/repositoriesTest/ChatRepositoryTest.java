@@ -11,13 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Transactional
 public class ChatRepositoryTest extends IntegrationTest {
     @Autowired
     private ChatRepository chatRepository;
     private static final Long CHAT_ID = 14L;
 
     @Test
-    @Transactional
     void addTest() {
         chatRepository.add(CHAT_ID);
         assertThat(chatRepository.findAll().size()).isEqualTo(1);
@@ -26,7 +26,6 @@ public class ChatRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    @Transactional
     void removeTest() {
         chatRepository.add(CHAT_ID);
         chatRepository.remove(CHAT_ID);
@@ -35,7 +34,6 @@ public class ChatRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    @Transactional
     void findAllTest() {
         chatRepository.add(1L);
         chatRepository.add(CHAT_ID);

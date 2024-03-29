@@ -14,6 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@Transactional
 public class LinkRepositoryTest extends IntegrationTest {
     @Autowired
     private LinkRepository linkRepository;
@@ -25,7 +26,6 @@ public class LinkRepositoryTest extends IntegrationTest {
         );
 
     @Test
-    @Transactional
     void addTest() {
         linkRepository.add(LINK);
         assertThat(linkRepository.findAll().size()).isEqualTo(1);
@@ -33,7 +33,6 @@ public class LinkRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    @Transactional
     void removeTest() {
         linkRepository.add(LINK);
         assertThat(linkRepository.findAll().size()).isEqualTo(1);
@@ -42,7 +41,6 @@ public class LinkRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    @Transactional
     void findAllTest() {
         linkRepository.add(LINK);
         List<Link> links = linkRepository.findAll();
@@ -58,7 +56,6 @@ public class LinkRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    @Transactional
     void findByUrlTest() {
         linkRepository.add(LINK);
         URI addedUrl = URI.create("https://github.com/onevoker/LinkTrackerBot");

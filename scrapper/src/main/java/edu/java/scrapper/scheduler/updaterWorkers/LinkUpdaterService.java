@@ -8,6 +8,7 @@ import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.Resource
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class LinkUpdaterService {
     public List<LinkUpdateResponse> getUpdates(OffsetDateTime time) {
         List<Link> neededToCheckLinks = linkRepository.findOldCheckedLinks(time);
         if (neededToCheckLinks.isEmpty()) {
-            return List.of();
+            return Collections.emptyList();
         }
 
         List<Link> stackOverflowLinks = new ArrayList<>();
