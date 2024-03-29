@@ -1,10 +1,10 @@
 package edu.java.scrapper.domain.dataBaseAccessorsTest;
 
-import edu.java.scrapper.domain.repositories.jpa.JpaChatLinkRepository;
-import edu.java.scrapper.domain.repositories.jpa.JpaChatRepository;
-import edu.java.scrapper.domain.repositories.jpa.JpaGitHubResponseRepository;
-import edu.java.scrapper.domain.repositories.jpa.JpaLinkRepository;
-import edu.java.scrapper.domain.repositories.jpa.JpaQuestionResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
+import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
 import edu.java.scrapper.domain.repositoriesTest.ChatLinkRepositoryTest;
 import edu.java.scrapper.domain.repositoriesTest.ChatRepositoryTest;
 import edu.java.scrapper.domain.repositoriesTest.GitHubResponseRepositoryTest;
@@ -14,23 +14,21 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-@TestPropertySource(properties = "app.database-access-type=jpa")
-@SpringBootTest
+@SpringBootTest(properties = "app.database-access-type=jpa")
 @Transactional
 public class JpaTest {
     @Autowired
-    private JpaChatLinkRepository jpaChatLinkRepository;
+    private ChatLinkRepository jpaChatLinkRepository;
     @Autowired
-    private JpaChatRepository jpaChatRepository;
+    private ChatRepository jpaChatRepository;
     @Autowired
-    private JpaGitHubResponseRepository jpaGitHubResponseRepository;
+    private GitHubResponseRepository jpaGitHubResponseRepository;
     @Autowired
-    private JpaLinkRepository jpaLinkRepository;
+    private LinkRepository jpaLinkRepository;
     @Autowired
-    private JpaQuestionResponseRepository jpaQuestionResponseRepository;
+    private QuestionResponseRepository jpaQuestionResponseRepository;
 
     @Nested
     class JpaChatLinkRepositoryTest {

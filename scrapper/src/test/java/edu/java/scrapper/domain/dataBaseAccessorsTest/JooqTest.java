@@ -1,10 +1,10 @@
 package edu.java.scrapper.domain.dataBaseAccessorsTest;
 
-import edu.java.scrapper.domain.repositories.jooq.JooqChatLinkRepository;
-import edu.java.scrapper.domain.repositories.jooq.JooqChatRepository;
-import edu.java.scrapper.domain.repositories.jooq.JooqGitHubResponseRepository;
-import edu.java.scrapper.domain.repositories.jooq.JooqLinkRepository;
-import edu.java.scrapper.domain.repositories.jooq.JooqQuestionResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
+import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
+import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
+import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
 import edu.java.scrapper.domain.repositoriesTest.ChatLinkRepositoryTest;
 import edu.java.scrapper.domain.repositoriesTest.ChatRepositoryTest;
 import edu.java.scrapper.domain.repositoriesTest.GitHubResponseRepositoryTest;
@@ -14,23 +14,21 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-@TestPropertySource(properties = "app.database-access-type=jooq")
-@SpringBootTest
+@SpringBootTest(properties = "app.database-access-type=jooq")
 @Transactional
 public class JooqTest {
     @Autowired
-    private JooqChatLinkRepository jooqChatLinkRepository;
+    private ChatLinkRepository jooqChatLinkRepository;
     @Autowired
-    private JooqChatRepository jooqChatRepository;
+    private ChatRepository jooqChatRepository;
     @Autowired
-    private JooqGitHubResponseRepository jooqGitHubResponseRepository;
+    private GitHubResponseRepository jooqGitHubResponseRepository;
     @Autowired
-    private JooqLinkRepository jooqLinkRepository;
+    private LinkRepository jooqLinkRepository;
     @Autowired
-    private JooqQuestionResponseRepository jooqQuestionResponseRepository;
+    private QuestionResponseRepository jooqQuestionResponseRepository;
 
     @Nested
     class JooqChatLinkRepositoryTest {
