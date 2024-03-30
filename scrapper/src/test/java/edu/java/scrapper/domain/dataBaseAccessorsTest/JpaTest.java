@@ -1,5 +1,6 @@
 package edu.java.scrapper.domain.dataBaseAccessorsTest;
 
+import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
@@ -18,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-public class JpaTest {
+public class JpaTest extends IntegrationTest {
     @Autowired
     private ChatLinkRepository jpaChatLinkRepository;
     @Autowired

@@ -1,6 +1,5 @@
 package edu.java.scrapper.domain.repositoriesTest;
 
-import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import java.net.URI;
@@ -11,7 +10,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class LinkRepositoryTest extends IntegrationTest {
+public class LinkRepositoryTest {
     private final LinkRepository linkRepository;
     private static final Link LINK =
         new Link(

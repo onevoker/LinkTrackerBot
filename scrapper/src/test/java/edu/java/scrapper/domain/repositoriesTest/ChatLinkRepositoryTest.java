@@ -1,6 +1,5 @@
 package edu.java.scrapper.domain.repositoriesTest;
 
-import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
@@ -15,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ChatLinkRepositoryTest extends IntegrationTest {
+public class ChatLinkRepositoryTest {
     private final ChatLinkRepository chatLinkRepository;
     private final ChatRepository chatRepository;
     private final LinkRepository linkRepository;

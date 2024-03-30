@@ -1,6 +1,5 @@
 package edu.java.scrapper.domain.repositoriesTest;
 
-import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
@@ -11,7 +10,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class GitHubResponseRepositoryTest extends IntegrationTest {
+public class GitHubResponseRepositoryTest {
     private final GitHubResponseRepository gitHubResponseRepository;
     private final LinkRepository linkRepository;
 
