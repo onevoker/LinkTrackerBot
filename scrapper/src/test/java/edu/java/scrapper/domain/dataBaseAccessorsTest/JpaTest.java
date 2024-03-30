@@ -11,7 +11,6 @@ import edu.java.scrapper.domain.repositoriesTest.ChatRepositoryTest;
 import edu.java.scrapper.domain.repositoriesTest.GitHubResponseRepositoryTest;
 import edu.java.scrapper.domain.repositoriesTest.LinkRepositoryTest;
 import edu.java.scrapper.domain.repositoriesTest.QuestionResponseRepositoryTest;
-import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(properties = "app.database-access-type=jpa")
+@Transactional
 public class JpaTest extends IntegrationTest {
     @Autowired
     private ChatLinkRepository jpaChatLinkRepository;
@@ -31,27 +31,10 @@ public class JpaTest extends IntegrationTest {
     @Autowired
     private QuestionResponseRepository jpaQuestionResponseRepository;
 
-    private ChatLinkRepositoryTest jpaChatLinkRepositoryTest;
-    private ChatRepositoryTest jpaChatRepositoryTest;
-    private GitHubResponseRepositoryTest jpaGitHubResponseRepositoryTest;
-    private LinkRepositoryTest jpaLinkRepositoryTest;
-    private QuestionResponseRepositoryTest jpaQuestionResponseRepositoryTest;
-
-    @PostConstruct
-    void setUpTests() {
-        jpaChatLinkRepositoryTest =
-            new ChatLinkRepositoryTest(jpaChatLinkRepository, jpaChatRepository, jpaLinkRepository);
-        jpaChatRepositoryTest = new ChatRepositoryTest(jpaChatRepository);
-        jpaGitHubResponseRepositoryTest =
-            new GitHubResponseRepositoryTest(jpaGitHubResponseRepository, jpaLinkRepository);
-        jpaLinkRepositoryTest = new LinkRepositoryTest(jpaLinkRepository);
-        jpaQuestionResponseRepositoryTest =
-            new QuestionResponseRepositoryTest(jpaQuestionResponseRepository, jpaLinkRepository);
-    }
-
     @Nested
-    @Transactional
     class JpaChatLinkRepositoryTest {
+        private final ChatLinkRepositoryTest jpaChatLinkRepositoryTest =
+            new ChatLinkRepositoryTest(jpaChatLinkRepository, jpaChatRepository, jpaLinkRepository);
 
         @Test
         void addTest() {
@@ -80,8 +63,9 @@ public class JpaTest extends IntegrationTest {
     }
 
     @Nested
-    @Transactional
     class JpaChatRepositoryTest {
+        private final ChatRepositoryTest jpaChatRepositoryTest = new ChatRepositoryTest(jpaChatRepository);
+
         @Test
         void addTest() {
             jpaChatRepositoryTest.addTest();
@@ -99,8 +83,10 @@ public class JpaTest extends IntegrationTest {
     }
 
     @Nested
-    @Transactional
     class JpaGitHubResponseRepositoryTest {
+        private final GitHubResponseRepositoryTest jpaGitHubResponseRepositoryTest =
+            new GitHubResponseRepositoryTest(jpaGitHubResponseRepository, jpaLinkRepository);
+
         @Test
         void addAndFindAllTest() {
             jpaGitHubResponseRepositoryTest.addAndFindAllTest();
@@ -118,8 +104,9 @@ public class JpaTest extends IntegrationTest {
     }
 
     @Nested
-    @Transactional
     class JpaLinkRepositoryTest {
+        private final LinkRepositoryTest jpaLinkRepositoryTest = new LinkRepositoryTest(jpaLinkRepository);
+
         @Test
         void addTest() {
             jpaLinkRepositoryTest.addTest();
@@ -142,8 +129,9 @@ public class JpaTest extends IntegrationTest {
     }
 
     @Nested
-    @Transactional
     class JpaQuestionResponseRepositoryTest {
+        private final QuestionResponseRepositoryTest jpaQuestionResponseRepositoryTest =
+            new QuestionResponseRepositoryTest(jpaQuestionResponseRepository, jpaLinkRepository);
 
         @Test
         void addAndFindAllTest() {
