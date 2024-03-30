@@ -11,16 +11,23 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RequiredArgsConstructor
+@SpringBootTest
+@Transactional
 public class ChatLinkRepositoryTest extends IntegrationTest {
-    private final ChatLinkRepository chatLinkRepository;
-    private final ChatRepository chatRepository;
-    private final LinkRepository linkRepository;
+    @Autowired
+    private ChatLinkRepository chatLinkRepository;
+    @Autowired
+    private ChatRepository chatRepository;
+    @Autowired
+    private LinkRepository linkRepository;
 
     private static final long CHAT_ID = 14L;
     private static final Link LINK =
@@ -35,6 +42,7 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
         linkRepository.add(LINK);
     }
 
+    @Test
     public void addTest() {
         setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
@@ -47,6 +55,7 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
         assertThat(exception.getMessage()).isEqualTo("Ссылка уже добавлена, для просмотра ссылок введите /list");
     }
 
+    @Test
     public void removeTest() {
         setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
@@ -59,6 +68,7 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
         assertThat(chatLinkRepository.findAll().size()).isEqualTo(0);
     }
 
+    @Test
     public void findAllTest() {
         setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
@@ -73,6 +83,7 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
         );
     }
 
+    @Test
     public void findLinksByTgChatIdTest() {
         setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
@@ -89,6 +100,7 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
         assertThat(result.getFirst().getUrl()).isEqualTo(expected.getFirst().getUrl());
     }
 
+    @Test
     public void findTgChatIdsTest() {
         setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
