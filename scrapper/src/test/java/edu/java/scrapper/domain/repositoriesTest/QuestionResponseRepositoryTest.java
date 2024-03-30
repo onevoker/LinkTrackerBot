@@ -8,11 +8,9 @@ import edu.java.scrapper.dto.stackOverflowDto.Item;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import lombok.RequiredArgsConstructor;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@RequiredArgsConstructor
 public class QuestionResponseRepositoryTest extends IntegrationTest {
     private final QuestionResponseRepository questionResponseRepository;
     private final LinkRepository linkRepository;
@@ -30,6 +28,14 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
         2024, 3, 14, 12, 13, 20, 0, ZoneOffset.UTC)
     );
     private Long linkId;
+
+    public QuestionResponseRepositoryTest(
+        QuestionResponseRepository questionResponseRepository,
+        LinkRepository linkRepository
+    ) {
+        this.questionResponseRepository = questionResponseRepository;
+        this.linkRepository = linkRepository;
+    }
 
     void setUpRepos() {
         linkRepository.add(LINK);

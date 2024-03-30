@@ -7,12 +7,10 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@RequiredArgsConstructor
 public class LinkRepositoryTest extends IntegrationTest {
     private final LinkRepository linkRepository;
     private static final Link LINK =
@@ -21,6 +19,10 @@ public class LinkRepositoryTest extends IntegrationTest {
             OffsetDateTime.now().with(ZoneOffset.UTC),
             OffsetDateTime.now().with(ZoneOffset.UTC)
         );
+
+    public LinkRepositoryTest(LinkRepository linkRepository) {
+        this.linkRepository = linkRepository;
+    }
 
     public void addTest() {
         linkRepository.add(LINK);

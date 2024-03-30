@@ -5,14 +5,17 @@ import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.domain.models.Chat;
 import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RequiredArgsConstructor
 public class ChatRepositoryTest extends IntegrationTest {
+
     private final ChatRepository chatRepository;
     private static final Long CHAT_ID = 14L;
+
+    public ChatRepositoryTest(ChatRepository chatRepository) {
+        this.chatRepository = chatRepository;
+    }
 
     public void addTest() {
         chatRepository.add(CHAT_ID);

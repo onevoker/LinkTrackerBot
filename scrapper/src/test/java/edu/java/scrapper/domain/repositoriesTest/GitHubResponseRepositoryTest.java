@@ -9,10 +9,8 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@RequiredArgsConstructor
 public class GitHubResponseRepositoryTest extends IntegrationTest {
     private final GitHubResponseRepository gitHubResponseRepository;
     private final LinkRepository linkRepository;
@@ -31,6 +29,14 @@ public class GitHubResponseRepositoryTest extends IntegrationTest {
         )
     );
     private Long linkId;
+
+    public GitHubResponseRepositoryTest(
+        GitHubResponseRepository gitHubResponseRepository,
+        LinkRepository linkRepository
+    ) {
+        this.gitHubResponseRepository = gitHubResponseRepository;
+        this.linkRepository = linkRepository;
+    }
 
     private void setUpRepos() {
         linkRepository.add(LINK);
