@@ -1,19 +1,21 @@
 package edu.java.scrapper.linkWorkersTest;
 
+import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.linkParser.dto.GitHubLinkData;
 import edu.java.scrapper.linkParser.services.GitHubParserService;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import java.net.URI;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@SpringBootTest
 public class GitHubParserServiceTest {
-    @Autowired
-    private GitHubParserService gitHubParserService;
+    private static final ApplicationConfig.GitHubRegexp gitHubRegexp = new ApplicationConfig.GitHubRegexp(
+        "https://github\\.com/(.*?)/",
+        "https://github\\.com/.*?/(.*)"
+    );
+    private final GitHubParserService gitHubParserService = new GitHubParserService(gitHubRegexp);
     private static final String preparedRepo = "https://github.com/%s/%s";
+
     @Test
     void testParseGitHub() {
         String owner = "onevoker";

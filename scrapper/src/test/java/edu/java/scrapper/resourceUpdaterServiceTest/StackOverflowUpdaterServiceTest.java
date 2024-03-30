@@ -24,6 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -32,6 +33,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@SpringBootTest
 @WireMockTest(httpPort = 8080)
 @ExtendWith(WireMockExtension.class)
 public class StackOverflowUpdaterServiceTest extends IntegrationTest {
@@ -43,6 +45,8 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     private ChatLinkRepository chatLinkRepository;
     @Autowired
     private ChatRepository chatRepository;
+    @Autowired
+    private ApplicationConfig applicationConfig;
     private StackOverflowUpdaterService stackOverflowUpdaterService;
     private static final ApplicationConfig.StackOverflowRegexp regexp = new ApplicationConfig.StackOverflowRegexp(
         "https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)"
@@ -113,6 +117,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         chatLinkRepository.add(new ChatLink(CHAT_ID, linkId));
 
         stackOverflowUpdaterService = new StackOverflowUpdaterService(
+            applicationConfig,
             LINK_PARSER_SERVICE,
             questionResponseRepository,
             linkRepository,
@@ -131,11 +136,11 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     @Test
     @Transactional
     void getUpdatesTest() {
-        List<Link> neededToCheckLinks = List.of(linkRepository.findAll().getFirst());
-        List<LinkUpdateResponse> noThingToUpdate =
-            stackOverflowUpdaterService.getListLinkUpdateResponses(neededToCheckLinks);
+        Link neededToCheckLink = linkRepository.findAll().getFirst();
+        LinkUpdateResponse noThingToUpdate =
+            stackOverflowUpdaterService.getLinkUpdateResponse(neededToCheckLink);
 
-        assertThat(noThingToUpdate.isEmpty()).isTrue();
+        assertThat(noThingToUpdate).isNull();
 
         // changing date, answer_count and is_answered
         stubFor(
@@ -143,13 +148,13 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         );
 
         List<Item> repoAfterTest = questionResponseRepository.findAll();
-        List<LinkUpdateResponse> res =
-            stackOverflowUpdaterService.getListLinkUpdateResponses(List.of(linkRepository.findAll().getFirst()));
+        LinkUpdateResponse res =
+            stackOverflowUpdaterService.getLinkUpdateResponse(linkRepository.findAll().getFirst());
 
         assertThat(repoAfterTest.isEmpty()).isFalse();
-        assertThat(res.getFirst()).isEqualTo(new LinkUpdateResponse(
+        assertThat(res).isEqualTo(new LinkUpdateResponse(
             url,
-            "Появилось обновление\nБыл добавлен ответ на вопрос\nНа вопрос был получен ответ",
+            "Появилось обновление\nБыл добавлен ответ на вопрос\nНа вопрос ответили",
             List.of(CHAT_ID)
         ));
     }

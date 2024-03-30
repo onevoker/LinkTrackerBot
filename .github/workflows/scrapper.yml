@@ -62,5 +62,4 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-
       - run: mvn -pl scrapper -am verify -Dskip.unit.tests=true

@@ -1,6 +1,5 @@
 package edu.java.scrapper.domain.repositoriesTest;
 
-import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
@@ -8,18 +7,12 @@ import edu.java.scrapper.dto.stackOverflowDto.Item;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class QuestionResponseRepositoryTest extends IntegrationTest {
-    @Autowired
-    private QuestionResponseRepository questionResponseRepository;
-    @Autowired
-    private LinkRepository linkRepository;
+public class QuestionResponseRepositoryTest {
+    private final QuestionResponseRepository questionResponseRepository;
+    private final LinkRepository linkRepository;
 
     private static final Link LINK =
         new Link(
@@ -35,15 +28,21 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
     );
     private Long linkId;
 
-    @BeforeEach
+    public QuestionResponseRepositoryTest(
+        QuestionResponseRepository questionResponseRepository,
+        LinkRepository linkRepository
+    ) {
+        this.questionResponseRepository = questionResponseRepository;
+        this.linkRepository = linkRepository;
+    }
+
     void setUpRepos() {
         linkRepository.add(LINK);
         linkId = linkRepository.findAll().getFirst().getId();
     }
 
-    @Test
-    @Transactional
-    void addAndFindAllTest() {
+    public void addAndFindAllTest() {
+        setUpRepos();
         questionResponseRepository.add(QUESTION_ITEM, linkId);
 
         Item result = questionResponseRepository.findAll().getFirst();
@@ -54,9 +53,8 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
         );
     }
 
-    @Test
-    @Transactional
-    void findByLinkIdTest() {
+    public void findByLinkIdTest() {
+        setUpRepos();
         questionResponseRepository.add(QUESTION_ITEM, linkId);
 
         Item result = questionResponseRepository.findByLinkId(linkId).getFirst();
@@ -67,9 +65,8 @@ public class QuestionResponseRepositoryTest extends IntegrationTest {
         );
     }
 
-    @Test
-    @Transactional
-    void updateTest() {
+    public void updateTest() {
+        setUpRepos();
         questionResponseRepository.add(QUESTION_ITEM, linkId);
         long newAnswerCount = 5L;
         Item newResponse = QUESTION_ITEM;

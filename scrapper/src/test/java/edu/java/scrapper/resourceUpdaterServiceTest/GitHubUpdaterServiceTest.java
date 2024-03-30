@@ -24,6 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -32,6 +33,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@SpringBootTest
 @WireMockTest(httpPort = 8080)
 @ExtendWith(WireMockExtension.class)
 public class GitHubUpdaterServiceTest extends IntegrationTest {
@@ -43,6 +45,8 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     private ChatLinkRepository chatLinkRepository;
     @Autowired
     private ChatRepository chatRepository;
+    @Autowired
+    private ApplicationConfig applicationConfig;
     private GitHubUpdaterService gitHubUpdaterService;
     private static final ApplicationConfig.GitHubRegexp regexp = new ApplicationConfig.GitHubRegexp(
         "https://github\\.com/(.*?)/",
@@ -95,6 +99,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         chatLinkRepository.add(new ChatLink(CHAT_ID, linkId));
 
         gitHubUpdaterService = new GitHubUpdaterService(
+            applicationConfig,
             LINK_PARSER_SERVICE,
             gitHubResponseRepository,
             linkRepository,
@@ -113,10 +118,10 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     @Test
     @Transactional
     void getUpdatesTest() {
-        List<Link> neededToCheckLinks = List.of(linkRepository.findAll().getFirst());
-        List<LinkUpdateResponse> neededToUpdate = gitHubUpdaterService.getListLinkUpdateResponses(neededToCheckLinks);
+        Link neededToCheckLink = linkRepository.findAll().getFirst();
+        LinkUpdateResponse neededToUpdate = gitHubUpdaterService.getLinkUpdateResponse(neededToCheckLink);
 
-        assertThat(neededToUpdate.getFirst().description()).isEqualTo("Появилось обновление");
+        assertThat(neededToUpdate.description()).isEqualTo("Появилось обновление");
 
         // changing date
         stubFor(
@@ -124,11 +129,11 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         );
 
         List<RepositoryResponse> repoAfterTest = gitHubResponseRepository.findAll();
-        List<LinkUpdateResponse> res =
-            gitHubUpdaterService.getListLinkUpdateResponses(List.of(linkRepository.findAll().getFirst()));
+        LinkUpdateResponse res =
+            gitHubUpdaterService.getLinkUpdateResponse(linkRepository.findAll().getFirst());
 
         assertThat(repoAfterTest.isEmpty()).isFalse();
-        assertThat(res.getFirst()).isEqualTo(new LinkUpdateResponse(
+        assertThat(res).isEqualTo(new LinkUpdateResponse(
             URL,
             "Появилось обновление",
             List.of(CHAT_ID)

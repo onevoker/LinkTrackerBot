@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-//@Repository
 @RequiredArgsConstructor
 public class JdbcGitHubResponseRepository implements GitHubResponseRepository {
     private final JdbcTemplate jdbcTemplate;

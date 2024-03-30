@@ -1,6 +1,5 @@
 package edu.java.scrapper.domain.repositoriesTest;
 
-import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
@@ -11,41 +10,43 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ChatLinkRepositoryTest extends IntegrationTest {
-    @Autowired
-    private ChatLinkRepository chatLinkRepository;
-    @Autowired
-    private ChatRepository chatRepository;
-    @Autowired
-    private LinkRepository linkRepository;
+public class ChatLinkRepositoryTest {
+    private final ChatLinkRepository chatLinkRepository;
+    private final ChatRepository chatRepository;
+    private final LinkRepository linkRepository;
 
     private static final long CHAT_ID = 14L;
     private static final Link LINK =
         new Link(
             URI.create("https://github.com/onevoker/LinkTrackerBot"),
+            OffsetDateTime.of(2024, 3, 13, 1, 42, 0, 0, ZoneOffset.UTC),
             OffsetDateTime.of(2024, 3, 13, 1, 42, 0, 0, ZoneOffset.UTC)
         );
 
-    @BeforeEach
-    void setUpRepos() {
+    public ChatLinkRepositoryTest(
+        ChatLinkRepository chatLinkRepository,
+        ChatRepository chatRepository,
+        LinkRepository linkRepository
+    ) {
+        this.chatLinkRepository = chatLinkRepository;
+        this.chatRepository = chatRepository;
+        this.linkRepository = linkRepository;
+    }
+
+    private void setUpRepos() {
         chatRepository.add(CHAT_ID);
         linkRepository.add(LINK);
     }
 
-    @Test
-    @Transactional
-    void addTest() {
+    public void addTest() {
+        setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
-        ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
 
+        ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
         chatLinkRepository.add(chatLink);
 
         assertThat(chatLinkRepository.findAll().size()).isEqualTo(1);
@@ -53,9 +54,8 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
         assertThat(exception.getMessage()).isEqualTo("Ссылка уже добавлена, для просмотра ссылок введите /list");
     }
 
-    @Test
-    @Transactional
-    void removeTest() {
+    public void removeTest() {
+        setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
         chatLinkRepository.add(chatLink);
@@ -66,9 +66,8 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
         assertThat(chatLinkRepository.findAll().size()).isEqualTo(0);
     }
 
-    @Test
-    @Transactional
-    void findAllTest() {
+    public void findAllTest() {
+        setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
         chatLinkRepository.add(chatLink);
@@ -81,9 +80,8 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
         );
     }
 
-    @Test
-    @Transactional
-    void findLinksByTgChatIdTest() {
+    public void findLinksByTgChatIdTest() {
+        setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
         chatLinkRepository.add(chatLink);
@@ -98,9 +96,8 @@ public class ChatLinkRepositoryTest extends IntegrationTest {
         assertThat(result.getFirst().getUrl()).isEqualTo(expected.getFirst().getUrl());
     }
 
-    @Test
-    @Transactional
-    void findTgChatIdsTest() {
+    public void findTgChatIdsTest() {
+        setUpRepos();
         long linkId = linkRepository.findAll().getFirst().getId();
         ChatLink chatLink = new ChatLink(CHAT_ID, linkId);
         chatLinkRepository.add(chatLink);

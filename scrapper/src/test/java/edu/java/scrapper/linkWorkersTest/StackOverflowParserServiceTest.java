@@ -1,16 +1,16 @@
 package edu.java.scrapper.linkWorkersTest;
 
+import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.linkParser.services.StackOverflowParserService;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
 public class StackOverflowParserServiceTest {
-    @Autowired
-    private StackOverflowParserService stackOverflowParserService;
+    private static final ApplicationConfig.StackOverflowRegexp regexp = new ApplicationConfig.StackOverflowRegexp(
+        "https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)"
+    );
+    private final StackOverflowParserService stackOverflowParserService = new StackOverflowParserService(regexp);
     private static final String preparedQuestion =
         "https://stackoverflow.com/questions/%s/python-functional-method-of-checking-that-all-elements-in-a-list-are-equal";
 

@@ -1,6 +1,5 @@
 package edu.java.scrapper.domain.repositoriesTest;
 
-import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
@@ -9,17 +8,11 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class GitHubResponseRepositoryTest extends IntegrationTest {
-    @Autowired
-    private GitHubResponseRepository gitHubResponseRepository;
-    @Autowired
-    private LinkRepository linkRepository;
+public class GitHubResponseRepositoryTest {
+    private final GitHubResponseRepository gitHubResponseRepository;
+    private final LinkRepository linkRepository;
 
     private static final Link LINK =
         new Link(
@@ -36,22 +29,28 @@ public class GitHubResponseRepositoryTest extends IntegrationTest {
     );
     private Long linkId;
 
-    @BeforeEach
-    void setUpRepos() {
+    public GitHubResponseRepositoryTest(
+        GitHubResponseRepository gitHubResponseRepository,
+        LinkRepository linkRepository
+    ) {
+        this.gitHubResponseRepository = gitHubResponseRepository;
+        this.linkRepository = linkRepository;
+    }
+
+    private void setUpRepos() {
         linkRepository.add(LINK);
         linkId = linkRepository.findAll().getFirst().getId();
     }
 
-    @Test
-    @Transactional
-    void addAndFindAllTest() {
+    public void addAndFindAllTest() {
+        setUpRepos();
         gitHubResponseRepository.add(RESPONSE, linkId);
+
         assertThat(gitHubResponseRepository.findAll().getFirst().getId()).isEqualTo(REPO_ID);
     }
 
-    @Test
-    @Transactional
-    void findByLinkIdTest() {
+    public void findByLinkIdTest() {
+        setUpRepos();
         gitHubResponseRepository.add(RESPONSE, linkId);
 
         List<RepositoryResponse> result = gitHubResponseRepository.findByLinkId(linkId);
@@ -59,19 +58,17 @@ public class GitHubResponseRepositoryTest extends IntegrationTest {
         assertThat(result.size()).isEqualTo(1);
     }
 
-    @Test
-    @Transactional
-    void updateTest() {
+    public void updateTest() {
+        setUpRepos();
         gitHubResponseRepository.add(RESPONSE, linkId);
+
         OffsetDateTime timeOfUpdate = OffsetDateTime.of(
             2025, 1, 1, 1, 1, 1, 0, ZoneOffset.UTC
         );
         RepositoryResponse newResponse = new RepositoryResponse(REPO_ID, timeOfUpdate);
         gitHubResponseRepository.update(newResponse, linkId);
-
         OffsetDateTime timeInRepo = gitHubResponseRepository.findByLinkId(linkId).getFirst().getPushedAt();
 
         assertThat(timeInRepo).isEqualTo(timeOfUpdate);
     }
-
 }
