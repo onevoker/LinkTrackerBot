@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(properties = {"file= ./scrapper/src/main/resources/application.yml", "app.database-access-type=jdbc"})
+@SpringBootTest
 @Transactional
 public class JdbcTest {
     @Autowired
