@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
+@SpringBootTest(properties = "app.database-access-type=jpa")
 public class JpaTest extends IntegrationTest {
     @Autowired
     private ChatLinkRepository jpaChatLinkRepository;
