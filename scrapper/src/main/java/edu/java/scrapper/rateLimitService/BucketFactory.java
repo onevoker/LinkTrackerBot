@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BucketFactory {
     private final ApplicationConfig applicationConfig;
+
     public Bucket newBucket() {
         var limitingSettings = applicationConfig.rateLimitingSettings();
 
