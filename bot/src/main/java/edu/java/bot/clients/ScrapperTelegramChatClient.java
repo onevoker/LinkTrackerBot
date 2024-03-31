@@ -16,13 +16,16 @@ public class ScrapperTelegramChatClient {
     private final WebClient scrapperWebClient;
     private final Retry retry;
 
-
     public void registerChat(long id) {
         scrapperWebClient.post()
             .uri(TELEGRAM_CHAT_ENDPOINT_PATH + id)
             .retrieve()
             .onStatus(
                 HttpStatus.CONFLICT::equals,
+                response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
+            )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(Void.class)
@@ -36,6 +39,10 @@ public class ScrapperTelegramChatClient {
             .retrieve()
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
+                response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
+            )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(Void.class)

@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class GitHubClient {
     private final WebClient gitHubWebClient;
     private final Retry retry;
+
     public RepositoryResponse fetchRepository(String owner, String repository) {
         return gitHubWebClient.get()
             .uri(owner + "/" + repository)

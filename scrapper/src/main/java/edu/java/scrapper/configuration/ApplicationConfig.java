@@ -27,7 +27,8 @@ public record ApplicationConfig(
     StackOverflowRegexp stackOverflowRegexp,
     String databaseAccessType,
     @Bean
-    RetrySettings retrySettings
+    RetrySettings retrySettings,
+    RateLimitingSettings rateLimitingSettings
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
@@ -38,7 +39,12 @@ public record ApplicationConfig(
     public record GitHubRegexp(String regexpForGitHubOwner, String regexpForGitHubRepo) {
     }
 
-    public record StackOverflowRegexp(String regexpForStackOverflowQuestionId){}
+    public record StackOverflowRegexp(String regexpForStackOverflowQuestionId) {
+    }
+
     public record RetrySettings(BackOfType backOfType, int retryCount, Duration step, Set<HttpStatus> httpStatuses) {
+    }
+
+    public record RateLimitingSettings(int count, int tokens, Duration period) {
     }
 }

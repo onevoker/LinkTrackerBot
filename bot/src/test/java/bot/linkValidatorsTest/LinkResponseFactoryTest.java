@@ -24,7 +24,8 @@ public class LinkResponseFactoryTest {
         null,
         List.of("https://github\\.com/[^/]+/[^/]+/?", "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"),
         Duration.ofSeconds(15),
-        new ApplicationConfig.RetrySettings(BackOfType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet())
+        new ApplicationConfig.RetrySettings(BackOfType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
+        null
     );
     private static final int USER_ID = 1;
     private static LinkResponseFactory linkFactory;

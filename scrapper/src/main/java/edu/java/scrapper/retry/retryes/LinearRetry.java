@@ -1,6 +1,5 @@
 package edu.java.scrapper.retry.retryes;
 
-
 import edu.java.scrapper.retry.BackOfType;
 import io.github.resilience4j.retry.RetryConfig;
 import java.time.Duration;
@@ -17,8 +16,8 @@ public class LinearRetry implements FunctionalRetry {
         return RetryConfig.<WebClientResponseException>custom()
             .maxAttempts(retryCount)
             .intervalFunction(attempt -> interval * attempt)
-            .retryOnException(e -> e instanceof WebClientResponseException &&
-                httpStatuses.contains(HttpStatus.resolve(((WebClientResponseException) e).getStatusCode().value())))
+            .retryOnException(e -> e instanceof WebClientResponseException
+                && httpStatuses.contains(HttpStatus.resolve(((WebClientResponseException) e).getStatusCode().value())))
             .build();
     }
 

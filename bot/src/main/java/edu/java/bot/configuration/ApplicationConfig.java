@@ -19,8 +19,12 @@ public record ApplicationConfig(
     List<String> validatorRegexp,
     Duration responseTimeout,
     @Bean
-    RetrySettings retrySettings
+    RetrySettings retrySettings,
+    RateLimitingSettings rateLimitingSettings
 ) {
     public record RetrySettings(BackOfType backOfType, int retryCount, Duration step, Set<HttpStatus> httpStatuses) {
+    }
+
+    public record RateLimitingSettings(int count, int tokens, Duration period) {
     }
 }

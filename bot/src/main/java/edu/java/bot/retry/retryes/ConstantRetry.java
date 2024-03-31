@@ -15,8 +15,8 @@ public class ConstantRetry implements FunctionalRetry {
         return RetryConfig.<WebClientResponseException>custom()
             .maxAttempts(retryCount)
             .waitDuration(step)
-            .retryOnException(e -> e instanceof WebClientResponseException &&
-                httpStatuses.contains(HttpStatus.resolve(((WebClientResponseException) e).getStatusCode().value())))
+            .retryOnException(e -> e instanceof WebClientResponseException
+                && httpStatuses.contains(HttpStatus.resolve(((WebClientResponseException) e).getStatusCode().value())))
             .build();
     }
 

@@ -28,6 +28,10 @@ public class ScrapperLinkClient {
             .uri(LINK_ENDPOINT_PATH)
             .header(LINK_HEADER, String.valueOf(chatId))
             .retrieve()
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
+            )
             .bodyToMono(ListLinksResponse.class)
             .transformDeferred(RetryOperator.of(retry))
             .block();
@@ -47,6 +51,10 @@ public class ScrapperLinkClient {
                 HttpStatus.CONFLICT::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
+            )
             .bodyToMono(LinkResponse.class)
             .transformDeferred(RetryOperator.of(retry))
             .block();
@@ -64,6 +72,10 @@ public class ScrapperLinkClient {
             )
             .onStatus(
                 HttpStatus.CONFLICT::equals,
+                response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
+            )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(LinkResponse.class)

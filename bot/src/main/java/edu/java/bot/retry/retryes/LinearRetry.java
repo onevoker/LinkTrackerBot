@@ -6,7 +6,6 @@ import java.time.Duration;
 import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Component
@@ -17,8 +16,8 @@ public class LinearRetry implements FunctionalRetry {
         return RetryConfig.<WebClientResponseException>custom()
             .maxAttempts(retryCount)
             .intervalFunction(attempt -> interval * attempt)
-            .retryOnException(e -> e instanceof WebClientResponseException &&
-                httpStatuses.contains(HttpStatus.resolve(((WebClientResponseException) e).getStatusCode().value())))
+            .retryOnException(e -> e instanceof WebClientResponseException
+                && httpStatuses.contains(HttpStatus.resolve(((WebClientResponseException) e).getStatusCode().value())))
             .build();
     }
 

@@ -27,6 +27,10 @@ public class BotClient {
                 HttpStatus.BAD_REQUEST::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
+            )
             .bodyToMono(Void.class)
             .transformDeferred(RetryOperator.of(retry))
             .block();

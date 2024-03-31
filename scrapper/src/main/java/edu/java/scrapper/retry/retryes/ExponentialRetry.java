@@ -1,6 +1,5 @@
 package edu.java.scrapper.retry.retryes;
 
-
 import edu.java.scrapper.retry.BackOfType;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.RetryConfig;
@@ -17,8 +16,8 @@ public class ExponentialRetry implements FunctionalRetry {
         return RetryConfig.<WebClientResponseException>custom()
             .maxAttempts(retryCount)
             .intervalFunction(IntervalFunction.ofExponentialBackoff(step))
-            .retryOnException(e -> e instanceof WebClientResponseException &&
-                httpStatuses.contains(HttpStatus.resolve(((WebClientResponseException) e).getStatusCode().value())))
+            .retryOnException(e -> e instanceof WebClientResponseException
+                && httpStatuses.contains(HttpStatus.resolve(((WebClientResponseException) e).getStatusCode().value())))
             .build();
     }
 
