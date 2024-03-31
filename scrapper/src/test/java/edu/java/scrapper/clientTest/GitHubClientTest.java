@@ -3,19 +3,16 @@ package edu.java.scrapper.clientTest;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.clients.GitHubClient;
-import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
-import edu.java.scrapper.retry.BackOfType;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.util.Collections;
-import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
@@ -23,11 +20,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@WireMockTest(httpPort = 8080)
-@SpringBootTest
+@WireMockTest(httpPort = 8800)
 @ExtendWith(WireMockExtension.class)
 public class GitHubClientTest {
-    static final String WIRE_MOCK_URL = "http://localhost:8080/repos/";
+    static final String WIRE_MOCK_URL = "http://localhost:8800/repos/";
     private static final String BODY = """
         {
             "id": 755139175,
@@ -40,8 +36,13 @@ public class GitHubClientTest {
             "pushed_at": "2024-02-09T13:59:57Z"
         }""";
 
-    @Autowired
-    private Retry retry;
+    private static final int retryCount = 3;
+    private static final RetryConfig config = RetryConfig.<WebClientResponseException>custom()
+        .maxAttempts(retryCount)
+        .waitDuration(Duration.ofSeconds(3))
+        .retryOnException(e -> e instanceof WebClientResponseException)
+        .build();
+    private static final Retry retry = Retry.of("TestRetry", config);
     private WebClient webClient;
 
     @BeforeEach
