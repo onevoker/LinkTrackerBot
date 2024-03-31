@@ -9,9 +9,12 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClient;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -20,6 +23,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @WireMockTest(httpPort = 8080)
+@SpringBootTest
 @ExtendWith(WireMockExtension.class)
 public class StackOverFlowClientTest {
 
@@ -63,6 +67,8 @@ public class StackOverFlowClientTest {
             "quota_remaining": 282
         }""";
 
+    @Autowired
+    private Retry retry;
     private WebClient webClient;
 
     @BeforeEach
@@ -79,7 +85,7 @@ public class StackOverFlowClientTest {
                     .withHeader("Content-Type", "application/json")
                     .withBody(BODY))
         );
-        StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient);
+        StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient, retry);
 
         QuestionResponse response = stackOverflowClient.fetchQuestion(QUESTION_ID);
         List<Item> actualItems = response.items();

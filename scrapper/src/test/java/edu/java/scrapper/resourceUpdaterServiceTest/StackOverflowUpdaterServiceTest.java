@@ -20,6 +20,7 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,6 +48,8 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     private ChatRepository chatRepository;
     @Autowired
     private ApplicationConfig applicationConfig;
+    @Autowired
+    private Retry retry;
     private StackOverflowUpdaterService stackOverflowUpdaterService;
     private static final ApplicationConfig.StackOverflowRegexp regexp = new ApplicationConfig.StackOverflowRegexp(
         "https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)"
@@ -109,7 +112,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         stubFor(
             prepareStub(BODY)
         );
-        StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient);
+        StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient, retry);
 
         chatRepository.add(CHAT_ID);
         linkRepository.add(link);

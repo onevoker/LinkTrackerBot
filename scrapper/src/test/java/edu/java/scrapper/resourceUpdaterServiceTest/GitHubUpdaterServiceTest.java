@@ -20,6 +20,7 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,6 +48,8 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     private ChatRepository chatRepository;
     @Autowired
     private ApplicationConfig applicationConfig;
+    @Autowired
+    private Retry retry;
     private GitHubUpdaterService gitHubUpdaterService;
     private static final ApplicationConfig.GitHubRegexp regexp = new ApplicationConfig.GitHubRegexp(
         "https://github\\.com/(.*?)/",
@@ -91,7 +94,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         stubFor(
             prepareStub(BODY)
         );
-        GitHubClient gitHubClient = new GitHubClient(webClient);
+        GitHubClient gitHubClient = new GitHubClient(webClient, retry);
 
         chatRepository.add(CHAT_ID);
         linkRepository.add(link);

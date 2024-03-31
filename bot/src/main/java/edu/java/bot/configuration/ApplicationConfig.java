@@ -1,9 +1,13 @@
 package edu.java.bot.configuration;
 
+import edu.java.bot.retry.BackOfType;
 import jakarta.validation.constraints.NotEmpty;
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
@@ -13,6 +17,10 @@ public record ApplicationConfig(
     String telegramToken,
     String scrapperBaseUrl,
     List<String> validatorRegexp,
-    Duration responseTimeout
+    Duration responseTimeout,
+    @Bean
+    RetrySettings retrySettings
 ) {
+    public record RetrySettings(BackOfType backOfType, int retryCount, Duration step, Set<HttpStatus> httpStatuses) {
+    }
 }

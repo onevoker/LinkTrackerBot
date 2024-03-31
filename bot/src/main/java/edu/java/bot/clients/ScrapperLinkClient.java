@@ -6,6 +6,8 @@ import edu.java.bot.dto.response.ApiErrorResponse;
 import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.dto.response.ListLinksResponse;
 import edu.java.bot.exceptions.ApiException;
+import io.github.resilience4j.reactor.retry.RetryOperator;
+import io.github.resilience4j.retry.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ScrapperLinkClient {
     private final WebClient scrapperWebClient;
+    private final Retry retry;
     private static final String LINK_ENDPOINT_PATH = "/links";
     private static final String LINK_HEADER = "Tg-Chat-Id";
 
@@ -26,6 +29,7 @@ public class ScrapperLinkClient {
             .header(LINK_HEADER, String.valueOf(chatId))
             .retrieve()
             .bodyToMono(ListLinksResponse.class)
+            .transformDeferred(RetryOperator.of(retry))
             .block();
     }
 
@@ -44,6 +48,7 @@ public class ScrapperLinkClient {
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(LinkResponse.class)
+            .transformDeferred(RetryOperator.of(retry))
             .block();
     }
 
@@ -62,6 +67,7 @@ public class ScrapperLinkClient {
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(LinkResponse.class)
+            .transformDeferred(RetryOperator.of(retry))
             .block();
     }
 }

@@ -21,6 +21,12 @@ app:
   authorization-git-hub-token: ${access-token}
   git-hub-response-timeout: 15
 
+  retry-settings:
+    back-of-type: exponential
+    retry-count: 3
+    step: 2s
+    http-statuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT
+
 
 spring:
   liquibase:
