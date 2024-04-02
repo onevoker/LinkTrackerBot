@@ -1,4 +1,4 @@
-package edu.java.scrapper.rateLimitService;
+package edu.java.scrapper.controllers.filters;
 
 import edu.java.scrapper.configuration.ApplicationConfig;
 import io.github.bucket4j.Bandwidth;

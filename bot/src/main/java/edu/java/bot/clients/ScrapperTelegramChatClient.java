@@ -13,12 +13,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ScrapperTelegramChatClient {
     private static final String TELEGRAM_CHAT_ENDPOINT_PATH = "/tg-chat/";
+    private static final String ID_HEADER = "Tg-Chat-Id";
     private final WebClient scrapperWebClient;
     private final Retry retry;
 
     public void registerChat(long id) {
         scrapperWebClient.post()
             .uri(TELEGRAM_CHAT_ENDPOINT_PATH + id)
+            .header(ID_HEADER, String.valueOf(id))
             .retrieve()
             .onStatus(
                 HttpStatus.CONFLICT::equals,
@@ -36,6 +38,7 @@ public class ScrapperTelegramChatClient {
     public void unregisterChat(long id) {
         scrapperWebClient.delete()
             .uri(TELEGRAM_CHAT_ENDPOINT_PATH + id)
+            .header(ID_HEADER, String.valueOf(id))
             .retrieve()
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,

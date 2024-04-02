@@ -4,7 +4,6 @@ import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
 import edu.java.scrapper.controllers.exceptions.LinkWasNotTrackedException;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
-import edu.java.scrapper.controllers.exceptions.RateLimitException;
 import edu.java.scrapper.controllers.exceptions.ScrapperException;
 import edu.java.scrapper.dto.response.ApiErrorResponse;
 import java.util.Arrays;
@@ -38,8 +37,7 @@ public class ScrapperExceptionHandler {
         ChatAlreadyRegisteredException.class,
         ChatNotFoundException.class,
         LinkWasTrackedException.class,
-        LinkWasNotTrackedException.class,
-        RateLimitException.class
+        LinkWasNotTrackedException.class
     })
     public ResponseEntity<ApiErrorResponse> handleScrapperExceptions(ScrapperException exception) {
         return ResponseEntity.status(exception.getStatusCode())

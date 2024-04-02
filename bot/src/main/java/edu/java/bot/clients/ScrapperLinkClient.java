@@ -21,12 +21,12 @@ public class ScrapperLinkClient {
     private final WebClient scrapperWebClient;
     private final Retry retry;
     private static final String LINK_ENDPOINT_PATH = "/links";
-    private static final String LINK_HEADER = "Tg-Chat-Id";
+    private static final String ID_HEADER = "Tg-Chat-Id";
 
     public ListLinksResponse getTrackedLinks(long chatId) {
         return scrapperWebClient.get()
             .uri(LINK_ENDPOINT_PATH)
-            .header(LINK_HEADER, String.valueOf(chatId))
+            .header(ID_HEADER, String.valueOf(chatId))
             .retrieve()
             .onStatus(
                 HttpStatus.TOO_MANY_REQUESTS::equals,
@@ -40,7 +40,7 @@ public class ScrapperLinkClient {
     public LinkResponse trackLink(long chatId, AddLinkRequest addLinkRequest) {
         return scrapperWebClient.post()
             .uri(LINK_ENDPOINT_PATH)
-            .header(LINK_HEADER, String.valueOf(chatId))
+            .header(ID_HEADER, String.valueOf(chatId))
             .body(BodyInserters.fromValue(addLinkRequest))
             .retrieve()
             .onStatus(
@@ -63,7 +63,7 @@ public class ScrapperLinkClient {
     public LinkResponse untrackLink(long chatId, RemoveLinkRequest removeLinkRequest) {
         return scrapperWebClient.method(HttpMethod.DELETE)
             .uri(LINK_ENDPOINT_PATH)
-            .header(LINK_HEADER, String.valueOf(chatId))
+            .header(ID_HEADER, String.valueOf(chatId))
             .body(BodyInserters.fromValue(removeLinkRequest))
             .retrieve()
             .onStatus(
