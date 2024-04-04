@@ -1,6 +1,7 @@
 package edu.java.scrapper.scheduler;
 
-import edu.java.scrapper.clients.BotClient;
+import edu.java.scrapper.senderUpdates.UpdateSender;
+import edu.java.scrapper.senderUpdates.http.BotClient;
 import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.scheduler.updaterWorkers.LinkUpdaterService;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LinkUpdaterScheduler {
     private final ApplicationConfig applicationConfig;
-    private final BotClient botClient;
+    private final UpdateSender updateSender;
     private final LinkUpdaterService linkUpdaterService;
 
     @Scheduled(fixedDelayString = "#{scheduler.interval()}")
@@ -29,7 +30,7 @@ public class LinkUpdaterScheduler {
 
         if (!requests.isEmpty()) {
             for (var request : requests) {
-                botClient.sendUpdate(request);
+                updateSender.sendUpdate(request);
             }
         } else {
             log.info("No updates");

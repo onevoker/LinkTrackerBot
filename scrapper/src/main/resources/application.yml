@@ -32,6 +32,10 @@ app:
     tokens: 4
     period: 60s
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    topic-name: updates
+  use-queue: true
 
 spring:
   liquibase:

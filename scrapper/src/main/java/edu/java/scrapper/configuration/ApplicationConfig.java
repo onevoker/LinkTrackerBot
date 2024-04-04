@@ -28,7 +28,9 @@ public record ApplicationConfig(
     String databaseAccessType,
     @Bean
     RetrySettings retrySettings,
-    RateLimitingSettings rateLimitingSettings
+    RateLimitingSettings rateLimitingSettings,
+    Kafka kafka,
+    boolean useQueue
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
@@ -46,5 +48,9 @@ public record ApplicationConfig(
     }
 
     public record RateLimitingSettings(int count, int tokens, Duration period) {
+    }
+
+    public record Kafka(String bootstrapServers, String topicName) {
+
     }
 }
