@@ -1,10 +1,9 @@
 package edu.java.scrapper.scheduler;
 
-import edu.java.scrapper.senderUpdates.UpdateSender;
-import edu.java.scrapper.senderUpdates.http.BotClient;
 import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.scheduler.updaterWorkers.LinkUpdaterService;
+import edu.java.scrapper.senderUpdates.UpdateSender;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;

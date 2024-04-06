@@ -1,7 +1,7 @@
 package edu.java.bot.takersUpdates.http.controllers;
 
-import edu.java.bot.takersUpdates.BotUpdaterService;
 import edu.java.bot.dto.response.LinkUpdateResponse;
+import edu.java.bot.takersUpdates.BotUpdaterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
