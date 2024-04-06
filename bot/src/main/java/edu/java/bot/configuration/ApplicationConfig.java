@@ -20,11 +20,16 @@ public record ApplicationConfig(
     Duration responseTimeout,
     @Bean
     RetrySettings retrySettings,
-    RateLimitingSettings rateLimitingSettings
+    RateLimitingSettings rateLimitingSettings,
+    Kafka kafka
 ) {
     public record RetrySettings(BackOfType backOfType, int retryCount, Duration step, Set<HttpStatus> httpStatuses) {
     }
 
     public record RateLimitingSettings(int count, int tokens, Duration period) {
+    }
+
+    public record Kafka(String topicName, String consumerGroupId, String bootstrapServer, String typeMapping,
+                        String dlqTopicName) {
     }
 }
