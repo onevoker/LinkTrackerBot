@@ -1,4 +1,4 @@
-package edu.java.bot.takersUpdates.http.controllers;
+package edu.java.bot.updateHandlers.http.controllers;
 
 import edu.java.bot.dto.response.ApiErrorResponse;
 import java.util.Arrays;

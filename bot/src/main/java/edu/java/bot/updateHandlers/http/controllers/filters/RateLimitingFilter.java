@@ -1,4 +1,4 @@
-package edu.java.bot.takersUpdates.http.controllers.filters;
+package edu.java.bot.updateHandlers.http.controllers.filters;
 
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.FilterChain;

@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain.repositoriesTest;
+package edu.java.scrapper.domainTest.repositoriesTest;
 
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;

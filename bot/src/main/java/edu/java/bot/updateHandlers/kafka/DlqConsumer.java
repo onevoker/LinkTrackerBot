@@ -1,4 +1,4 @@
-package edu.java.bot.takersUpdates.kafka;
+package edu.java.bot.updateHandlers.kafka;
 
 import edu.java.bot.dto.response.LinkUpdateResponse;
 import lombok.RequiredArgsConstructor;

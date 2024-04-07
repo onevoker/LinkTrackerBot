@@ -1,4 +1,4 @@
-package edu.java.bot.takersUpdates;
+package edu.java.bot.updateHandlers;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.dto.response.LinkUpdateResponse;

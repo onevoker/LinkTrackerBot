@@ -1,17 +1,15 @@
-package edu.java.bot.takersUpdates.http.controllers;
+package edu.java.bot.updateHandlers.http.controllers;
 
 import edu.java.bot.dto.response.LinkUpdateResponse;
-import edu.java.bot.takersUpdates.BotUpdaterService;
+import edu.java.bot.updateHandlers.BotUpdaterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Log4j2
 @RequestMapping("/updates")
 @RequiredArgsConstructor
 public class BotController {

@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain.dataBaseAccessorsTest;
+package edu.java.scrapper.domainTest.dataBaseAccessorsTest;
 
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
@@ -6,11 +6,11 @@ import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
-import edu.java.scrapper.domain.repositoriesTest.ChatLinkRepositoryTest;
-import edu.java.scrapper.domain.repositoriesTest.ChatRepositoryTest;
-import edu.java.scrapper.domain.repositoriesTest.GitHubResponseRepositoryTest;
-import edu.java.scrapper.domain.repositoriesTest.LinkRepositoryTest;
-import edu.java.scrapper.domain.repositoriesTest.QuestionResponseRepositoryTest;
+import edu.java.scrapper.domainTest.repositoriesTest.ChatLinkRepositoryTest;
+import edu.java.scrapper.domainTest.repositoriesTest.ChatRepositoryTest;
+import edu.java.scrapper.domainTest.repositoriesTest.GitHubResponseRepositoryTest;
+import edu.java.scrapper.domainTest.repositoriesTest.LinkRepositoryTest;
+import edu.java.scrapper.domainTest.repositoriesTest.QuestionResponseRepositoryTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

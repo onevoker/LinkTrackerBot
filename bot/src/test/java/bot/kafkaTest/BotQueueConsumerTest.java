@@ -1,10 +1,10 @@
-package bot.kafka;
+package bot.kafkaTest;
 
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.dto.response.LinkUpdateResponse;
 import edu.java.bot.retry.BackOfType;
-import edu.java.bot.takersUpdates.BotUpdaterService;
-import edu.java.bot.takersUpdates.kafka.BotQueueConsumer;
+import edu.java.bot.updateHandlers.BotUpdaterService;
+import edu.java.bot.updateHandlers.kafka.BotQueueConsumer;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
