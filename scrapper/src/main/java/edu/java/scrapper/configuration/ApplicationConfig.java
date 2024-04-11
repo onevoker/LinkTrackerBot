@@ -29,6 +29,8 @@ public record ApplicationConfig(
     @Bean
     RetrySettings retrySettings,
     RateLimitingSettings rateLimitingSettings,
+    @Bean
+    SwaggerEndpoints swaggerEndpoints,
     Kafka kafka,
     boolean useQueue
 ) {
@@ -51,6 +53,8 @@ public record ApplicationConfig(
     }
 
     public record Kafka(String bootstrapServers, String topicName) {
+    }
 
+    public record SwaggerEndpoints(String swagger, String apiDocs) {
     }
 }

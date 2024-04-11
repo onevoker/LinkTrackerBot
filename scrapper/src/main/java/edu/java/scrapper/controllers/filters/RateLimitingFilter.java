@@ -1,6 +1,7 @@
 package edu.java.scrapper.controllers.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.dto.response.ApiErrorResponse;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.FilterChain;
@@ -20,15 +21,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class RateLimitingFilter extends OncePerRequestFilter {
     private final BucketFactory bucketFactory;
+    private final ApplicationConfig.SwaggerEndpoints swaggerEndpoints;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Map<Long, Bucket> buckets = new ConcurrentHashMap<>();
     private static final int TOKEN_COUNT = 1;
     private static final String ID_HEADER = "Tg-Chat-Id";
     private static final int TOO_MANY_REQUESTS_STATUS_CODE = 429;
-    private static final String DUDOS_MESSAGE = "Слишком много запросов, хватит дудосить!";
+    private static final String DDOS_MESSAGE = "Слишком много запросов, хватит дудосить!";
     private static final String ENCODING = "UTF-8";
-    private static final String SWAGGER = "/swagger-ui";
-    private static final String API_DOCS = "/v3/api-docs";
 
     @Override
     protected void doFilterInternal(
@@ -37,7 +37,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
         String uri = request.getRequestURI();
-        if (uri.contains(SWAGGER) || uri.contains(API_DOCS)) {
+        if (uri.contains(swaggerEndpoints.swagger()) || uri.contains(swaggerEndpoints.apiDocs())) {
             filterChain.doFilter(request, response);
         } else {
             filterTelegramRequest(request, response, filterChain);
@@ -64,7 +64,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         response.setCharacterEncoding(ENCODING);
 
         ApiErrorResponse errorResponse = ApiErrorResponse.builder()
-            .exceptionMessage(DUDOS_MESSAGE)
+            .exceptionMessage(DDOS_MESSAGE)
             .code(String.valueOf(TOO_MANY_REQUESTS_STATUS_CODE))
             .build();
         String json = objectMapper.writeValueAsString(errorResponse);
