@@ -1,5 +1,6 @@
 package edu.java.scrapper.domain.modelsMapper;
 
+import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
 import edu.java.scrapper.domain.models.Chat;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
@@ -14,6 +15,7 @@ import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -79,9 +81,14 @@ public class ModelsMapper {
     }
 
     public ChatLinkEntity getChatLinkEntity(ChatLink chatLink) {
-        ChatEntity chatEntity = chatEntityRepository.findById(chatLink.getChatId()).get();
-        LinkEntity linkEntity = linkEntityRepository.findById(chatLink.getLinkId()).get();
+        Optional<ChatEntity> optionalChatEntity = chatEntityRepository.findById(chatLink.getChatId());
+        Optional<LinkEntity> optionalLinkEntity = linkEntityRepository.findById(chatLink.getLinkId());
 
-        return new ChatLinkEntity(chatLink.getId(), chatEntity, linkEntity);
+        if (optionalChatEntity.isPresent() && optionalLinkEntity.isPresent()) {
+            ChatEntity chatEntity = optionalChatEntity.get();
+            LinkEntity linkEntity = optionalLinkEntity.get();
+            return new ChatLinkEntity(chatLink.getId(), chatEntity, linkEntity);
+        }
+        throw new ChatNotFoundException();
     }
 }

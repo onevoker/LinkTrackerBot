@@ -4,14 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 public class LinkWasNotTrackedException extends ScrapperException {
-    private static final String MESSAGE = "Can't untrack, link wasn't tracked";
+    private static final String MESSAGE = "Вы не отслеживаете данную ссылку";
 
     public LinkWasNotTrackedException() {
         super(MESSAGE);
-    }
-
-    public LinkWasNotTrackedException(String message) {
-        super(message);
     }
 
     @Override

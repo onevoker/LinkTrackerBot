@@ -21,12 +21,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class RateLimitingFilter extends OncePerRequestFilter {
     private final BucketFactory bucketFactory;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+    private final Map<Long, Bucket> buckets = new ConcurrentHashMap<>();
     private static final int TOKEN_COUNT = 1;
     private static final String ID_HEADER = "Tg-Chat-Id";
     private static final int TOO_MANY_REQUESTS_STATUS_CODE = 429;
-    private static final String MESSAGE = "Слишком много запросов, хватит дудосить!";
+    private static final String DUDOS_MESSAGE = "Слишком много запросов, хватит дудосить!";
     private static final String ENCODING = "UTF-8";
+    private static final String SWAGGER = "/swagger-ui";
+    private static final String API_DOCS = "/v3/api-docs";
 
     @Override
     protected void doFilterInternal(
@@ -34,8 +36,21 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         @NotNull HttpServletResponse response,
         @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
-        String id = request.getHeader(ID_HEADER);
-        Bucket bucket = buckets.computeIfAbsent(id, k -> bucketFactory.newBucket());
+        String uri = request.getRequestURI();
+        if (uri.contains(SWAGGER) || uri.contains(API_DOCS)) {
+            filterChain.doFilter(request, response);
+        } else {
+            filterTelegramRequest(request, response, filterChain);
+        }
+    }
+
+    private void filterTelegramRequest(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        FilterChain filterChain
+    ) throws ServletException, IOException {
+        Long tgId = Long.parseLong(request.getHeader(ID_HEADER));
+        Bucket bucket = buckets.computeIfAbsent(tgId, k -> bucketFactory.newBucket());
         if (bucket.tryConsume(TOKEN_COUNT)) {
             filterChain.doFilter(request, response);
         } else {
@@ -49,7 +64,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         response.setCharacterEncoding(ENCODING);
 
         ApiErrorResponse errorResponse = ApiErrorResponse.builder()
-            .exceptionMessage(MESSAGE)
+            .exceptionMessage(DUDOS_MESSAGE)
             .code(String.valueOf(TOO_MANY_REQUESTS_STATUS_CODE))
             .build();
         String json = objectMapper.writeValueAsString(errorResponse);

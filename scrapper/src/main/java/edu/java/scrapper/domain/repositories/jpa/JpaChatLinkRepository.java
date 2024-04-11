@@ -23,7 +23,7 @@ public class JpaChatLinkRepository implements ChatLinkRepository {
             ChatLinkEntity chatLinkEntity = mapper.getChatLinkEntity(chatLink);
             chatLinkEntityRepository.save(chatLinkEntity);
         } catch (DataIntegrityViolationException exception) {
-            throw new LinkWasTrackedException("Ссылка уже добавлена, для просмотра ссылок введите /list");
+            throw new LinkWasTrackedException();
         }
     }
 

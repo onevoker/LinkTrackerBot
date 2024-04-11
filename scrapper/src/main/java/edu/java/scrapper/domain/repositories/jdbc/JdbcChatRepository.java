@@ -19,7 +19,7 @@ public class JdbcChatRepository implements ChatRepository {
         try {
             jdbcTemplate.update("INSERT INTO chat VALUES (?)", id);
         } catch (DuplicateKeyException exception) {
-            throw new ChatAlreadyRegisteredException("Вы уже были зарегестрированы раньше");
+            throw new ChatAlreadyRegisteredException();
         }
     }
 

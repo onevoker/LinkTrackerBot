@@ -21,7 +21,7 @@ public class JpaChatRepository implements ChatRepository {
     @Override
     public void add(Long id) {
         if (chatEntityRepository.existsById(id)) {
-            throw new ChatAlreadyRegisteredException("Вы уже были зарегестрированы раньше");
+            throw new ChatAlreadyRegisteredException();
         }
         chatEntityRepository.save(new ChatEntity(id));
     }

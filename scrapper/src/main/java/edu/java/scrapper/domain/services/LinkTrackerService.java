@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class LinkTrackerService implements LinkService {
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
-    private static final String NOT_TRACKED_MESSAGE = "Вы не отслеживаете данную ссылку";
 
     @Transactional
     @Override
@@ -45,7 +44,7 @@ public class LinkTrackerService implements LinkService {
         List<Link> linkInRepo = linkRepository.findByUrl(url);
 
         if (linkInRepo.isEmpty()) {
-            throw new LinkWasNotTrackedException(NOT_TRACKED_MESSAGE);
+            throw new LinkWasNotTrackedException();
         }
 
         Long linkId = linkInRepo.getFirst().getId();
@@ -53,7 +52,7 @@ public class LinkTrackerService implements LinkService {
         int size = chatLinkRepository.remove(chatLink);
 
         if (size == 0) {
-            throw new LinkWasNotTrackedException(NOT_TRACKED_MESSAGE);
+            throw new LinkWasNotTrackedException();
         }
 
         List<Long> tgChatIds = chatLinkRepository.findTgChatIds(linkId);
