@@ -50,7 +50,8 @@ public class TrackCommandServiceTest {
             "localhost:9092",
             "edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse",
             "badResponse"
-        )
+        ),
+        null
     );
 
     private static final LinkResponseValidatorService linkValidatorService =

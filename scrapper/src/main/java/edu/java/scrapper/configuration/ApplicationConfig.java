@@ -32,7 +32,9 @@ public record ApplicationConfig(
     @Bean
     SwaggerEndpoints swaggerEndpoints,
     Kafka kafka,
-    boolean useQueue
+    boolean useQueue,
+    @Bean
+    CustomMetrics customMetrics
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
@@ -56,5 +58,10 @@ public record ApplicationConfig(
     }
 
     public record SwaggerEndpoints(String swagger, String apiDocs) {
+    }
+
+    public record CustomMetrics(MessagesProcessed messagesProcessed) {
+        public record MessagesProcessed(String name, String description, String tag) {
+        }
     }
 }

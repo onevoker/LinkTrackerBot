@@ -41,6 +41,12 @@ app:
     topic-name: updates
   use-queue: false
 
+  custom-metrics:
+    messages-processed:
+      name: messages-processed
+      description: count processed messages
+      tag: application
+
 spring:
   liquibase:
     enabled: false
@@ -61,3 +67,17 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: info, health, prometheus
+      path-mapping:
+        prometheus: /metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}

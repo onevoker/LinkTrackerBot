@@ -32,7 +32,8 @@ public class LinkResponseFactoryTest {
             "localhost:9092",
             "edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse",
             "badResponse"
-        )
+        ),
+        null
     );
     private static final int USER_ID = 1;
     private static LinkResponseFactory linkFactory;

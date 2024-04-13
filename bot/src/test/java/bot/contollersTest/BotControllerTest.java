@@ -3,6 +3,7 @@ package bot.contollersTest;
 import edu.java.bot.dto.response.LinkUpdateResponse;
 import edu.java.bot.updateHandlers.BotUpdaterService;
 import edu.java.bot.updateHandlers.http.controllers.BotController;
+import io.micrometer.core.instrument.Counter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BotControllerTest {
     @Mock
     private BotUpdaterService botUpdaterService;
+    @Mock
+    private Counter messagesProcessedCounter;
 
     @InjectMocks
     private BotController botController;
@@ -49,6 +52,7 @@ public class BotControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
 
+        verify(messagesProcessedCounter).increment();
         verify(botUpdaterService).sendUpdate(any(LinkUpdateResponse.class));
     }
 }
