@@ -1,5 +1,6 @@
 package edu.java.scrapper.scheduler;
 
+import edu.java.scrapper.clients.exceptions.ApiException;
 import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.scheduler.updaterWorkers.LinkUpdaterService;
@@ -29,7 +30,11 @@ public class LinkUpdaterScheduler {
 
         if (!requests.isEmpty()) {
             for (var request : requests) {
-                updateSender.sendUpdate(request);
+                try {
+                    updateSender.sendUpdate(request);
+                } catch (ApiException exception) {
+                    log.error(exception.getMessage());
+                }
             }
         } else {
             log.info("No updates");

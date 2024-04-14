@@ -1,7 +1,9 @@
 package edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService;
 
 import edu.java.scrapper.clients.StackOverflowClient;
+import edu.java.scrapper.clients.exceptions.RemovedLinkException;
 import edu.java.scrapper.configuration.ApplicationConfig;
+import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
@@ -31,6 +33,8 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
     private static final String UPDATE_DESCRIPTION = "Появилось обновление";
     private static final String ANSWERED_DESCRIPTION = "На вопрос ответили";
     private static final String ANSWER_COUNT_DESCRIPTION = "Был добавлен ответ на вопрос";
+    private static final String LINK_WAS_REMOVED_BY_AUTHOR_DESCRIPTION =
+        "Вы перестали ослеживать данную ссылку, так как она была удалена автором";
 
     @Transactional
     @Override
@@ -43,22 +47,27 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
         long questionId = linkQuestionData.questionId();
 
         if (questionId != 0L) {
-            QuestionResponse response = stackOverflowClient.fetchQuestion(questionId);
-            Item responseItem = response.items().getFirst();
-            List<Item> responsesInRepo = questionResponseRepository.findByLinkId(linkId);
+            try {
+                QuestionResponse response = stackOverflowClient.fetchQuestion(questionId).block();
+                Item responseItem = response.items().getFirst();
+                List<Item> responsesInRepo = questionResponseRepository.findByLinkId(linkId);
 
-            if (responsesInRepo.isEmpty()) {
-                questionResponseRepository.add(responseItem, linkId);
-                responsesInRepo = questionResponseRepository.findByLinkId(linkId);
-            }
+                if (responsesInRepo.isEmpty()) {
+                    questionResponseRepository.add(responseItem, linkId);
+                    responsesInRepo = questionResponseRepository.findByLinkId(linkId);
+                }
 
-            Item questionInRepo = responsesInRepo.getFirst();
-            if (isNeedToUpdate(responseItem, link)) {
-                updateResponse = getUpdateQuestion(responseItem, linkId, url, questionInRepo);
+                Item questionInRepo = responsesInRepo.getFirst();
+                if (isNeedToUpdate(responseItem, link)) {
+                    updateResponse = getUpdateQuestion(responseItem, linkId, url, questionInRepo);
+                }
+
+                OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
+                linkRepository.updateLastApiCheck(lastApiCheck, linkId);
+            } catch (RemovedLinkException exception) {
+                updateResponse = removeLinkInDatabaseAndGetResponse(linkId, url);
             }
         }
-        OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
-        linkRepository.updateLastApiCheck(lastApiCheck, linkId);
 
         return updateResponse;
     }
@@ -93,5 +102,16 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
         }
 
         return updateMessage.toString();
+    }
+
+    private LinkUpdateResponse removeLinkInDatabaseAndGetResponse(Long linkId, URI url) {
+        List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
+
+        for (Long chatId: tgChatIdsForUpdate) {
+            chatLinkRepository.remove(new ChatLink(chatId, linkId));
+        }
+        linkRepository.remove(linkId);
+
+        return new LinkUpdateResponse(url, LINK_WAS_REMOVED_BY_AUTHOR_DESCRIPTION, tgChatIdsForUpdate);
     }
 }

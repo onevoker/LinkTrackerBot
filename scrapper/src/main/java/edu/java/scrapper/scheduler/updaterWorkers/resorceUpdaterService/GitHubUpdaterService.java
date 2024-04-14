@@ -1,7 +1,9 @@
 package edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService;
 
 import edu.java.scrapper.clients.GitHubClient;
+import edu.java.scrapper.clients.exceptions.RemovedLinkException;
 import edu.java.scrapper.configuration.ApplicationConfig;
+import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
@@ -28,6 +30,8 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
     private final ChatLinkRepository chatLinkRepository;
     private final GitHubClient gitHubClient;
     private static final String UPDATE_DESCRIPTION = "Появилось обновление";
+    private static final String LINK_WAS_REMOVED_BY_AUTHOR_DESCRIPTION =
+        "Вы перестали ослеживать данную ссылку, так как она была удалена автором";
 
     @Transactional
     @Override
@@ -42,19 +46,24 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
         String repo = linkRepoData.repo();
 
         if (!owner.isBlank() && !repo.isBlank()) {
-            RepositoryResponse response = gitHubClient.fetchRepository(owner, repo);
-            List<RepositoryResponse> responsesInRepo = gitHubResponseRepository.findByLinkId(linkId);
+            try {
+                RepositoryResponse response = gitHubClient.fetchRepository(owner, repo).block();
+                List<RepositoryResponse> responsesInRepo = gitHubResponseRepository.findByLinkId(linkId);
 
-            if (responsesInRepo.isEmpty()) {
-                gitHubResponseRepository.add(response, linkId);
-            }
+                if (responsesInRepo.isEmpty()) {
+                    gitHubResponseRepository.add(response, linkId);
+                }
 
-            if (isNeedToUpdate(response, link)) {
-                updateResponse = getUpdateRepo(response, linkId, url);
+                if (isNeedToUpdate(response, link)) {
+                    updateResponse = getUpdateRepo(response, linkId, url);
+                }
+
+                OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
+                linkRepository.updateLastApiCheck(lastApiCheck, linkId);
+            } catch (RemovedLinkException exception) {
+                updateResponse = removeLinkInDatabaseAndGetResponse(linkId, url);
             }
         }
-        OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
-        linkRepository.updateLastApiCheck(lastApiCheck, linkId);
 
         return updateResponse;
     }
@@ -75,5 +84,16 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
         List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
 
         return new LinkUpdateResponse(url, UPDATE_DESCRIPTION, tgChatIdsForUpdate);
+    }
+
+    private LinkUpdateResponse removeLinkInDatabaseAndGetResponse(Long linkId, URI url) {
+        List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
+
+        for (Long chatId: tgChatIdsForUpdate) {
+            chatLinkRepository.remove(new ChatLink(chatId, linkId));
+        }
+        linkRepository.remove(linkId);
+
+        return new LinkUpdateResponse(url, LINK_WAS_REMOVED_BY_AUTHOR_DESCRIPTION, tgChatIdsForUpdate);
     }
 }

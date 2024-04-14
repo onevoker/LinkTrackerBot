@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
 
@@ -41,7 +42,7 @@ public class ListCommandServiceTest {
         doReturn(message).when(update).message();
         doReturn(chat).when(message).chat();
         doReturn(CHAT_ID).when(chat).id();
-        doReturn(listLinksResponse).when(linkClient).getTrackedLinks(CHAT_ID);
+        doReturn(Mono.just(listLinksResponse)).when(linkClient).getTrackedLinks(CHAT_ID);
         this.listCommand = new ListCommandService(linkClient);
 
         String expectedHandleText = "Список ваших отслеживаемых ссылок:\n1. https://github.com/onevoker\n";

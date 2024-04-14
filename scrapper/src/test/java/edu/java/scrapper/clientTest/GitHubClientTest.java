@@ -61,7 +61,7 @@ public class GitHubClientTest {
         );
         GitHubClient gitHubClient = new GitHubClient(webClient, retry);
 
-        RepositoryResponse response = gitHubClient.fetchRepository("onevoker", "LinkTrackerBot");
+        RepositoryResponse response = gitHubClient.fetchRepository("onevoker", "LinkTrackerBot").block();
         long expectedId = 755139175L;
         OffsetDateTime expectedUpdatedAt = OffsetDateTime.parse("2024-02-09T13:59:57Z");
 

@@ -12,6 +12,7 @@ import edu.java.bot.linkValidators.LinkResponseFactory;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -53,12 +54,11 @@ public class TrackCommandService implements CommandService {
                 URI url = URI.create(link);
                 LinkResponse response = linkResponseFactory.createLink(chatId, url);
                 AddLinkRequest addLinkRequest = new AddLinkRequest(response.url());
-                try {
-                    LinkResponse linkResponse = linkClient.trackLink(chatId, addLinkRequest);
-                    answerText = HANDLE_TEXT + linkResponse.url();
-                } catch (ApiException exception) {
-                    answerText = exception.getMessage();
-                }
+
+                answerText = linkClient.trackLink(chatId, addLinkRequest)
+                    .map(linkResponse -> HANDLE_TEXT + linkResponse.url())
+                    .onErrorResume(ApiException.class, exception -> Mono.just(exception.getMessage()))
+                    .block();
             } catch (IllegalArgumentException exception) {
                 answerText = INVALID_LINK_TEXT;
             } catch (InvalidLinkException exception) {

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ public class ScrapperTelegramChatClient {
     private final WebClient scrapperWebClient;
     private final Retry retry;
 
-    public void registerChat(long id) {
-        scrapperWebClient.post()
+    public Mono<Void> registerChat(long id) {
+        return scrapperWebClient.post()
             .uri(TELEGRAM_CHAT_ENDPOINT_PATH + id)
             .header(ID_HEADER, String.valueOf(id))
             .retrieve()
@@ -31,12 +32,11 @@ public class ScrapperTelegramChatClient {
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(Void.class)
-            .transformDeferred(RetryOperator.of(retry))
-            .block();
+            .transformDeferred(RetryOperator.of(retry));
     }
 
-    public void unregisterChat(long id) {
-        scrapperWebClient.delete()
+    public Mono<Void> unregisterChat(long id) {
+        return scrapperWebClient.delete()
             .uri(TELEGRAM_CHAT_ENDPOINT_PATH + id)
             .header(ID_HEADER, String.valueOf(id))
             .retrieve()
@@ -49,7 +49,7 @@ public class ScrapperTelegramChatClient {
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(Void.class)
-            .transformDeferred(RetryOperator.of(retry))
-            .block();
+            .transformDeferred(RetryOperator.of(retry));
     }
 }
+

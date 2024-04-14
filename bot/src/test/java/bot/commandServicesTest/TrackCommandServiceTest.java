@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
 
@@ -101,7 +102,7 @@ public class TrackCommandServiceTest {
         doReturn(command).when(message).text();
         doReturn(chat).when(message).chat();
         doReturn(CHAT_ID).when(chat).id();
-        doReturn(response).when(linkClient).trackLink(CHAT_ID, request);
+        doReturn(Mono.just(response)).when(linkClient).trackLink(CHAT_ID, request);
         trackCommandService = new TrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Начали отслеживать данную ссылку: " + GIT_HUB;

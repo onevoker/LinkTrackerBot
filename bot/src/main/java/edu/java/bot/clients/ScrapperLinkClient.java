@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class ScrapperLinkClient {
     private static final String LINK_ENDPOINT_PATH = "/links";
     private static final String ID_HEADER = "Tg-Chat-Id";
 
-    public ListLinksResponse getTrackedLinks(long chatId) {
+    public Mono<ListLinksResponse> getTrackedLinks(long chatId) {
         return scrapperWebClient.get()
             .uri(LINK_ENDPOINT_PATH)
             .header(ID_HEADER, String.valueOf(chatId))
@@ -33,11 +34,10 @@ public class ScrapperLinkClient {
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(ListLinksResponse.class)
-            .transformDeferred(RetryOperator.of(retry))
-            .block();
+            .transformDeferred(RetryOperator.of(retry));
     }
 
-    public LinkResponse trackLink(long chatId, AddLinkRequest addLinkRequest) {
+    public Mono<LinkResponse> trackLink(long chatId, AddLinkRequest addLinkRequest) {
         return scrapperWebClient.post()
             .uri(LINK_ENDPOINT_PATH)
             .header(ID_HEADER, String.valueOf(chatId))
@@ -60,11 +60,10 @@ public class ScrapperLinkClient {
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(LinkResponse.class)
-            .transformDeferred(RetryOperator.of(retry))
-            .block();
+            .transformDeferred(RetryOperator.of(retry));
     }
 
-    public LinkResponse untrackLink(long chatId, RemoveLinkRequest removeLinkRequest) {
+    public Mono<LinkResponse> untrackLink(long chatId, RemoveLinkRequest removeLinkRequest) {
         return scrapperWebClient.method(HttpMethod.DELETE)
             .uri(LINK_ENDPOINT_PATH)
             .header(ID_HEADER, String.valueOf(chatId))
@@ -83,7 +82,6 @@ public class ScrapperLinkClient {
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(LinkResponse.class)
-            .transformDeferred(RetryOperator.of(retry))
-            .block();
+            .transformDeferred(RetryOperator.of(retry));
     }
 }

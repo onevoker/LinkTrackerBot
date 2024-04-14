@@ -5,10 +5,11 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.clients.ScrapperLinkClient;
 import edu.java.bot.dto.response.LinkResponse;
-import edu.java.bot.dto.response.ListLinksResponse;
+import edu.java.bot.exceptions.ApiException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -34,15 +35,18 @@ public class ListCommandService implements CommandService {
         Message message = update.message();
         long chatId = message.chat().id();
 
-        ListLinksResponse userLinks = linkClient.getTrackedLinks(chatId);
-        List<LinkResponse> linkResponseList = userLinks.links();
-
-        if (linkResponseList == null || linkResponseList.isEmpty()) {
-            return new SendMessage(chatId, NOT_LINKED_MESSAGE);
-        }
-
-        String text = HANDLE_TEXT + getLinksListText(linkResponseList);
-        return new SendMessage(chatId, text);
+        return linkClient.getTrackedLinks(chatId)
+            .flatMap(userLinks -> {
+                    List<LinkResponse> linkResponseList = userLinks.links();
+                    if (linkResponseList == null || linkResponseList.isEmpty()) {
+                        return Mono.just(new SendMessage(chatId, NOT_LINKED_MESSAGE));
+                    }
+                    String text = HANDLE_TEXT + getLinksListText(linkResponseList);
+                    return Mono.just(new SendMessage(chatId, text));
+                }
+            )
+            .onErrorResume(ApiException.class, exception -> Mono.just(new SendMessage(chatId, exception.getMessage())))
+            .block();
     }
 
     private String getLinksListText(List<LinkResponse> linkResponseList) {

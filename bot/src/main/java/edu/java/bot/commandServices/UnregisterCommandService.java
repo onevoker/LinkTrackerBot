@@ -7,6 +7,7 @@ import edu.java.bot.clients.ScrapperTelegramChatClient;
 import edu.java.bot.exceptions.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +31,9 @@ public class UnregisterCommandService implements CommandService {
     public SendMessage handle(Update update) {
         Message message = update.message();
         long chatId = message.chat().id();
-        try {
-            chatClient.unregisterChat(chatId);
-            return new SendMessage(chatId, HANDLE_TEXT);
-        } catch (ApiException exception) {
-            return new SendMessage(chatId, exception.getMessage());
-        }
+        return chatClient.unregisterChat(chatId)
+            .thenReturn(new SendMessage(chatId, HANDLE_TEXT))
+            .onErrorResume(ApiException.class, exception -> Mono.just(new SendMessage(chatId, exception.getMessage())))
+            .block();
     }
 }

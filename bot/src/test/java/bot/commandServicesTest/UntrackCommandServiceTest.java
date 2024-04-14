@@ -23,9 +23,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
 public class UntrackCommandServiceTest {
@@ -106,7 +106,7 @@ public class UntrackCommandServiceTest {
         doReturn(command).when(message).text();
         doReturn(chat).when(message).chat();
         doReturn(CHAT_ID).when(chat).id();
-        doThrow(exception).when(linkClient).untrackLink(CHAT_ID, request);
+        doReturn(Mono.error(exception)).when(linkClient).untrackLink(CHAT_ID, request);
         untrackCommandService = new UntrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Вы не отслеживаете данную ссылку";
@@ -126,7 +126,7 @@ public class UntrackCommandServiceTest {
         doReturn(command).when(message).text();
         doReturn(chat).when(message).chat();
         doReturn(CHAT_ID).when(chat).id();
-        doReturn(linkResponse).when(linkClient).untrackLink(CHAT_ID, request);
+        doReturn(Mono.just(linkResponse)).when(linkClient).untrackLink(CHAT_ID, request);
         untrackCommandService = new UntrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Прекратили отслеживание данной ссылки: " + GIT_HUB;
