@@ -38,7 +38,7 @@ public class StartCommandServiceTest {
         startCommandService = new StartCommandService(chatClient);
 
         String expectedHandleText = "Начинаем регистрацию...\nДля получения списка команд используйте /help";
-        SendMessage result = startCommandService.handle(update);
+        SendMessage result = startCommandService.handle(update).block();
         SendMessage expected = new SendMessage(1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());

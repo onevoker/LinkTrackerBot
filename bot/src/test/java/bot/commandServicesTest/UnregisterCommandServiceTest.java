@@ -37,7 +37,7 @@ public class UnregisterCommandServiceTest {
         unregisterCommandService = new UnregisterCommandService(chatClient);
 
         String expectedHandleText = "Чат успешно удален";
-        SendMessage result = unregisterCommandService.handle(update);
+        SendMessage result = unregisterCommandService.handle(update).block();
         SendMessage expected = new SendMessage(1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());

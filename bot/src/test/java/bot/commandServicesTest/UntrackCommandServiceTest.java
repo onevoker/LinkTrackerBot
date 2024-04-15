@@ -70,7 +70,7 @@ public class UntrackCommandServiceTest {
         doReturn(CHAT_ID).when(chat).id();
 
         String expectedHandleText = "Укажите что перестать отслеживать. Пример /untrack ,,ваша_ссылка,,";
-        SendMessage result = untrackCommandService.handle(update);
+        SendMessage result = untrackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -87,7 +87,7 @@ public class UntrackCommandServiceTest {
         untrackCommandService = new UntrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Вы указали неправильную ссылку, возможно вам поможет /help";
-        SendMessage result = untrackCommandService.handle(update);
+        SendMessage result = untrackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -110,7 +110,7 @@ public class UntrackCommandServiceTest {
         untrackCommandService = new UntrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Вы не отслеживаете данную ссылку";
-        SendMessage result = untrackCommandService.handle(update);
+        SendMessage result = untrackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -130,7 +130,7 @@ public class UntrackCommandServiceTest {
         untrackCommandService = new UntrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Прекратили отслеживание данной ссылки: " + GIT_HUB;
-        SendMessage result = untrackCommandService.handle(update);
+        SendMessage result = untrackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());

@@ -28,12 +28,11 @@ public class StartCommandService implements CommandService {
     }
 
     @Override
-    public SendMessage handle(Update update) {
+    public Mono<SendMessage> handle(Update update) {
         Message message = update.message();
         long chatId = message.chat().id();
         return chatClient.registerChat(chatId)
             .thenReturn(new SendMessage(chatId, HANDLE_TEXT))
-            .onErrorResume(ApiException.class, exception -> Mono.just(new SendMessage(chatId, exception.getMessage())))
-            .block();
+            .onErrorResume(ApiException.class, exception -> Mono.just(new SendMessage(chatId, exception.getMessage())));
     }
 }

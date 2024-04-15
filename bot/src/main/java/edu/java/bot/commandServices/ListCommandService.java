@@ -31,7 +31,7 @@ public class ListCommandService implements CommandService {
     }
 
     @Override
-    public SendMessage handle(Update update) {
+    public Mono<SendMessage> handle(Update update) {
         Message message = update.message();
         long chatId = message.chat().id();
 
@@ -45,8 +45,7 @@ public class ListCommandService implements CommandService {
                     return Mono.just(new SendMessage(chatId, text));
                 }
             )
-            .onErrorResume(ApiException.class, exception -> Mono.just(new SendMessage(chatId, exception.getMessage())))
-            .block();
+            .onErrorResume(ApiException.class, exception -> Mono.just(new SendMessage(chatId, exception.getMessage())));
     }
 
     private String getLinksListText(List<LinkResponse> linkResponseList) {

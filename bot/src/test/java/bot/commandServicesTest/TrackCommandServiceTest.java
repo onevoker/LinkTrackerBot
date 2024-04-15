@@ -69,7 +69,7 @@ public class TrackCommandServiceTest {
         doReturn(CHAT_ID).when(chat).id();
 
         String expectedHandleText = "Введите ссылку для отслеживания. Пример ввода: /track ,,ваша_ссылка,,";
-        SendMessage result = trackCommandService.handle(update);
+        SendMessage result = trackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -86,7 +86,7 @@ public class TrackCommandServiceTest {
         trackCommandService = new TrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Вы указали неправильную ссылку, возможно вам поможет /help";
-        SendMessage result = trackCommandService.handle(update);
+        SendMessage result = trackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -106,7 +106,7 @@ public class TrackCommandServiceTest {
         trackCommandService = new TrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Начали отслеживать данную ссылку: " + GIT_HUB;
-        SendMessage result = trackCommandService.handle(update);
+        SendMessage result = trackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());

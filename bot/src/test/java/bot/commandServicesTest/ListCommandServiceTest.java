@@ -46,7 +46,7 @@ public class ListCommandServiceTest {
         this.listCommand = new ListCommandService(linkClient);
 
         String expectedHandleText = "Список ваших отслеживаемых ссылок:\n1. https://github.com/onevoker\n";
-        SendMessage result = listCommand.handle(update);
+        SendMessage result = listCommand.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());

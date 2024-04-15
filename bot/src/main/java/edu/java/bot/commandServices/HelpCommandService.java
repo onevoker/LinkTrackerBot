@@ -3,6 +3,7 @@ package edu.java.bot.commandServices;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class HelpCommandService implements CommandService {
@@ -32,8 +33,8 @@ public class HelpCommandService implements CommandService {
     }
 
     @Override
-    public SendMessage handle(Update update) {
+    public Mono<SendMessage> handle(Update update) {
         long chatId = update.message().chat().id();
-        return new SendMessage(chatId, HANDLE_TEXT);
+        return Mono.just(new SendMessage(chatId, HANDLE_TEXT));
     }
 }
