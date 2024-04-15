@@ -39,8 +39,7 @@ public class LinkTrackerBot implements Bot {
     public int process(List<Update> updates) {
         Flux.fromIterable(updates)
             .flatMap(update -> userMessageProcessor.process(update)
-                .flatMap(sendMessage ->
-                    {
+                .flatMap(sendMessage -> {
                         SendResponse sendResponse = bot.execute(sendMessage);
                         if (!sendResponse.isOk()) {
                             log.error("{} - {}", sendResponse.errorCode(), sendResponse.description());
