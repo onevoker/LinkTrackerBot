@@ -3,7 +3,7 @@ app:
     enable: true
     interval: 14s
     force-check-delay: 20s
-  database-access-type: jpa
+  database-access-type: jdbc
 
   clients:
     git-hub: https://api.github.com/repos/

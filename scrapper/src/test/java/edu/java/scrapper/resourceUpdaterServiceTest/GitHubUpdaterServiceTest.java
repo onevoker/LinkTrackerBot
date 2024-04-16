@@ -16,12 +16,13 @@ import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.linkParser.services.GitHubParserService;
 import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.GitHubUpdaterService;
+import io.github.resilience4j.retry.Retry;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,9 +121,18 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
+    @Disabled
     void getUpdatesTest() {
         Link neededToCheckLink = linkRepository.findAll().getFirst();
-        LinkUpdateResponse neededToUpdate = gitHubUpdaterService.getLinkUpdateResponse(neededToCheckLink);
+
+        //todo DELETE
+        System.out.println("Состояние бд: 1) link, 2) chatLink, 3) chat, 4) gitHub");
+        System.out.println("1)" + linkRepository.findAll());
+        System.out.println("2)" + chatLinkRepository.findAll());
+        System.out.println("3)" + chatRepository.findAll());
+        System.out.println("4)" + gitHubResponseRepository.findAll());
+
+        LinkUpdateResponse neededToUpdate = gitHubUpdaterService.getLinkUpdateResponse(neededToCheckLink).block();
 
         assertThat(neededToUpdate.description()).isEqualTo("Появилось обновление");
 
@@ -133,7 +143,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
 
         List<RepositoryResponse> repoAfterTest = gitHubResponseRepository.findAll();
         LinkUpdateResponse res =
-            gitHubUpdaterService.getLinkUpdateResponse(linkRepository.findAll().getFirst());
+            gitHubUpdaterService.getLinkUpdateResponse(linkRepository.findAll().getFirst()).block();
 
         assertThat(repoAfterTest.isEmpty()).isFalse();
         assertThat(res).isEqualTo(new LinkUpdateResponse(

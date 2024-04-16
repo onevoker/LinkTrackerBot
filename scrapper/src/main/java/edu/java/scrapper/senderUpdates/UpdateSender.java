@@ -1,7 +1,8 @@
 package edu.java.scrapper.senderUpdates;
 
 import edu.java.scrapper.dto.response.LinkUpdateResponse;
+import reactor.core.publisher.Mono;
 
 public interface UpdateSender {
-    void sendUpdate(LinkUpdateResponse update);
+    Mono<Void> sendUpdate(LinkUpdateResponse update);
 }

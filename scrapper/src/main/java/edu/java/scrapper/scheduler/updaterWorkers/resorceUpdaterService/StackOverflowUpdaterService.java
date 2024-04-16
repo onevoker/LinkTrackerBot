@@ -10,7 +10,6 @@ import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
 import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
-import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;
 import edu.java.scrapper.linkParser.dto.StackOverflowLinkQuestionData;
 import edu.java.scrapper.linkParser.services.StackOverflowParserService;
 import java.net.URI;
@@ -20,6 +19,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -38,38 +38,40 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
 
     @Transactional
     @Override
-    public LinkUpdateResponse getLinkUpdateResponse(Link link) {
-        LinkUpdateResponse updateResponse = null;
-
+    public Mono<LinkUpdateResponse> getLinkUpdateResponse(Link link) {
         URI url = link.getUrl();
         Long linkId = link.getId();
         StackOverflowLinkQuestionData linkQuestionData = stackOverflowParserService.getLinkData(url);
         long questionId = linkQuestionData.questionId();
 
         if (questionId != 0L) {
-            try {
-                QuestionResponse response = stackOverflowClient.fetchQuestion(questionId).block();
-                Item responseItem = response.items().getFirst();
-                List<Item> responsesInRepo = questionResponseRepository.findByLinkId(linkId);
+            return stackOverflowClient.fetchQuestion(questionId)
+                .flatMap(response -> {
+                    Item responseItem = response.items().getFirst();
+                    List<Item> responsesInRepo = questionResponseRepository.findByLinkId(linkId);
 
-                if (responsesInRepo.isEmpty()) {
-                    questionResponseRepository.add(responseItem, linkId);
-                    responsesInRepo = questionResponseRepository.findByLinkId(linkId);
-                }
+                    if (responsesInRepo.isEmpty()) {
+                        questionResponseRepository.add(responseItem, linkId);
+                        responsesInRepo = questionResponseRepository.findByLinkId(linkId);
+                    }
 
-                Item questionInRepo = responsesInRepo.getFirst();
-                if (isNeedToUpdate(responseItem, link)) {
-                    updateResponse = getUpdateQuestion(responseItem, linkId, url, questionInRepo);
-                }
+                    Item questionInRepo = responsesInRepo.getFirst();
+                    if (isNeedToUpdate(responseItem, link)) {
+                        return Mono.just(getUpdateQuestion(responseItem, linkId, url, questionInRepo));
+                    }
 
-                OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
-                linkRepository.updateLastApiCheck(lastApiCheck, linkId);
-            } catch (RemovedLinkException exception) {
-                updateResponse = removeLinkInDatabaseAndGetResponse(linkId, url);
-            }
+                    OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
+                    linkRepository.updateLastApiCheck(lastApiCheck, linkId);
+
+                    return Mono.empty();
+                })
+                .onErrorResume(
+                    RemovedLinkException.class,
+                    exception -> Mono.just(removeLinkInDatabaseAndGetResponse(linkId, url))
+                );
         }
 
-        return updateResponse;
+        return Mono.empty();
     }
 
     @Override
@@ -107,7 +109,7 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
     private LinkUpdateResponse removeLinkInDatabaseAndGetResponse(Long linkId, URI url) {
         List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
 
-        for (Long chatId: tgChatIdsForUpdate) {
+        for (Long chatId : tgChatIdsForUpdate) {
             chatLinkRepository.remove(new ChatLink(chatId, linkId));
         }
         linkRepository.remove(linkId);

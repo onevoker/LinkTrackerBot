@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 public class BotClient implements UpdateSender {
@@ -18,8 +19,8 @@ public class BotClient implements UpdateSender {
     private static final String UPDATE_ENDPOINT = "/updates";
 
     @Override
-    public void sendUpdate(LinkUpdateResponse update) {
-        botWebClient.post()
+    public Mono<Void> sendUpdate(LinkUpdateResponse update) {
+        return botWebClient.post()
             .uri(UPDATE_ENDPOINT)
             .body(BodyInserters.fromValue(update))
             .retrieve()
@@ -32,7 +33,6 @@ public class BotClient implements UpdateSender {
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
             .bodyToMono(Void.class)
-            .transformDeferred(RetryOperator.of(retry))
-            .block();
+            .transformDeferred(RetryOperator.of(retry));
     }
 }
