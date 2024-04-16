@@ -40,7 +40,7 @@ public class ScrapperQueueProducerTest {
                 List.of(1L, 2L)
             );
 
-        scrapperQueueProducer.sendUpdate(update).block();
+        scrapperQueueProducer.sendUpdate(update);
 
         verify(kafkaTemplate, times(1)).send(eq(TOPIC), eq(update));
     }

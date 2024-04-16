@@ -1,9 +1,8 @@
-package edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService;
+package edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService;
 
 import edu.java.scrapper.clients.GitHubClient;
 import edu.java.scrapper.clients.exceptions.RemovedLinkException;
 import edu.java.scrapper.configuration.ApplicationConfig;
-import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
@@ -17,12 +16,13 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class GitHubUpdaterService implements ResourceUpdaterService {
     private final ApplicationConfig applicationConfig;
     private final GitHubParserService gitHubParserService;
@@ -30,13 +30,15 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
     private final GitHubClient gitHubClient;
+    private final RemoverLinksService removerLinksService;
     private static final String UPDATE_DESCRIPTION = "Появилось обновление";
-    private static final String LINK_WAS_REMOVED_BY_AUTHOR_DESCRIPTION =
-        "Вы перестали ослеживать данную ссылку, так как она была удалена автором";
+
 
     @Transactional
     @Override
-    public Mono<LinkUpdateResponse> getLinkUpdateResponse(Link link) {
+    public LinkUpdateResponse getLinkUpdateResponse(Link link) {
+        LinkUpdateResponse updateResponse = null;
+
         URI url = link.getUrl();
         Long linkId = link.getId();
 
@@ -45,29 +47,26 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
         String repo = linkRepoData.repo();
 
         if (!owner.isBlank() && !repo.isBlank()) {
-            return gitHubClient.fetchRepository(owner, repo)
-                .flatMap(response -> {
-                        List<RepositoryResponse> responsesInRepo = gitHubResponseRepository.findByLinkId(linkId);
+            try {
+                RepositoryResponse response = gitHubClient.fetchRepository(owner, repo);
+                List<RepositoryResponse> responsesInRepo = gitHubResponseRepository.findByLinkId(linkId);
 
-                        if (responsesInRepo.isEmpty()) {
-                            gitHubResponseRepository.add(response, linkId);
-                        }
+                if (responsesInRepo.isEmpty()) {
+                    gitHubResponseRepository.add(response, linkId);
+                }
 
-                        if (isNeedToUpdate(response, link)) {
-                            return Mono.just(getUpdateRepo(response, linkId, url));
-                        }
-                        OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
-                        linkRepository.updateLastApiCheck(lastApiCheck, linkId);
+                if (isNeedToUpdate(response, link)) {
+                    updateResponse = getUpdateRepo(response, linkId, url);
+                }
 
-                        return Mono.empty();
-                    }
-                )
-                .onErrorResume(
-                    RemovedLinkException.class,
-                    exception -> Mono.just(removeLinkInDatabaseAndGetResponse(linkId, url))
-                );
+                OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
+                linkRepository.updateLastApiCheck(lastApiCheck, linkId);
+            } catch (RemovedLinkException exception) {
+                updateResponse = removerLinksService.removeLinkInDatabaseAndGetResponse(linkId, url);
+            }
         }
-        return Mono.empty();
+
+        return updateResponse;
     }
 
     @Override
@@ -86,16 +85,5 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
         List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
 
         return new LinkUpdateResponse(url, UPDATE_DESCRIPTION, tgChatIdsForUpdate);
-    }
-
-    private LinkUpdateResponse removeLinkInDatabaseAndGetResponse(Long linkId, URI url) {
-        List<Long> tgChatIdsForUpdate = chatLinkRepository.findTgChatIds(linkId);
-
-        for (Long chatId : tgChatIdsForUpdate) {
-            chatLinkRepository.remove(new ChatLink(chatId, linkId));
-        }
-        linkRepository.remove(linkId);
-
-        return new LinkUpdateResponse(url, LINK_WAS_REMOVED_BY_AUTHOR_DESCRIPTION, tgChatIdsForUpdate);
     }
 }

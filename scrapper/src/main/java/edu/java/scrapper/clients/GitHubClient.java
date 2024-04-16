@@ -16,7 +16,7 @@ public class GitHubClient {
     private final WebClient gitHubWebClient;
     private final Retry retry;
 
-    public Mono<RepositoryResponse> fetchRepository(String owner, String repository) {
+    public RepositoryResponse fetchRepository(String owner, String repository) {
         return gitHubWebClient.get()
             .uri(owner + "/" + repository)
             .retrieve()
@@ -25,6 +25,7 @@ public class GitHubClient {
                 clientResponse -> Mono.error(RemovedLinkException::new)
             )
             .bodyToMono(RepositoryResponse.class)
-            .transformDeferred(RetryOperator.of(retry));
+            .transformDeferred(RetryOperator.of(retry))
+            .block();
     }
 }

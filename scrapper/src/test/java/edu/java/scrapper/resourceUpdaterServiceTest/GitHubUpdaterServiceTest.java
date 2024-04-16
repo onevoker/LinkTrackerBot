@@ -15,14 +15,14 @@ import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.linkParser.services.GitHubParserService;
-import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.GitHubUpdaterService;
+import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.GitHubUpdaterService;
+import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.RemoverLinksService;
 import io.github.resilience4j.retry.Retry;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +47,8 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     private ChatLinkRepository chatLinkRepository;
     @Autowired
     private ChatRepository chatRepository;
+    @Autowired
+    private RemoverLinksService removerLinksService;
     @Autowired
     private ApplicationConfig applicationConfig;
     @Autowired
@@ -108,7 +110,8 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
             gitHubResponseRepository,
             linkRepository,
             chatLinkRepository,
-            gitHubClient
+            gitHubClient,
+            removerLinksService
         );
     }
 
@@ -121,18 +124,10 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Disabled
     void getUpdatesTest() {
         Link neededToCheckLink = linkRepository.findAll().getFirst();
 
-        //todo DELETE
-        System.out.println("Состояние бд: 1) link, 2) chatLink, 3) chat, 4) gitHub");
-        System.out.println("1)" + linkRepository.findAll());
-        System.out.println("2)" + chatLinkRepository.findAll());
-        System.out.println("3)" + chatRepository.findAll());
-        System.out.println("4)" + gitHubResponseRepository.findAll());
-
-        LinkUpdateResponse neededToUpdate = gitHubUpdaterService.getLinkUpdateResponse(neededToCheckLink).block();
+        LinkUpdateResponse neededToUpdate = gitHubUpdaterService.getLinkUpdateResponse(neededToCheckLink);
 
         assertThat(neededToUpdate.description()).isEqualTo("Появилось обновление");
 
@@ -143,7 +138,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
 
         List<RepositoryResponse> repoAfterTest = gitHubResponseRepository.findAll();
         LinkUpdateResponse res =
-            gitHubUpdaterService.getLinkUpdateResponse(linkRepository.findAll().getFirst()).block();
+            gitHubUpdaterService.getLinkUpdateResponse(linkRepository.findAll().getFirst());
 
         assertThat(repoAfterTest.isEmpty()).isFalse();
         assertThat(res).isEqualTo(new LinkUpdateResponse(

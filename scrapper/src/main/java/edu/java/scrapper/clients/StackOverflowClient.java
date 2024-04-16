@@ -16,7 +16,7 @@ public class StackOverflowClient {
     private final WebClient stackOverflowWebClient;
     private final Retry retry;
 
-    public Mono<QuestionResponse> fetchQuestion(long questionId) {
+    public QuestionResponse fetchQuestion(long questionId) {
         return stackOverflowWebClient.get()
             .uri(uriBuilder -> uriBuilder
                 .path("{id}")
@@ -30,6 +30,7 @@ public class StackOverflowClient {
                 clientResponse -> Mono.error(RemovedLinkException::new)
             )
             .bodyToMono(QuestionResponse.class)
-            .transformDeferred(RetryOperator.of(retry));
+            .transformDeferred(RetryOperator.of(retry))
+            .block();
     }
 }

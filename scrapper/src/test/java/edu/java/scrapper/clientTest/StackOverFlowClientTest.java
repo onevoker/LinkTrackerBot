@@ -92,7 +92,7 @@ public class StackOverFlowClientTest {
         );
         StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient, retry);
 
-        QuestionResponse response = stackOverflowClient.fetchQuestion(QUESTION_ID).block();
+        QuestionResponse response = stackOverflowClient.fetchQuestion(QUESTION_ID);
         List<Item> actualItems = response.items();
         boolean expectedIsAnswered = false;
         long expectedQuestionId = 61746598L;

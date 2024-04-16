@@ -15,14 +15,14 @@ import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseReposito
 import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import edu.java.scrapper.linkParser.services.StackOverflowParserService;
-import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.StackOverflowUpdaterService;
+import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.RemoverLinksService;
+import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.StackOverflowUpdaterService;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +47,8 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     private ChatLinkRepository chatLinkRepository;
     @Autowired
     private ChatRepository chatRepository;
+    @Autowired
+    private RemoverLinksService removerLinksService;
     @Autowired
     private ApplicationConfig applicationConfig;
     @Autowired
@@ -126,7 +128,8 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
             questionResponseRepository,
             linkRepository,
             chatLinkRepository,
-            stackOverflowClient
+            stackOverflowClient,
+            removerLinksService
         );
     }
 
@@ -139,11 +142,10 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
 
     @Test
     @Transactional
-    @Disabled
     void getUpdatesTest() {
         Link neededToCheckLink = linkRepository.findAll().getFirst();
         LinkUpdateResponse noThingToUpdate =
-            stackOverflowUpdaterService.getLinkUpdateResponse(neededToCheckLink).block();
+            stackOverflowUpdaterService.getLinkUpdateResponse(neededToCheckLink);
 
         assertThat(noThingToUpdate).isNull();
 
@@ -154,7 +156,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
 
         List<Item> repoAfterTest = questionResponseRepository.findAll();
         LinkUpdateResponse res =
-            stackOverflowUpdaterService.getLinkUpdateResponse(linkRepository.findAll().getFirst()).block();
+            stackOverflowUpdaterService.getLinkUpdateResponse(linkRepository.findAll().getFirst());
 
         assertThat(repoAfterTest.isEmpty()).isFalse();
         assertThat(res).isEqualTo(new LinkUpdateResponse(
