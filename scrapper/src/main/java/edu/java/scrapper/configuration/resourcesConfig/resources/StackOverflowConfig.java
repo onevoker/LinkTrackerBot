@@ -26,6 +26,6 @@ public class StackOverflowConfig {
     @Bean
     public Retry stackOverflowRetry() {
         var retrySettings = stackOverflow.retrySettings();
-        return retryFactory.getRetry(retrySettings);
+        return retryFactory.createRetry(retrySettings);
     }
 }

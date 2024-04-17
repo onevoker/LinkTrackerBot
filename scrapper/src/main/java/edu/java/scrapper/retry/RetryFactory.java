@@ -1,7 +1,7 @@
 package edu.java.scrapper.retry;
 
 import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
-import edu.java.scrapper.retry.retryes.FunctionalRetry;
+import edu.java.scrapper.retry.retries.FunctionalRetry;
 import io.github.resilience4j.retry.Retry;
 import java.time.Duration;
 import java.util.List;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class RetryFactory {
     private final List<FunctionalRetry> retries;
 
-    public Retry getRetry(ResourcesConfig.RetrySettings retrySettings) {
+    public Retry createRetry(ResourcesConfig.RetrySettings retrySettings) {
         BackOffType type = retrySettings.backOffType();
         int retryCount = retrySettings.retryCount();
         Set<HttpStatus> httpStatuses = retrySettings.httpStatuses();

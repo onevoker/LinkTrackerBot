@@ -26,6 +26,6 @@ public class BotConfig {
     @Bean
     public Retry botRetry() {
         var retrySettings = bot.retrySettings();
-        return retryFactory.getRetry(retrySettings);
+        return retryFactory.createRetry(retrySettings);
     }
 }

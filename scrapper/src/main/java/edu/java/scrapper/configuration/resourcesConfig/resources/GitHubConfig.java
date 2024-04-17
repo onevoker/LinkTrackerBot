@@ -26,6 +26,6 @@ public class GitHubConfig {
     @Bean
     public Retry gitHubRetry() {
         var retrySettings = gitHub.retrySettings();
-        return retryFactory.getRetry(retrySettings);
+        return retryFactory.createRetry(retrySettings);
     }
 }

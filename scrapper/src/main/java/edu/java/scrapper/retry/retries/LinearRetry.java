@@ -1,7 +1,6 @@
-package edu.java.scrapper.retry.retryes;
+package edu.java.scrapper.retry.retries;
 
 import edu.java.scrapper.retry.BackOffType;
-import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.RetryConfig;
 import java.time.Duration;
 import java.util.Set;
@@ -10,12 +9,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Component
-public class ExponentialRetry implements FunctionalRetry {
+public class LinearRetry implements FunctionalRetry {
     @Override
     public RetryConfig getRetryConfig(int retryCount, Duration step, Set<HttpStatus> httpStatuses) {
+        long interval = step.toSeconds();
         return RetryConfig.<WebClientResponseException>custom()
             .maxAttempts(retryCount)
-            .intervalFunction(IntervalFunction.ofExponentialBackoff(step))
+            .intervalFunction(attempt -> interval * attempt)
             .retryOnException(e -> e instanceof WebClientResponseException
                 && httpStatuses.contains(HttpStatus.resolve(((WebClientResponseException) e).getStatusCode().value())))
             .build();
@@ -23,6 +23,6 @@ public class ExponentialRetry implements FunctionalRetry {
 
     @Override
     public BackOffType getBackOfType() {
-        return BackOffType.EXPONENTIAL;
+        return BackOffType.LINEAR;
     }
 }

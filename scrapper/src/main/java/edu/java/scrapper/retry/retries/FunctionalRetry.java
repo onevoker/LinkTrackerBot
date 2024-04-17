@@ -1,4 +1,4 @@
-package edu.java.scrapper.retry.retryes;
+package edu.java.scrapper.retry.retries;
 
 
 import edu.java.scrapper.retry.BackOffType;
