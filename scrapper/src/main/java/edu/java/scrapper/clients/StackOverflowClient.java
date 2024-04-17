@@ -1,6 +1,8 @@
 package edu.java.scrapper.clients;
 
 import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;
+import io.github.resilience4j.reactor.retry.RetryOperator;
+import io.github.resilience4j.retry.Retry;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -9,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @AllArgsConstructor
 public class StackOverflowClient {
     private final WebClient stackOverflowWebClient;
+    private final Retry retry;
 
     public QuestionResponse fetchQuestion(long questionId) {
         return stackOverflowWebClient.get()
@@ -20,6 +23,7 @@ public class StackOverflowClient {
                 .build(questionId))
             .retrieve()
             .bodyToMono(QuestionResponse.class)
+            .transformDeferred(RetryOperator.of(retry))
             .block();
     }
 }

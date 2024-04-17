@@ -5,8 +5,10 @@ import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.exceptions.InvalidLinkException;
 import edu.java.bot.linkValidators.LinkResponseFactory;
 import edu.java.bot.linkValidators.LinkResponseValidatorService;
+import edu.java.bot.retry.BackOfType;
 import java.net.URI;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +23,9 @@ public class LinkResponseFactoryTest {
         null,
         null,
         List.of("https://github\\.com/[^/]+/[^/]+/?", "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"),
-        Duration.ofSeconds(15)
+        Duration.ofSeconds(15),
+        new ApplicationConfig.RetrySettings(BackOfType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
+        null
     );
     private static final int USER_ID = 1;
     private static LinkResponseFactory linkFactory;

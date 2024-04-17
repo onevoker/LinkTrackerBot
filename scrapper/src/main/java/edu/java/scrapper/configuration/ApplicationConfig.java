@@ -1,9 +1,12 @@
 package edu.java.scrapper.configuration;
 
+import edu.java.scrapper.retry.BackOfType;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
+import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
@@ -22,7 +25,10 @@ public record ApplicationConfig(
     GitHubRegexp gitHubRegexp,
     @Bean
     StackOverflowRegexp stackOverflowRegexp,
-    String databaseAccessType
+    String databaseAccessType,
+    @Bean
+    RetrySettings retrySettings,
+    RateLimitingSettings rateLimitingSettings
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
@@ -33,5 +39,12 @@ public record ApplicationConfig(
     public record GitHubRegexp(String regexpForGitHubOwner, String regexpForGitHubRepo) {
     }
 
-    public record StackOverflowRegexp(String regexpForStackOverflowQuestionId){}
+    public record StackOverflowRegexp(String regexpForStackOverflowQuestionId) {
+    }
+
+    public record RetrySettings(BackOfType backOfType, int retryCount, Duration step, Set<HttpStatus> httpStatuses) {
+    }
+
+    public record RateLimitingSettings(int count, int tokens, Duration period) {
+    }
 }
