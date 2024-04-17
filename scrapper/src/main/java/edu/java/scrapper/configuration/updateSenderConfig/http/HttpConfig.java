@@ -15,10 +15,10 @@ public class HttpConfig {
     @Autowired
     private WebClient botWebClient;
     @Autowired
-    private Retry retry;
+    private Retry botRetry;
 
     @Bean
     public UpdateSender botClient() {
-        return new BotClient(botWebClient, retry);
+        return new BotClient(botWebClient, botRetry);
     }
 }

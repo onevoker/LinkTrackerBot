@@ -1,6 +1,6 @@
 package edu.java.scrapper.retry.retryes;
 
-import edu.java.scrapper.retry.BackOfType;
+import edu.java.scrapper.retry.BackOffType;
 import io.github.resilience4j.retry.RetryConfig;
 import java.time.Duration;
 import java.util.Set;
@@ -22,7 +22,7 @@ public class LinearRetry implements FunctionalRetry {
     }
 
     @Override
-    public BackOfType getBackOfType() {
-        return BackOfType.LINEAR;
+    public BackOffType getBackOfType() {
+        return BackOffType.LINEAR;
     }
 }

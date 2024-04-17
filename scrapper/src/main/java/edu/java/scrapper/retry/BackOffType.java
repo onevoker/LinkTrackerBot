@@ -1,6 +1,6 @@
 package edu.java.scrapper.retry;
 
-public enum BackOfType {
+public enum BackOffType {
     CONSTANT,
     LINEAR,
     EXPONENTIAL

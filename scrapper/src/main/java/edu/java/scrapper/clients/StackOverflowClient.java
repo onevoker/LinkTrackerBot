@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class StackOverflowClient {
     private final WebClient stackOverflowWebClient;
-    private final Retry retry;
+    private final Retry stackOverflowRetry;
 
     public QuestionResponse fetchQuestion(long questionId) {
         return stackOverflowWebClient.get()
@@ -30,7 +30,7 @@ public class StackOverflowClient {
                 clientResponse -> Mono.error(RemovedLinkException::new)
             )
             .bodyToMono(QuestionResponse.class)
-            .transformDeferred(RetryOperator.of(retry))
+            .transformDeferred(RetryOperator.of(stackOverflowRetry))
             .block();
     }
 }

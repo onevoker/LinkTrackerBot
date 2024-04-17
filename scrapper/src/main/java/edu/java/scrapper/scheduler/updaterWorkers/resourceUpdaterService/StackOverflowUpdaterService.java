@@ -2,7 +2,7 @@ package edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService;
 
 import edu.java.scrapper.clients.StackOverflowClient;
 import edu.java.scrapper.clients.exceptions.RemovedLinkException;
-import edu.java.scrapper.configuration.ApplicationConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class StackOverflowUpdaterService implements ResourceUpdaterService {
-    private final ApplicationConfig applicationConfig;
+    private final ResourcesConfig.StackOverflow stackOverflow;
     private final StackOverflowParserService stackOverflowParserService;
     private final QuestionResponseRepository questionResponseRepository;
     private final LinkRepository linkRepository;
@@ -71,7 +71,7 @@ public class StackOverflowUpdaterService implements ResourceUpdaterService {
 
     @Override
     public String getSupportedLinksDomain() {
-        return applicationConfig.stackOverflowDomain();
+        return stackOverflow.urls().domain();
     }
 
     private boolean isNeedToUpdate(Item responseItem, Link link) {

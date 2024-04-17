@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.clients.GitHubClient;
-import edu.java.scrapper.configuration.ApplicationConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
@@ -50,15 +50,12 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     @Autowired
     private RemoverLinksService removerLinksService;
     @Autowired
-    private ApplicationConfig applicationConfig;
-    @Autowired
-    private Retry retry;
+    private Retry gitHubRetry;
     private GitHubUpdaterService gitHubUpdaterService;
-    private static final ApplicationConfig.GitHubRegexp regexp = new ApplicationConfig.GitHubRegexp(
-        "https://github\\.com/(.*?)/",
-        "https://github\\.com/.*?/(.*)"
-    );
-    private static final GitHubParserService LINK_PARSER_SERVICE = new GitHubParserService(regexp);
+    @Autowired
+    private ResourcesConfig.GitHub gitHub;
+    @Autowired
+    private GitHubParserService linkParserService;
     private static final Long CHAT_ID = 10L;
     static final String WIRE_MOCK_URL = "http://localhost:8080/repos/";
     private static final String BODY = """
@@ -97,7 +94,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         stubFor(
             prepareStub(BODY)
         );
-        GitHubClient gitHubClient = new GitHubClient(webClient, retry);
+        GitHubClient gitHubClient = new GitHubClient(webClient, gitHubRetry);
 
         chatRepository.add(CHAT_ID);
         linkRepository.add(link);
@@ -105,8 +102,8 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         chatLinkRepository.add(new ChatLink(CHAT_ID, linkId));
 
         gitHubUpdaterService = new GitHubUpdaterService(
-            applicationConfig,
-            LINK_PARSER_SERVICE,
+            gitHub,
+            linkParserService,
             gitHubResponseRepository,
             linkRepository,
             chatLinkRepository,

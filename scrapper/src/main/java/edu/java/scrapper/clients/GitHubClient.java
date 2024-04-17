@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class GitHubClient {
     private final WebClient gitHubWebClient;
-    private final Retry retry;
+    private final Retry gitHubRetry;
 
     public RepositoryResponse fetchRepository(String owner, String repository) {
         return gitHubWebClient.get()
@@ -25,7 +25,7 @@ public class GitHubClient {
                 clientResponse -> Mono.error(RemovedLinkException::new)
             )
             .bodyToMono(RepositoryResponse.class)
-            .transformDeferred(RetryOperator.of(retry))
+            .transformDeferred(RetryOperator.of(gitHubRetry))
             .block();
     }
 }

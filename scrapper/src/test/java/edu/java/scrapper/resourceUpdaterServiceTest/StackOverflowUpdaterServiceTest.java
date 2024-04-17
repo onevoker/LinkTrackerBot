@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.clients.StackOverflowClient;
-import edu.java.scrapper.configuration.ApplicationConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
@@ -17,11 +17,11 @@ import edu.java.scrapper.dto.stackOverflowDto.Item;
 import edu.java.scrapper.linkParser.services.StackOverflowParserService;
 import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.RemoverLinksService;
 import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.StackOverflowUpdaterService;
+import io.github.resilience4j.retry.Retry;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,14 +50,12 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     @Autowired
     private RemoverLinksService removerLinksService;
     @Autowired
-    private ApplicationConfig applicationConfig;
-    @Autowired
-    private Retry retry;
+    private Retry stackOverflowRetry;
     private StackOverflowUpdaterService stackOverflowUpdaterService;
-    private static final ApplicationConfig.StackOverflowRegexp regexp = new ApplicationConfig.StackOverflowRegexp(
-        "https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)"
-    );
-    private static final StackOverflowParserService LINK_PARSER_SERVICE = new StackOverflowParserService(regexp);
+    @Autowired
+    private ResourcesConfig.StackOverflow stackOverflow;
+    @Autowired
+    private StackOverflowParserService linkParserService;
     private static final Long CHAT_ID = 10L;
     static final String WIRE_MOCK_URL = "http://localhost:8080/2.3/questions/";
     private static final long QUESTION_ID = 61746598L;
@@ -115,7 +113,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         stubFor(
             prepareStub(BODY)
         );
-        StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient, retry);
+        StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient, stackOverflowRetry);
 
         chatRepository.add(CHAT_ID);
         linkRepository.add(link);
@@ -123,8 +121,8 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
         chatLinkRepository.add(new ChatLink(CHAT_ID, linkId));
 
         stackOverflowUpdaterService = new StackOverflowUpdaterService(
-            applicationConfig,
-            LINK_PARSER_SERVICE,
+            stackOverflow,
+            linkParserService,
             questionResponseRepository,
             linkRepository,
             chatLinkRepository,
