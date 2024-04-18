@@ -1,6 +1,6 @@
 package edu.java.bot.configuration;
 
-import edu.java.bot.retry.BackOfType;
+import edu.java.bot.retry.BackOffType;
 import jakarta.validation.constraints.NotEmpty;
 import java.time.Duration;
 import java.util.List;
@@ -25,7 +25,7 @@ public record ApplicationConfig(
     @Bean
     CustomMetrics customMetrics
 ) {
-    public record RetrySettings(BackOfType backOfType, int retryCount, Duration step, Set<HttpStatus> httpStatuses) {
+    public record RetrySettings(BackOffType backOffType, int retryCount, Duration step, Set<HttpStatus> httpStatuses) {
     }
 
     public record RateLimitingSettings(int count, int tokens, Duration period) {

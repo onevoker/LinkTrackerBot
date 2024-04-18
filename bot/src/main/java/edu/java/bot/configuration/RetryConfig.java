@@ -23,7 +23,7 @@ public class RetryConfig {
         Duration step = retrySettings.step();
 
         return retries.stream()
-            .filter(e -> e.getBackOfType().equals(retrySettings.backOfType()))
+            .filter(e -> e.getBackOfType().equals(retrySettings.backOffType()))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Unsupported back off type: "))
             .createRetry(retryCount, step, httpStatuses);

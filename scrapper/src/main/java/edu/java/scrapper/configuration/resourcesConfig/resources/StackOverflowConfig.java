@@ -1,6 +1,6 @@
 package edu.java.scrapper.configuration.resourcesConfig.resources;
 
-import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
 import edu.java.scrapper.retry.RetryFactory;
 import io.github.resilience4j.retry.Retry;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 @RequiredArgsConstructor
 public class StackOverflowConfig {
-    private final ResourcesConfig.StackOverflow stackOverflow;
+    private final ClientsConfig.StackOverflow stackOverflow;
     private final RetryFactory retryFactory;
 
     @Bean

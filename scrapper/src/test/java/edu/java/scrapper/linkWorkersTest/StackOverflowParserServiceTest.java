@@ -1,15 +1,15 @@
 package edu.java.scrapper.linkWorkersTest;
 
-import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
 import edu.java.scrapper.linkParser.services.StackOverflowParserService;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class StackOverflowParserServiceTest {
-    private static final ResourcesConfig.StackOverflow stackOverflow = new ResourcesConfig.StackOverflow(
+    private static final ClientsConfig.StackOverflow stackOverflow = new ClientsConfig.StackOverflow(
         null,
-        new ResourcesConfig.StackOverflowRegexps(
+        new ClientsConfig.StackOverflowRegexps(
             "https://stackoverflow\\.com/questions/(\\d+)/([\\w-]+)"
         ),
         null

@@ -5,7 +5,7 @@ import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.exceptions.InvalidLinkException;
 import edu.java.bot.linkValidators.LinkResponseFactory;
 import edu.java.bot.linkValidators.LinkResponseValidatorService;
-import edu.java.bot.retry.BackOfType;
+import edu.java.bot.retry.BackOffType;
 import java.net.URI;
 import java.time.Duration;
 import java.util.Collections;
@@ -24,7 +24,7 @@ public class LinkResponseFactoryTest {
         null,
         List.of("https://github\\.com/[^/]+/[^/]+/?", "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"),
         Duration.ofSeconds(15),
-        new ApplicationConfig.RetrySettings(BackOfType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
+        new ApplicationConfig.RetrySettings(BackOffType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
         null,
         new ApplicationConfig.Kafka(
             "updates",

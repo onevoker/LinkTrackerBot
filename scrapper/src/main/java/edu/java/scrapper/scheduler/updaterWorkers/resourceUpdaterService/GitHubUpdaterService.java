@@ -2,7 +2,7 @@ package edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService;
 
 import edu.java.scrapper.clients.GitHubClient;
 import edu.java.scrapper.clients.exceptions.RemovedLinkException;
-import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Log4j2
 public class GitHubUpdaterService implements ResourceUpdaterService {
-    private final ResourcesConfig.GitHub gitHub;
+    private final ClientsConfig.GitHub gitHub;
     private final GitHubParserService gitHubParserService;
     private final GitHubResponseRepository gitHubResponseRepository;
     private final LinkRepository linkRepository;

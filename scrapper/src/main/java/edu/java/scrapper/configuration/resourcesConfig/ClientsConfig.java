@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties(prefix = "resources", ignoreUnknownFields = false)
-public record ResourcesConfig(
+@ConfigurationProperties(prefix = "clients", ignoreUnknownFields = false)
+public record ClientsConfig(
     @Bean
     Bot bot,
     @Bean

@@ -1,16 +1,12 @@
-package edu.java.scrapper.retryTest;
+package bot.retryTest;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
-import edu.java.scrapper.retry.BackOffType;
-import edu.java.scrapper.retry.RetryFactory;
-import edu.java.scrapper.retry.retries.ConstantRetry;
+import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.bot.configuration.RetryConfig;
+import edu.java.bot.retry.BackOffType;
+import edu.java.bot.retry.retryes.ConstantRetry;
 import io.github.resilience4j.reactor.retry.RetryOperator;
 import io.github.resilience4j.retry.Retry;
-import java.time.Duration;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,20 +14,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
-import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+import java.time.Duration;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assert.assertThrows;
-import static org.springframework.http.HttpStatus.BAD_GATEWAY;
-import static org.springframework.http.HttpStatus.GATEWAY_TIMEOUT;
-import static org.springframework.http.HttpStatus.INSUFFICIENT_STORAGE;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
-import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
+import static org.springframework.http.HttpStatus.*;
 
 @WireMockTest(httpPort = 1212)
 public class ConstantRetryTest {
@@ -47,15 +36,15 @@ public class ConstantRetryTest {
         SERVICE_UNAVAILABLE,
         GATEWAY_TIMEOUT
     );
-    private final ClientsConfig.RetrySettings retrySettings =
-        new ClientsConfig.RetrySettings(
+    private final ApplicationConfig.RetrySettings retrySettings =
+        new ApplicationConfig.RetrySettings(
             BackOffType.CONSTANT,
             RETRY_COUNT,
             Duration.ofSeconds(STEP),
             HTTP_STATUSES
         );
-    private final RetryFactory retryFactory = new RetryFactory(List.of(new ConstantRetry()));
-    private final Retry constantRetry = retryFactory.createRetry(retrySettings);
+    private final RetryConfig retryConfig = new RetryConfig(retrySettings, List.of(new ConstantRetry()));
+    private final Retry constantRetry = retryConfig.retry();
     private WebClient webClient;
 
     @BeforeEach

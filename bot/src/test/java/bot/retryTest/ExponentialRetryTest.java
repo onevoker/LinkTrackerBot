@@ -1,10 +1,10 @@
-package edu.java.scrapper.retryTest;
+package bot.retryTest;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
-import edu.java.scrapper.retry.BackOffType;
-import edu.java.scrapper.retry.RetryFactory;
-import edu.java.scrapper.retry.retries.ConstantRetry;
+import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.bot.configuration.RetryConfig;
+import edu.java.bot.retry.BackOffType;
+import edu.java.bot.retry.retryes.ExponentialRetry;
 import io.github.resilience4j.reactor.retry.RetryOperator;
 import io.github.resilience4j.retry.Retry;
 import java.time.Duration;
@@ -34,7 +34,7 @@ import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
 
 @WireMockTest(httpPort = 1212)
-public class ConstantRetryTest {
+public class ExponentialRetryTest {
     private static final String WIRE_MOCK_URL = "http://localhost:1212";
     private static final String ENDPOINT = "/test";
     private static final int RETRY_COUNT = 3;
@@ -47,15 +47,15 @@ public class ConstantRetryTest {
         SERVICE_UNAVAILABLE,
         GATEWAY_TIMEOUT
     );
-    private final ClientsConfig.RetrySettings retrySettings =
-        new ClientsConfig.RetrySettings(
-            BackOffType.CONSTANT,
+    private final ApplicationConfig.RetrySettings retrySettings =
+        new ApplicationConfig.RetrySettings(
+            BackOffType.EXPONENTIAL,
             RETRY_COUNT,
             Duration.ofSeconds(STEP),
             HTTP_STATUSES
         );
-    private final RetryFactory retryFactory = new RetryFactory(List.of(new ConstantRetry()));
-    private final Retry constantRetry = retryFactory.createRetry(retrySettings);
+    private final RetryConfig retryConfig = new RetryConfig(retrySettings, List.of(new ExponentialRetry()));
+    private final Retry constantRetry = retryConfig.retry();
     private WebClient webClient;
 
     @BeforeEach

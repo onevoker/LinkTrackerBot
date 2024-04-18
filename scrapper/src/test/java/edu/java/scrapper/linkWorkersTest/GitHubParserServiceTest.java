@@ -1,6 +1,6 @@
 package edu.java.scrapper.linkWorkersTest;
 
-import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
 import edu.java.scrapper.linkParser.dto.GitHubLinkData;
 import edu.java.scrapper.linkParser.services.GitHubParserService;
 import java.net.URI;
@@ -9,11 +9,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class GitHubParserServiceTest {
-    private static final ResourcesConfig.GitHub gitHub = new ResourcesConfig.GitHub(
+    private static final ClientsConfig.GitHub gitHub = new ClientsConfig.GitHub(
         null,
         0,
         null,
-        new ResourcesConfig.GitHubRegexps(
+        new ClientsConfig.GitHubRegexps(
             "https://github\\.com/(.*?)/",
             "https://github\\.com/.*?/(.*)"
         ),

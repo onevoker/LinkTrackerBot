@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.clients.StackOverflowClient;
-import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
@@ -53,7 +53,7 @@ public class StackOverflowUpdaterServiceTest extends IntegrationTest {
     private Retry stackOverflowRetry;
     private StackOverflowUpdaterService stackOverflowUpdaterService;
     @Autowired
-    private ResourcesConfig.StackOverflow stackOverflow;
+    private ClientsConfig.StackOverflow stackOverflow;
     @Autowired
     private StackOverflowParserService linkParserService;
     private static final Long CHAT_ID = 10L;

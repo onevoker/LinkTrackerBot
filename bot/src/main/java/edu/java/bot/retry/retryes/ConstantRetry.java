@@ -1,6 +1,6 @@
 package edu.java.bot.retry.retryes;
 
-import edu.java.bot.retry.BackOfType;
+import edu.java.bot.retry.BackOffType;
 import io.github.resilience4j.retry.RetryConfig;
 import java.time.Duration;
 import java.util.Set;
@@ -21,7 +21,7 @@ public class ConstantRetry implements FunctionalRetry {
     }
 
     @Override
-    public BackOfType getBackOfType() {
-        return BackOfType.CONSTANT;
+    public BackOffType getBackOfType() {
+        return BackOffType.CONSTANT;
     }
 }

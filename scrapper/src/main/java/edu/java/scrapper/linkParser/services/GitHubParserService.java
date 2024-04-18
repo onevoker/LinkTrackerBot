@@ -1,6 +1,6 @@
 package edu.java.scrapper.linkParser.services;
 
-import edu.java.scrapper.configuration.resourcesConfig.ResourcesConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
 import edu.java.scrapper.linkParser.dto.GitHubLinkData;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GitHubParserService implements LinkParserService {
-    private final ResourcesConfig.GitHub gitHub;
+    private final ClientsConfig.GitHub gitHub;
 
     @Override
     public GitHubLinkData getLinkData(URI url) {
