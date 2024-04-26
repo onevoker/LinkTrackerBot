@@ -28,8 +28,6 @@ public class LinkUpdaterScheduler {
         OffsetDateTime timeNow = OffsetDateTime.now(ZoneOffset.UTC).minusSeconds(checkingDuration.toSeconds());
         List<LinkUpdateResponse> requests = linkUpdaterService.getUpdates(timeNow);
 
-        updateSender.sendUpdate(null);
-
         if (!requests.isEmpty()) {
             for (var request : requests) {
                 try {
