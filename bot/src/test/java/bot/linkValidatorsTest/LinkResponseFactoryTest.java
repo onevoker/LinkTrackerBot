@@ -26,7 +26,7 @@ public class LinkResponseFactoryTest {
         Duration.ofSeconds(15),
         new ApplicationConfig.RetrySettings(BackOffType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
         null,
-        new ApplicationConfig.Kafka(
+        new ApplicationConfig.KafkaSettings(
             "updates",
             "bot",
             "localhost:9092",

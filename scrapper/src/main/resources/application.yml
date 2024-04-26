@@ -14,11 +14,11 @@ app:
     swagger: /swagger-ui
     api-docs: /v3/api-docs
 
-  kafka:
+  kafka-settings:
     bootstrap-servers: localhost:9092
     topic-name: updates
 
-  use-queue: false
+  use-queue: true
 
   custom-metrics:
     messages-processed:

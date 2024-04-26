@@ -15,15 +15,13 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 @Configuration
 @RequiredArgsConstructor
 public class KafkaProducerConfig {
-    private final ApplicationConfig applicationConfig;
+    private final ApplicationConfig.KafkaSettings kafkaSettings;
 
     @Bean
     public KafkaTemplate<String, LinkUpdateResponse> kafkaTemplate() {
-        var kafka = applicationConfig.kafka();
-
         return new KafkaTemplate<>(
             new DefaultKafkaProducerFactory<>(Map.of(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.bootstrapServers(),
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaSettings.bootstrapServers(),
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class
             ))

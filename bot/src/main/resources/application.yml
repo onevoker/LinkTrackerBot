@@ -18,7 +18,7 @@ app:
     tokens: 1000
     period: 4s
 
-  kafka:
+  kafka-settings:
     topic-name: updates
     consumer-group-id: bot
     bootstrap-server: localhost:9092

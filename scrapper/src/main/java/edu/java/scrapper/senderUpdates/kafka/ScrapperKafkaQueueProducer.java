@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 
 @RequiredArgsConstructor
-public class ScrapperQueueProducer implements UpdateSender {
+public class ScrapperKafkaQueueProducer implements UpdateSender {
     private final KafkaTemplate<String, LinkUpdateResponse> kafkaTemplate;
     private final String topicName;
 
