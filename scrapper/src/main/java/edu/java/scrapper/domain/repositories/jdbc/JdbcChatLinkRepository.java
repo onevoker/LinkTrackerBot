@@ -1,5 +1,6 @@
 package edu.java.scrapper.domain.repositories.jdbc;
 
+import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
@@ -7,6 +8,7 @@ import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -22,8 +24,10 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
                 chatLink.getChatId(),
                 chatLink.getLinkId()
             );
+        } catch (DuplicateKeyException exception) {
+            throw new LinkWasTrackedException();
         } catch (DataAccessException exception) {
-            throw new LinkWasTrackedException("Ссылка уже добавлена, для просмотра ссылок введите /list");
+            throw new ChatNotFoundException();
         }
     }
 

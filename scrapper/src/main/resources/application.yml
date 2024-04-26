@@ -2,7 +2,7 @@ app:
   scheduler:
     enable: true
     interval: 14s
-    force-check-delay: 60s
+    force-check-delay: 20s
   database-access-type: jpa
 
   clients:
@@ -30,8 +30,16 @@ app:
   rate-limiting-settings:
     count: 4
     tokens: 4
-    period: 60s
+    period: 10s
 
+  swagger-endpoints:
+    swagger: /swagger-ui
+    api-docs: /v3/api-docs
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    topic-name: updates
+  use-queue: false
 
 spring:
   liquibase:

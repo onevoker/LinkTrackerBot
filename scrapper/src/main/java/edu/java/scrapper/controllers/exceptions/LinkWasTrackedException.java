@@ -4,14 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 public class LinkWasTrackedException extends ScrapperException {
-    private static final String MESSAGE = "Link already tracks";
+    private static final String MESSAGE = "Ссылка уже добавлена, для просмотра ссылок введите /list";
 
     public LinkWasTrackedException() {
         super(MESSAGE);
-    }
-
-    public LinkWasTrackedException(String message) {
-        super(message);
     }
 
     @Override

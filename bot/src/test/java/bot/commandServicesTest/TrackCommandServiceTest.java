@@ -43,7 +43,14 @@ public class TrackCommandServiceTest {
         List.of("https://github\\.com/[^/]+/[^/]+/?", "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"),
         Duration.ofSeconds(15),
         new ApplicationConfig.RetrySettings(BackOfType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
-        null
+        null,
+        new ApplicationConfig.Kafka(
+            "updates",
+            "bot",
+            "localhost:9092",
+            "edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse",
+            "badResponse"
+        )
     );
 
     private static final LinkResponseValidatorService linkValidatorService =

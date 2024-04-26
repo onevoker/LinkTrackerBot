@@ -29,7 +29,7 @@ public class TelegramChatService implements ChatService {
         List<Link> links = chatLinkRepository.findLinksByTgChatId(tgChatId);
         int size = chatRepository.remove(tgChatId);
         if (size == 0) {
-            throw new ChatNotFoundException("Вы не были зарегестрированы");
+            throw new ChatNotFoundException();
         }
         if (!links.isEmpty()) {
             deleteNoOneTrackedLinks(links);

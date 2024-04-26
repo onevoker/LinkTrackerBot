@@ -55,6 +55,10 @@ public class ScrapperLinkClient {
                 HttpStatus.TOO_MANY_REQUESTS::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
             )
+            .onStatus(
+                HttpStatus.NOT_FOUND::equals,
+                response -> response.bodyToMono(ApiErrorResponse.class).map(ApiException::new)
+            )
             .bodyToMono(LinkResponse.class)
             .transformDeferred(RetryOperator.of(retry))
             .block();

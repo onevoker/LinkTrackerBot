@@ -22,7 +22,7 @@ public class JooqChatRepository implements ChatRepository {
                 .values(id)
                 .execute();
         } catch (DataAccessException exception) {
-            throw new ChatAlreadyRegisteredException("Вы уже были зарегестрированы раньше");
+            throw new ChatAlreadyRegisteredException();
         }
     }
 
