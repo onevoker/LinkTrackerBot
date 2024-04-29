@@ -1,6 +1,6 @@
 package edu.java.scrapper.senderUpdates.kafka;
 
-import edu.java.scrapper.dto.response.LinkUpdateResponse;
+import dto.response.LinkUpdateResponse;
 import edu.java.scrapper.senderUpdates.UpdateSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;

@@ -1,6 +1,6 @@
 package edu.java.bot.linkValidators;
 
-import edu.java.bot.dto.response.LinkResponse;
+import dto.response.LinkResponse;
 import edu.java.bot.exceptions.InvalidLinkException;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;

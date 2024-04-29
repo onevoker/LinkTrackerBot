@@ -1,7 +1,7 @@
 package edu.java.bot.configuration.kafka;
 
+import dto.response.LinkUpdateResponse;
 import edu.java.bot.configuration.ApplicationConfig;
-import edu.java.bot.dto.response.LinkUpdateResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -29,7 +29,7 @@ public class KafkaConsumerConfig {
                     ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaSettings.bootstrapServer(),
                     ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
                     ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class,
-                    JsonDeserializer.TYPE_MAPPINGS, kafkaSettings.typeMapping()
+                    JsonDeserializer.TRUSTED_PACKAGES, "*"
                 )
             )
         );

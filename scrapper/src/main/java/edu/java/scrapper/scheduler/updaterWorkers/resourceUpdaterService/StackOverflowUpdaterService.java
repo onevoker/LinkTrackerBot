@@ -1,5 +1,6 @@
 package edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService;
 
+import dto.response.LinkUpdateResponse;
 import edu.java.scrapper.clients.StackOverflowClient;
 import edu.java.scrapper.clients.exceptions.RemovedLinkException;
 import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
@@ -7,7 +8,6 @@ import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.QuestionResponseRepository;
-import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.dto.stackOverflowDto.Item;
 import edu.java.scrapper.dto.stackOverflowDto.QuestionResponse;
 import edu.java.scrapper.linkParser.dto.StackOverflowLinkQuestionData;

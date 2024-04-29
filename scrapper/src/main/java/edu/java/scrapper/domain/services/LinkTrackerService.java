@@ -1,13 +1,13 @@
 package edu.java.scrapper.domain.services;
 
+import dto.response.LinkResponse;
+import dto.response.ListLinksResponse;
 import edu.java.scrapper.controllers.exceptions.LinkWasNotTrackedException;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.domain.services.interfaces.LinkService;
-import edu.java.scrapper.dto.response.LinkResponse;
-import edu.java.scrapper.dto.response.ListLinksResponse;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;

@@ -1,6 +1,6 @@
 package edu.java.scrapper.kafkaTest;
 
-import edu.java.scrapper.dto.response.LinkUpdateResponse;
+import dto.response.LinkUpdateResponse;
 import edu.java.scrapper.senderUpdates.kafka.ScrapperKafkaQueueProducer;
 import java.net.URI;
 import java.util.List;

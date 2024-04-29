@@ -4,12 +4,12 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import dto.request.RemoveLinkRequest;
+import dto.response.ApiErrorResponse;
+import dto.response.LinkResponse;
 import edu.java.bot.clients.ScrapperLinkClient;
 import edu.java.bot.commandServices.UntrackCommandService;
 import edu.java.bot.configuration.ApplicationConfig;
-import edu.java.bot.dto.request.RemoveLinkRequest;
-import edu.java.bot.dto.response.ApiErrorResponse;
-import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.exceptions.ApiException;
 import edu.java.bot.linkValidators.LinkResponseFactory;
 import edu.java.bot.linkValidators.LinkResponseValidatorService;
@@ -51,7 +51,6 @@ public class UntrackCommandServiceTest {
             "updates",
             "bot",
             "localhost:9092",
-            "edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse",
             "badResponse"
         ),
         null

@@ -1,7 +1,7 @@
 package edu.java.bot.updateHandlers;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.dto.response.LinkUpdateResponse;
+import dto.response.LinkUpdateResponse;
 import edu.java.bot.linkTrackerBot.Bot;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

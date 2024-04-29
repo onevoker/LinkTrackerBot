@@ -1,4 +1,4 @@
-package edu.java.bot.dto.request;
+package dto.request;
 
 import java.net.URI;
 

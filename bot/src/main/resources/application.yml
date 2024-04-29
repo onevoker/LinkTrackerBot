@@ -22,7 +22,6 @@ app:
     topic-name: updates
     consumer-group-id: bot
     bootstrap-server: localhost:9092
-    type-mapping: edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse
     dlq-topic-name: badResponse
 
   custom-metrics:

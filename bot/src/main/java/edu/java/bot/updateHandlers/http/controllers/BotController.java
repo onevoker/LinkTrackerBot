@@ -1,6 +1,6 @@
 package edu.java.bot.updateHandlers.http.controllers;
 
-import edu.java.bot.dto.response.LinkUpdateResponse;
+import dto.response.LinkUpdateResponse;
 import edu.java.bot.updateHandlers.BotUpdaterService;
 import io.micrometer.core.instrument.Counter;
 import jakarta.validation.Valid;

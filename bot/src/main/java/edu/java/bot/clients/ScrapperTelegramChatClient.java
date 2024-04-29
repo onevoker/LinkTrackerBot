@@ -1,6 +1,6 @@
 package edu.java.bot.clients;
 
-import edu.java.bot.dto.response.ApiErrorResponse;
+import dto.response.ApiErrorResponse;
 import edu.java.bot.exceptions.ApiException;
 import io.github.resilience4j.reactor.retry.RetryOperator;
 import io.github.resilience4j.retry.Retry;

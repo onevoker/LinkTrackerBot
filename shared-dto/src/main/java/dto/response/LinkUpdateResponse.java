@@ -1,4 +1,4 @@
-package edu.java.bot.dto.response;
+package dto.response;
 
 import java.net.URI;
 import java.util.List;

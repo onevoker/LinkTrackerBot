@@ -35,7 +35,6 @@ public record ApplicationConfig(
     public record KafkaSettings(String topicName,
                         String consumerGroupId,
                         String bootstrapServer,
-                        String typeMapping,
                         String dlqTopicName) {
     }
 
