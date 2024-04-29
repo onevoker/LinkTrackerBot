@@ -1,6 +1,6 @@
 package bot.kafkaTest;
 
-import dto.response.LinkUpdateResponse;
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.bot.updateHandlers.BotUpdaterService;
 import edu.java.bot.updateHandlers.kafka.BotKafkaQueueConsumer;
 import org.junit.jupiter.api.Test;

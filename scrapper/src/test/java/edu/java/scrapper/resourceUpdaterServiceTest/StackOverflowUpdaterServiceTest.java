@@ -3,7 +3,7 @@ package edu.java.scrapper.resourceUpdaterServiceTest;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import dto.response.LinkUpdateResponse;
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.clients.StackOverflowClient;
 import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;

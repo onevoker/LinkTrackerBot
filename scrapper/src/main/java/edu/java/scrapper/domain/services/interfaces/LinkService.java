@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain.services.interfaces;
 
-import dto.response.LinkResponse;
-import dto.response.ListLinksResponse;
+import edu.java.dto.response.LinkResponse;
+import edu.java.dto.response.ListLinksResponse;
 import java.net.URI;
 
 public interface LinkService {

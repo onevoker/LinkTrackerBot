@@ -1,6 +1,6 @@
 package bot.linkValidatorsTest;
 
-import dto.response.LinkResponse;
+import edu.java.dto.response.LinkResponse;
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.exceptions.InvalidLinkException;
 import edu.java.bot.linkValidators.LinkResponseFactory;

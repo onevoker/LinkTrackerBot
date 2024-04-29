@@ -1,7 +1,7 @@
 package edu.java.bot.updateHandlers.http.controllers.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dto.response.ApiErrorResponse;
+import edu.java.dto.response.ApiErrorResponse;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

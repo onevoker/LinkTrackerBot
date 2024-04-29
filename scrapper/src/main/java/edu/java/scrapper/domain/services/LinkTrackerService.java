@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain.services;
 
-import dto.response.LinkResponse;
-import dto.response.ListLinksResponse;
+import edu.java.dto.response.LinkResponse;
+import edu.java.dto.response.ListLinksResponse;
 import edu.java.scrapper.controllers.exceptions.LinkWasNotTrackedException;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;

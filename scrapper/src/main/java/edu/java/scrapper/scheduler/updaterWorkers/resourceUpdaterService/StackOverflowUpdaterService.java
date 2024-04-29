@@ -1,6 +1,6 @@
 package edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService;
 
-import dto.response.LinkUpdateResponse;
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.clients.StackOverflowClient;
 import edu.java.scrapper.clients.exceptions.RemovedLinkException;
 import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;

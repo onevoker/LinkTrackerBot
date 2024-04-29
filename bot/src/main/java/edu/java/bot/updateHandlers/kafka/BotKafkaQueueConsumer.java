@@ -1,7 +1,7 @@
 package edu.java.bot.updateHandlers.kafka;
 
-import dto.response.LinkUpdateResponse;
 import edu.java.bot.updateHandlers.BotUpdaterService;
+import edu.java.dto.response.LinkUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;

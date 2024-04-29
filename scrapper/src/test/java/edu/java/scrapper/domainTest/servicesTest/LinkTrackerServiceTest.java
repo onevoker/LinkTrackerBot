@@ -1,7 +1,7 @@
 package edu.java.scrapper.domainTest.servicesTest;
 
-import dto.response.LinkResponse;
-import dto.response.ListLinksResponse;
+import edu.java.dto.response.LinkResponse;
+import edu.java.dto.response.ListLinksResponse;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;

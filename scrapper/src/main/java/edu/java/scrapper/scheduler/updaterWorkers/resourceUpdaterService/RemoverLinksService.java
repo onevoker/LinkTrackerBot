@@ -1,6 +1,6 @@
 package edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService;
 
-import dto.response.LinkUpdateResponse;
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;

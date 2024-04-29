@@ -1,6 +1,6 @@
 package edu.java.scrapper.configuration.updateSenderConfig.kafka;
 
-import dto.response.LinkUpdateResponse;
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.senderUpdates.UpdateSender;
 import edu.java.scrapper.senderUpdates.kafka.ScrapperKafkaQueueProducer;

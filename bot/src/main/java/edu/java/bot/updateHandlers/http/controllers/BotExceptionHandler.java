@@ -1,6 +1,6 @@
 package edu.java.bot.updateHandlers.http.controllers;
 
-import dto.response.ApiErrorResponse;
+import edu.java.dto.response.ApiErrorResponse;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.HttpStatusCode;

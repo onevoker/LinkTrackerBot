@@ -1,7 +1,7 @@
 package edu.java.bot.configuration.kafka;
 
-import dto.response.LinkUpdateResponse;
 import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.dto.response.LinkUpdateResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

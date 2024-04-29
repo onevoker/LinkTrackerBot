@@ -1,6 +1,6 @@
 package edu.java.scrapper.configuration.updateSenderConfig.kafka;
 
-import dto.response.LinkUpdateResponse;
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.configuration.ApplicationConfig;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

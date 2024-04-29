@@ -1,6 +1,6 @@
 package edu.java.scrapper.clients.exceptions;
 
-import dto.response.ApiErrorResponse;
+import edu.java.dto.response.ApiErrorResponse;
 
 public class ApiException extends RuntimeException {
 

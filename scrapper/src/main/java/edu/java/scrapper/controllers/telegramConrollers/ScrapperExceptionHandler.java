@@ -1,6 +1,6 @@
 package edu.java.scrapper.controllers.telegramConrollers;
 
-import dto.response.ApiErrorResponse;
+import edu.java.dto.response.ApiErrorResponse;
 import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
 import edu.java.scrapper.controllers.exceptions.LinkWasNotTrackedException;

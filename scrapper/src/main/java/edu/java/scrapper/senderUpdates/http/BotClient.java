@@ -1,7 +1,7 @@
 package edu.java.scrapper.senderUpdates.http;
 
-import dto.response.ApiErrorResponse;
-import dto.response.LinkUpdateResponse;
+import edu.java.dto.response.ApiErrorResponse;
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.clients.exceptions.ApiException;
 import edu.java.scrapper.senderUpdates.UpdateSender;
 import io.github.resilience4j.reactor.retry.RetryOperator;
