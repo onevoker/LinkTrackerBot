@@ -1,8 +1,8 @@
 package edu.java.bot.updateHandlers.http.controllers;
 
+import dto.response.ApiErrorResponse;
 import java.util.Arrays;
 import java.util.List;
-import dto.response.ApiErrorResponse;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
