@@ -1,6 +1,6 @@
 package edu.java.scrapper.linkParser.services;
 
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
+import edu.java.scrapper.configuration.clientsConfig.ClientsConfig;
 import edu.java.scrapper.linkParser.dto.GitHubLinkData;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;

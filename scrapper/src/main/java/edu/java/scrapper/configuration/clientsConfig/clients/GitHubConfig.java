@@ -1,6 +1,6 @@
-package edu.java.scrapper.configuration.resourcesConfig.resources;
+package edu.java.scrapper.configuration.clientsConfig.clients;
 
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
+import edu.java.scrapper.configuration.clientsConfig.ClientsConfig;
 import edu.java.scrapper.retry.RetryFactory;
 import io.github.resilience4j.retry.Retry;
 import lombok.RequiredArgsConstructor;
@@ -10,22 +10,22 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @RequiredArgsConstructor
-public class StackOverflowConfig {
-    private final ClientsConfig.StackOverflow stackOverflow;
+public class GitHubConfig {
+    private final ClientsConfig.GitHub gitHub;
     private final RetryFactory retryFactory;
 
     @Bean
-    public WebClient stackOverflowWebClient() {
-        var stackOverflowApi = stackOverflow.urls().api();
+    public WebClient gitHubWebClient() {
+        var apiUrl = gitHub.urls().api();
 
         return WebClient.builder()
-            .baseUrl(stackOverflowApi)
+            .baseUrl(apiUrl)
             .build();
     }
 
     @Bean
-    public Retry stackOverflowRetry() {
-        var retrySettings = stackOverflow.retrySettings();
+    public Retry gitHubRetry() {
+        var retrySettings = gitHub.retrySettings();
         return retryFactory.createRetry(retrySettings);
     }
 }

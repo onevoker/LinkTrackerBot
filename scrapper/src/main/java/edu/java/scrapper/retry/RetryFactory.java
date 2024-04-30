@@ -1,6 +1,6 @@
 package edu.java.scrapper.retry;
 
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
+import edu.java.scrapper.configuration.clientsConfig.ClientsConfig;
 import edu.java.scrapper.retry.retries.FunctionalRetry;
 import io.github.resilience4j.retry.Retry;
 import java.time.Duration;

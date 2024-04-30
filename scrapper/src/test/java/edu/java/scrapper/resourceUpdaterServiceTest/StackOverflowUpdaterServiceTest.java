@@ -6,7 +6,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.clients.StackOverflowClient;
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
+import edu.java.scrapper.configuration.clientsConfig.ClientsConfig;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;

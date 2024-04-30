@@ -3,7 +3,7 @@ package edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService;
 import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.clients.GitHubClient;
 import edu.java.scrapper.clients.exceptions.RemovedLinkException;
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
+import edu.java.scrapper.configuration.clientsConfig.ClientsConfig;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
