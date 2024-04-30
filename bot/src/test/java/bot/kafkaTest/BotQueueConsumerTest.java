@@ -2,7 +2,7 @@ package bot.kafkaTest;
 
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.dto.response.LinkUpdateResponse;
-import edu.java.bot.retry.BackOfType;
+import edu.java.bot.retry.BackOffType;
 import edu.java.bot.updateHandlers.BotUpdaterService;
 import edu.java.bot.updateHandlers.kafka.BotQueueConsumer;
 import java.time.Duration;
@@ -31,7 +31,7 @@ public class BotQueueConsumerTest {
         null,
         List.of("https://github\\.com/[^/]+/[^/]+/?", "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"),
         Duration.ofSeconds(15),
-        new ApplicationConfig.RetrySettings(BackOfType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
+        new ApplicationConfig.RetrySettings(BackOffType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
         null,
         new ApplicationConfig.Kafka(
             "updates",
@@ -39,7 +39,8 @@ public class BotQueueConsumerTest {
             "localhost:9092",
             "edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse",
             "badResponse"
-        )
+        ),
+        null
     );
 
     @Mock

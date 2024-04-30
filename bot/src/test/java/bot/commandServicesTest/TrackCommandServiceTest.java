@@ -11,7 +11,7 @@ import edu.java.bot.dto.request.AddLinkRequest;
 import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.linkValidators.LinkResponseFactory;
 import edu.java.bot.linkValidators.LinkResponseValidatorService;
-import edu.java.bot.retry.BackOfType;
+import edu.java.bot.retry.BackOffType;
 import java.net.URI;
 import java.time.Duration;
 import java.util.Collections;
@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
 
@@ -42,7 +43,7 @@ public class TrackCommandServiceTest {
         null,
         List.of("https://github\\.com/[^/]+/[^/]+/?", "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"),
         Duration.ofSeconds(15),
-        new ApplicationConfig.RetrySettings(BackOfType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
+        new ApplicationConfig.RetrySettings(BackOffType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
         null,
         new ApplicationConfig.Kafka(
             "updates",
@@ -50,7 +51,8 @@ public class TrackCommandServiceTest {
             "localhost:9092",
             "edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse",
             "badResponse"
-        )
+        ),
+        null
     );
 
     private static final LinkResponseValidatorService linkValidatorService =
@@ -67,7 +69,7 @@ public class TrackCommandServiceTest {
         doReturn(CHAT_ID).when(chat).id();
 
         String expectedHandleText = "Введите ссылку для отслеживания. Пример ввода: /track ,,ваша_ссылка,,";
-        SendMessage result = trackCommandService.handle(update);
+        SendMessage result = trackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -84,7 +86,7 @@ public class TrackCommandServiceTest {
         trackCommandService = new TrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Вы указали неправильную ссылку, возможно вам поможет /help";
-        SendMessage result = trackCommandService.handle(update);
+        SendMessage result = trackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -100,11 +102,11 @@ public class TrackCommandServiceTest {
         doReturn(command).when(message).text();
         doReturn(chat).when(message).chat();
         doReturn(CHAT_ID).when(chat).id();
-        doReturn(response).when(linkClient).trackLink(CHAT_ID, request);
+        doReturn(Mono.just(response)).when(linkClient).trackLink(CHAT_ID, request);
         trackCommandService = new TrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Начали отслеживать данную ссылку: " + GIT_HUB;
-        SendMessage result = trackCommandService.handle(update);
+        SendMessage result = trackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());

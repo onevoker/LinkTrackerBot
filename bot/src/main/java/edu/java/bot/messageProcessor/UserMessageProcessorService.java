@@ -10,11 +10,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class UserMessageProcessorImpl implements UserMessageProcessor {
+public class UserMessageProcessorService implements UserMessageProcessor {
     private final List<CommandService> commands;
     private static final String UNKNOWN_COMMAND_TEXT =
         "Мне не известна эта команда, для получения доступных команд воспользуйтесь командой /help";
@@ -25,22 +27,22 @@ public class UserMessageProcessorImpl implements UserMessageProcessor {
     }
 
     @Override
-    public SendMessage process(Update update) {
+    public Mono<SendMessage> process(Update update) {
         Message message = update.message();
-        try {
-            String response = message.text();
-            String inputCommand = response.split(" ")[0];
-
-            for (var command : this.commands()) {
-                if (inputCommand.equals(command.command())) {
-                    return command.handle(update).parseMode(ParseMode.HTML);
-                }
-            }
-
-            long chatId = message.chat().id();
-            return new SendMessage(chatId, UNKNOWN_COMMAND_TEXT).parseMode(ParseMode.Markdown);
-        } catch (NullPointerException exception) {
+        if (message == null || message.chat() == null) {
             throw new BlockedChatException();
         }
+
+        String response = message.text();
+        String inputCommand = response.split(" ")[0];
+        return Flux.fromIterable(this.commands)
+            .filter(commandService -> inputCommand.equals(commandService.command()))
+            .flatMap(commandService -> commandService.handle(update))
+            .next()
+            .switchIfEmpty(Mono.just(new SendMessage(
+                    message.chat().id(),
+                    UNKNOWN_COMMAND_TEXT
+                ).parseMode(ParseMode.Markdown))
+            );
     }
 }

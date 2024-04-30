@@ -5,7 +5,6 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
-import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.SendResponse;
@@ -18,6 +17,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @Log4j2
@@ -36,18 +37,20 @@ public class LinkTrackerBot implements Bot {
 
     @Override
     public int process(List<Update> updates) {
-        try {
-            for (Update update : updates) {
-                SendMessage response = userMessageProcessor.process(update);
-                SendResponse sendResponse = bot.execute(response);
-                if (!sendResponse.isOk()) {
-                    log.error(sendResponse.errorCode() + " - " + sendResponse.description());
-                }
-            }
-        } catch (BlockedChatException exception) {
-            log.info(EXECUTED_MESSAGE_FROM_BLOCKED_CHAT);
-        }
-
+        Flux.fromIterable(updates)
+            .flatMap(update -> userMessageProcessor.process(update)
+                .flatMap(sendMessage -> {
+                        SendResponse sendResponse = bot.execute(sendMessage);
+                        if (!sendResponse.isOk()) {
+                            log.error("{} - {}", sendResponse.errorCode(), sendResponse.description());
+                        }
+                        return Mono.empty();
+                    }
+                )
+            )
+            .doOnError(BlockedChatException.class, exception ->
+                log.info(EXECUTED_MESSAGE_FROM_BLOCKED_CHAT))
+            .subscribe();
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 

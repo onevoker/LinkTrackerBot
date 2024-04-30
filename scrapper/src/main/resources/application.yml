@@ -3,29 +3,7 @@ app:
     enable: true
     interval: 14s
     force-check-delay: 20s
-  database-access-type: jpa
-
-  clients:
-    git-hub: https://api.github.com/repos/
-    stack-overflow: https://api.stackexchange.com/2.3/questions/
-    bot: http://localhost:8090
-  git-hub-regexp:
-    regexp-for-git-hub-owner: https://github\.com/(.*?)/
-    regexp-for-git-hub-repo: https://github\.com/.*?/(.*)
-  stack-overflow-regexp:
-    regexp-for-stack-overflow-question-id: https://stackoverflow\.com/questions/(\d+)/([\w-]+)
-
-  stack-overflow-domain: stackoverflow.com
-  git-hub-domain: github.com
-  git-hub-header-name: onevoker
-  authorization-git-hub-token: ${access-token}
-  git-hub-response-timeout: 15
-
-  retry-settings:
-    back-of-type: constant
-    retry-count: 3
-    step: 4s
-    http-statuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT, TOO_MANY_REQUESTS
+  database-access-type: jooq
 
   rate-limiting-settings:
     count: 4
@@ -39,7 +17,58 @@ app:
   kafka:
     bootstrap-servers: localhost:9092
     topic-name: updates
+
   use-queue: false
+
+  custom-metrics:
+    messages-processed:
+      name: messages-processed
+      description: count processed messages
+      tag: application
+
+clients:
+  bot:
+    base-url: http://localhost:8090
+
+    retry-settings:
+      backOffType: constant
+      retryCount: 2
+      step: 2s
+      httpStatuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT, TOO_MANY_REQUESTS
+
+  stack-overflow:
+    urls:
+      api: https://api.stackexchange.com/2.3/questions/
+      domain: stackoverflow.com
+
+    regexps:
+      regexp-for-question-id: https://stackoverflow\.com/questions/(\d+)/([\w-]+)
+
+    retry-settings:
+      backOffType: exponential
+      retryCount: 8
+      step: 6s
+      httpStatuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT, TOO_MANY_REQUESTS
+
+  git-hub:
+    urls:
+      api: https://api.github.com/repos/
+      domain: github.com
+    response-timeout: 15
+
+    authorization:
+      header-name: onevoker
+      authorization-token: ${access-token}
+
+    regexps:
+      regexp-for-git-hub-owner: https://github\.com/(.*?)/
+      regexp-for-git-hub-repo: https://github\.com/.*?/(.*)
+
+    retry-settings:
+      backOffType: linear
+      retryCount: 3
+      step: 10s
+      httpStatuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT, TOO_MANY_REQUESTS
 
 spring:
   liquibase:
@@ -61,3 +90,17 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: info, health, prometheus
+      path-mapping:
+        prometheus: /metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}

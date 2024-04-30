@@ -1,7 +1,8 @@
-package edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService;
+package edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService;
 
 import edu.java.scrapper.clients.GitHubClient;
-import edu.java.scrapper.configuration.ApplicationConfig;
+import edu.java.scrapper.clients.exceptions.RemovedLinkException;
+import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.GitHubResponseRepository;
@@ -15,19 +16,23 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class GitHubUpdaterService implements ResourceUpdaterService {
-    private final ApplicationConfig applicationConfig;
+    private final ClientsConfig.GitHub gitHub;
     private final GitHubParserService gitHubParserService;
     private final GitHubResponseRepository gitHubResponseRepository;
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
     private final GitHubClient gitHubClient;
+    private final RemoverLinksService removerLinksService;
     private static final String UPDATE_DESCRIPTION = "Появилось обновление";
+
 
     @Transactional
     @Override
@@ -42,26 +47,31 @@ public class GitHubUpdaterService implements ResourceUpdaterService {
         String repo = linkRepoData.repo();
 
         if (!owner.isBlank() && !repo.isBlank()) {
-            RepositoryResponse response = gitHubClient.fetchRepository(owner, repo);
-            List<RepositoryResponse> responsesInRepo = gitHubResponseRepository.findByLinkId(linkId);
+            try {
+                RepositoryResponse response = gitHubClient.fetchRepository(owner, repo);
+                List<RepositoryResponse> responsesInRepo = gitHubResponseRepository.findByLinkId(linkId);
 
-            if (responsesInRepo.isEmpty()) {
-                gitHubResponseRepository.add(response, linkId);
-            }
+                if (responsesInRepo.isEmpty()) {
+                    gitHubResponseRepository.add(response, linkId);
+                }
 
-            if (isNeedToUpdate(response, link)) {
-                updateResponse = getUpdateRepo(response, linkId, url);
+                if (isNeedToUpdate(response, link)) {
+                    updateResponse = getUpdateRepo(response, linkId, url);
+                }
+
+                OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
+                linkRepository.updateLastApiCheck(lastApiCheck, linkId);
+            } catch (RemovedLinkException exception) {
+                updateResponse = removerLinksService.removeLinkInDatabaseAndGetResponse(linkId, url);
             }
         }
-        OffsetDateTime lastApiCheck = OffsetDateTime.now(ZoneOffset.UTC);
-        linkRepository.updateLastApiCheck(lastApiCheck, linkId);
 
         return updateResponse;
     }
 
     @Override
     public String getSupportedLinksDomain() {
-        return applicationConfig.gitHubDomain();
+        return gitHub.urls().domain();
     }
 
     private boolean isNeedToUpdate(RepositoryResponse response, Link link) {

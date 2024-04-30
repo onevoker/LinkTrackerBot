@@ -12,6 +12,7 @@ import edu.java.bot.linkValidators.LinkResponseFactory;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -36,36 +37,34 @@ public class UntrackCommandService implements CommandService {
     }
 
     @Override
-    public SendMessage handle(Update update) {
+    public Mono<SendMessage> handle(Update update) {
         Message message = update.message();
         long chatId = message.chat().id();
-        String answerText = getAnswerText(message);
 
-        return new SendMessage(chatId, answerText);
+        return getAnswerText(message)
+            .map(answerText -> new SendMessage(chatId, answerText));
     }
 
-    private String getAnswerText(Message message) {
+    private Mono<String> getAnswerText(Message message) {
         long chatId = message.chat().id();
-        String answerText;
+        Mono<String> answerText;
         try {
             String link = message.text().substring(BEGIN_LINK_INDEX);
             try {
                 URI url = URI.create(link);
                 LinkResponse response = linkResponseFactory.createLink(chatId, url);
                 RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest(response.url());
-                try {
-                    LinkResponse linkResponse = linkClient.untrackLink(chatId, removeLinkRequest);
-                    answerText = HANDLE_TEXT + linkResponse.url();
-                } catch (ApiException exception) {
-                    answerText = exception.getMessage();
-                }
+
+                answerText = linkClient.untrackLink(chatId, removeLinkRequest)
+                    .map(linkResponse -> HANDLE_TEXT + linkResponse.url())
+                    .onErrorResume(ApiException.class, exception -> Mono.just(exception.getMessage()));
             } catch (IllegalArgumentException exception) {
-                answerText = INCORRECT_LINK_TEXT;
+                answerText = Mono.just(INCORRECT_LINK_TEXT);
             } catch (InvalidLinkException exception) {
-                answerText = exception.getMessage();
+                answerText = Mono.just(exception.getMessage());
             }
         } catch (IndexOutOfBoundsException exception) {
-            answerText = NO_LINK_TEXT;
+            answerText = Mono.just(NO_LINK_TEXT);
         }
 
         return answerText;

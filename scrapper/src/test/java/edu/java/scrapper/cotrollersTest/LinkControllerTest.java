@@ -2,6 +2,7 @@ package edu.java.scrapper.cotrollersTest;
 
 import edu.java.scrapper.controllers.telegramConrollers.LinkController;
 import edu.java.scrapper.domain.services.interfaces.LinkService;
+import io.micrometer.core.instrument.Counter;
 import java.net.URI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LinkControllerTest {
     @Mock
     private LinkService linkService;
+    @Mock
+    private Counter messagesProcessedCounter;
 
     @InjectMocks
     private LinkController linkController;
@@ -47,6 +50,7 @@ public class LinkControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
 
+        verify(messagesProcessedCounter).increment();
         verify(linkService).listAll(chatId);
     }
 
@@ -62,6 +66,7 @@ public class LinkControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().is(expectedStatus));
 
+        verify(messagesProcessedCounter, never()).increment();
         verify(linkService, never()).add(anyLong(), any());
     }
 
@@ -76,6 +81,7 @@ public class LinkControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
 
+        verify(messagesProcessedCounter).increment();
         verify(linkService).remove(eq(chatId), eq(URI.create(url)));
     }
 }

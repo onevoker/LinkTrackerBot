@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.clients.GitHubClient;
-import edu.java.scrapper.configuration.ApplicationConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
@@ -15,12 +15,13 @@ import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
 import edu.java.scrapper.dto.gitHubDto.RepositoryResponse;
 import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.linkParser.services.GitHubParserService;
-import edu.java.scrapper.scheduler.updaterWorkers.resorceUpdaterService.GitHubUpdaterService;
+import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.GitHubUpdaterService;
+import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.RemoverLinksService;
+import io.github.resilience4j.retry.Retry;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,15 +48,14 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     @Autowired
     private ChatRepository chatRepository;
     @Autowired
-    private ApplicationConfig applicationConfig;
+    private RemoverLinksService removerLinksService;
     @Autowired
-    private Retry retry;
+    private Retry gitHubRetry;
     private GitHubUpdaterService gitHubUpdaterService;
-    private static final ApplicationConfig.GitHubRegexp regexp = new ApplicationConfig.GitHubRegexp(
-        "https://github\\.com/(.*?)/",
-        "https://github\\.com/.*?/(.*)"
-    );
-    private static final GitHubParserService LINK_PARSER_SERVICE = new GitHubParserService(regexp);
+    @Autowired
+    private ClientsConfig.GitHub gitHub;
+    @Autowired
+    private GitHubParserService linkParserService;
     private static final Long CHAT_ID = 10L;
     static final String WIRE_MOCK_URL = "http://localhost:8080/repos/";
     private static final String BODY = """
@@ -94,7 +94,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         stubFor(
             prepareStub(BODY)
         );
-        GitHubClient gitHubClient = new GitHubClient(webClient, retry);
+        GitHubClient gitHubClient = new GitHubClient(webClient, gitHubRetry);
 
         chatRepository.add(CHAT_ID);
         linkRepository.add(link);
@@ -102,12 +102,13 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
         chatLinkRepository.add(new ChatLink(CHAT_ID, linkId));
 
         gitHubUpdaterService = new GitHubUpdaterService(
-            applicationConfig,
-            LINK_PARSER_SERVICE,
+            gitHub,
+            linkParserService,
             gitHubResponseRepository,
             linkRepository,
             chatLinkRepository,
-            gitHubClient
+            gitHubClient,
+            removerLinksService
         );
     }
 
@@ -122,6 +123,7 @@ public class GitHubUpdaterServiceTest extends IntegrationTest {
     @Transactional
     void getUpdatesTest() {
         Link neededToCheckLink = linkRepository.findAll().getFirst();
+
         LinkUpdateResponse neededToUpdate = gitHubUpdaterService.getLinkUpdateResponse(neededToCheckLink);
 
         assertThat(neededToUpdate.description()).isEqualTo("Появилось обновление");

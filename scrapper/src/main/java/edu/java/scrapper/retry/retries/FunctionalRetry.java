@@ -1,7 +1,7 @@
-package edu.java.scrapper.retry.retryes;
+package edu.java.scrapper.retry.retries;
 
 
-import edu.java.scrapper.retry.BackOfType;
+import edu.java.scrapper.retry.BackOffType;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import java.time.Duration;
@@ -13,7 +13,7 @@ public interface FunctionalRetry {
         return Retry.of(getBackOfType().name(), getRetryConfig(retryCount, step, httpStatuses));
     }
 
-    BackOfType getBackOfType();
+    BackOffType getBackOfType();
 
     RetryConfig getRetryConfig(int retryCount, Duration step, Set<HttpStatus> httpStatuses);
 }

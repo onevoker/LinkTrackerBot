@@ -5,6 +5,7 @@ import edu.java.scrapper.dto.request.AddLinkRequest;
 import edu.java.scrapper.dto.request.RemoveLinkRequest;
 import edu.java.scrapper.dto.response.LinkResponse;
 import edu.java.scrapper.dto.response.ListLinksResponse;
+import io.micrometer.core.instrument.Counter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LinkController {
     private final LinkService linkService;
+    private final Counter messagesProcessedCounter;
 
     @GetMapping
     public ListLinksResponse getTrackedLinks(@RequestHeader("Tg-Chat-Id") @Positive long chatId) {
+        messagesProcessedCounter.increment();
         return linkService.listAll(chatId);
     }
 
@@ -32,6 +35,7 @@ public class LinkController {
         @RequestHeader("Tg-Chat-Id") @Positive long chatId,
         @RequestBody @Valid AddLinkRequest addLinkRequest
     ) {
+        messagesProcessedCounter.increment();
         return linkService.add(chatId, addLinkRequest.url());
     }
 
@@ -40,6 +44,7 @@ public class LinkController {
         @RequestHeader("Tg-Chat-Id") @Positive long chatId,
         @RequestBody @Valid RemoveLinkRequest removeLinkRequest
     ) {
+        messagesProcessedCounter.increment();
         return linkService.remove(chatId, removeLinkRequest.url());
     }
 }

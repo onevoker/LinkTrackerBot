@@ -13,7 +13,7 @@ import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.exceptions.ApiException;
 import edu.java.bot.linkValidators.LinkResponseFactory;
 import edu.java.bot.linkValidators.LinkResponseValidatorService;
-import edu.java.bot.retry.BackOfType;
+import edu.java.bot.retry.BackOffType;
 import java.net.URI;
 import java.time.Duration;
 import java.util.Collections;
@@ -23,9 +23,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
 public class UntrackCommandServiceTest {
@@ -45,7 +45,7 @@ public class UntrackCommandServiceTest {
         null,
         List.of("https://github\\.com/[^/]+/[^/]+/?", "https://stackoverflow\\.com/questions/\\d+/[^/]+/?"),
         Duration.ofSeconds(15),
-        new ApplicationConfig.RetrySettings(BackOfType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
+        new ApplicationConfig.RetrySettings(BackOffType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
         null,
         new ApplicationConfig.Kafka(
             "updates",
@@ -53,7 +53,8 @@ public class UntrackCommandServiceTest {
             "localhost:9092",
             "edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse",
             "badResponse"
-        )
+        ),
+        null
     );
     private static final LinkResponseValidatorService linkValidatorService =
         new LinkResponseValidatorService(applicationConfig);
@@ -69,7 +70,7 @@ public class UntrackCommandServiceTest {
         doReturn(CHAT_ID).when(chat).id();
 
         String expectedHandleText = "Укажите что перестать отслеживать. Пример /untrack ,,ваша_ссылка,,";
-        SendMessage result = untrackCommandService.handle(update);
+        SendMessage result = untrackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -86,7 +87,7 @@ public class UntrackCommandServiceTest {
         untrackCommandService = new UntrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Вы указали неправильную ссылку, возможно вам поможет /help";
-        SendMessage result = untrackCommandService.handle(update);
+        SendMessage result = untrackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -105,11 +106,11 @@ public class UntrackCommandServiceTest {
         doReturn(command).when(message).text();
         doReturn(chat).when(message).chat();
         doReturn(CHAT_ID).when(chat).id();
-        doThrow(exception).when(linkClient).untrackLink(CHAT_ID, request);
+        doReturn(Mono.error(exception)).when(linkClient).untrackLink(CHAT_ID, request);
         untrackCommandService = new UntrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Вы не отслеживаете данную ссылку";
-        SendMessage result = untrackCommandService.handle(update);
+        SendMessage result = untrackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
@@ -125,11 +126,11 @@ public class UntrackCommandServiceTest {
         doReturn(command).when(message).text();
         doReturn(chat).when(message).chat();
         doReturn(CHAT_ID).when(chat).id();
-        doReturn(linkResponse).when(linkClient).untrackLink(CHAT_ID, request);
+        doReturn(Mono.just(linkResponse)).when(linkClient).untrackLink(CHAT_ID, request);
         untrackCommandService = new UntrackCommandService(linkClient, linkFactory);
 
         String expectedHandleText = "Прекратили отслеживание данной ссылки: " + GIT_HUB;
-        SendMessage result = untrackCommandService.handle(update);
+        SendMessage result = untrackCommandService.handle(update).block();
         SendMessage expected = new SendMessage(CHAT_ID, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());

@@ -1,6 +1,6 @@
 package edu.java.scrapper.linkParser.services;
 
-import edu.java.scrapper.configuration.ApplicationConfig;
+import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
 import edu.java.scrapper.linkParser.dto.GitHubLinkData;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GitHubParserService implements LinkParserService {
-    private final ApplicationConfig.GitHubRegexp gitHubRegexp;
+    private final ClientsConfig.GitHub gitHub;
 
     @Override
     public GitHubLinkData getLinkData(URI url) {
@@ -18,10 +18,10 @@ public class GitHubParserService implements LinkParserService {
     }
 
     private String getGitHubOwner(URI url) {
-        return urlMatcher(url, gitHubRegexp.regexpForGitHubOwner());
+        return urlMatcher(url, gitHub.regexps().regexpForGitHubOwner());
     }
 
     private String getGitHubRepo(URI url) {
-        return urlMatcher(url, gitHubRegexp.regexpForGitHubRepo());
+        return urlMatcher(url, gitHub.regexps().regexpForGitHubRepo());
     }
 }

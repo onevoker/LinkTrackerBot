@@ -11,8 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 @ExtendWith(MockitoExtension.class)
 public class UnregisterCommandServiceTest {
@@ -33,11 +33,11 @@ public class UnregisterCommandServiceTest {
         doReturn(message).when(update).message();
         doReturn(chat).when(message).chat();
         doReturn(1L).when(chat).id();
-        doNothing().when(chatClient).unregisterChat(1);
+        doReturn(Mono.empty()).when(chatClient).unregisterChat(1);
         unregisterCommandService = new UnregisterCommandService(chatClient);
 
         String expectedHandleText = "Чат успешно удален";
-        SendMessage result = unregisterCommandService.handle(update);
+        SendMessage result = unregisterCommandService.handle(update).block();
         SendMessage expected = new SendMessage(1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());

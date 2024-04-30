@@ -1,6 +1,6 @@
-package edu.java.scrapper.retry.retryes;
+package edu.java.scrapper.retry.retries;
 
-import edu.java.scrapper.retry.BackOfType;
+import edu.java.scrapper.retry.BackOffType;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.RetryConfig;
 import java.time.Duration;
@@ -22,7 +22,7 @@ public class ExponentialRetry implements FunctionalRetry {
     }
 
     @Override
-    public BackOfType getBackOfType() {
-        return BackOfType.EXPONENTIAL;
+    public BackOffType getBackOfType() {
+        return BackOffType.EXPONENTIAL;
     }
 }

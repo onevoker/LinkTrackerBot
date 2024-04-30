@@ -43,7 +43,7 @@ class HelpCommandServiceTest {
             /list -- показать список отслеживаемых ссылок
             /unregister -- удалить все данные(отслеживаемые ссылки), удалить профиль
             """;
-        SendMessage result = helpCommandService.handle(update);
+        SendMessage result = helpCommandService.handle(update).block();
         SendMessage expected = new SendMessage(1L, expectedHandleText);
 
         assertThat(result.toWebhookResponse()).isEqualTo(expected.toWebhookResponse());
