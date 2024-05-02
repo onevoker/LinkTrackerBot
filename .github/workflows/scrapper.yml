@@ -31,6 +31,29 @@ jobs:
       - name: maven build
         run: mvn -pl scrapper -am package
 
+      - id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        if: ( github.event_name != 'workflow_dispatch' )
+        with:
+          paths: ${{ github.workspace }}/scrapper/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 30
+          min-coverage-changed-files: 30
+          title: Code Coverage
+          update-comment: true
+
+  push_to_registry:
+    runs-on: ubuntu-latest
+    name: Docker
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -52,17 +75,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - id: jacoco
-        uses: madrapps/jacoco-report@v1.6.1
-        if: ( github.event_name != 'workflow_dispatch' )
-        with:
-          paths: ${{ github.workspace }}/scrapper/target/site/jacoco/jacoco.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 30
-          min-coverage-changed-files: 30
-          title: Code Coverage
-          update-comment: true
 
   checkstyle:
     name: checkstyle
@@ -89,4 +101,5 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+
       - run: mvn -pl scrapper -am verify -Dskip.unit.tests=true
