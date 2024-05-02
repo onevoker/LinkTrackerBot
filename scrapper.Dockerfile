@@ -1,7 +1,6 @@
 FROM maven:latest AS builder
 WORKDIR /app
-COPY pom.xml .
-COPY scrapper ./scrapper
+COPY . .
 RUN mvn -pl scrapper -am package
 
 FROM openjdk:21
