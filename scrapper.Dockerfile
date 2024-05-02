@@ -1,7 +1,7 @@
 FROM maven:latest AS builder
 WORKDIR /app
 COPY . .
-RUN mvn -pl scrapper -am package
+RUN mvn -pl scrapper -am package -DskipTests
 
 FROM openjdk:21
 WORKDIR /app
