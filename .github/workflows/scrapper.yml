@@ -43,6 +43,7 @@ jobs:
           update-comment: true
 
   push_to_registry:
+    needs: build
     runs-on: ubuntu-latest
     name: Docker
     permissions:
