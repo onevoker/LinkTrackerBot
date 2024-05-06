@@ -1,10 +1,10 @@
 package edu.java.scrapper.controllers.telegramConrollers;
 
+import edu.java.dto.request.AddLinkRequest;
+import edu.java.dto.request.RemoveLinkRequest;
+import edu.java.dto.response.LinkResponse;
+import edu.java.dto.response.ListLinksResponse;
 import edu.java.scrapper.domain.services.interfaces.LinkService;
-import edu.java.scrapper.dto.request.AddLinkRequest;
-import edu.java.scrapper.dto.request.RemoveLinkRequest;
-import edu.java.scrapper.dto.response.LinkResponse;
-import edu.java.scrapper.dto.response.ListLinksResponse;
 import io.micrometer.core.instrument.Counter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;

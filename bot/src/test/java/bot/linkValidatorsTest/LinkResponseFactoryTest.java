@@ -1,7 +1,7 @@
 package bot.linkValidatorsTest;
 
+import edu.java.dto.response.LinkResponse;
 import edu.java.bot.configuration.ApplicationConfig;
-import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.exceptions.InvalidLinkException;
 import edu.java.bot.linkValidators.LinkResponseFactory;
 import edu.java.bot.linkValidators.LinkResponseValidatorService;
@@ -26,11 +26,10 @@ public class LinkResponseFactoryTest {
         Duration.ofSeconds(15),
         new ApplicationConfig.RetrySettings(BackOffType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
         null,
-        new ApplicationConfig.Kafka(
+        new ApplicationConfig.KafkaSettings(
             "updates",
             "bot",
             "localhost:9092",
-            "edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse",
             "badResponse"
         ),
         null

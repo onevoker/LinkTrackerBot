@@ -119,6 +119,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Shared Data -->
+        <dependency>
+            <groupId>edu.java</groupId>
+            <artifactId>shared-dto</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
         <!-- Tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,8 +1,8 @@
 package edu.java.scrapper.controllers.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.java.dto.response.ApiErrorResponse;
 import edu.java.scrapper.configuration.ApplicationConfig;
-import edu.java.scrapper.dto.response.ApiErrorResponse;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

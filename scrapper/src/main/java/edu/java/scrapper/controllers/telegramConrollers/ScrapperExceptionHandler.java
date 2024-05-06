@@ -1,11 +1,11 @@
 package edu.java.scrapper.controllers.telegramConrollers;
 
+import edu.java.dto.response.ApiErrorResponse;
 import edu.java.scrapper.controllers.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.controllers.exceptions.ChatNotFoundException;
 import edu.java.scrapper.controllers.exceptions.LinkWasNotTrackedException;
 import edu.java.scrapper.controllers.exceptions.LinkWasTrackedException;
 import edu.java.scrapper.controllers.exceptions.ScrapperException;
-import edu.java.scrapper.dto.response.ApiErrorResponse;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.HttpStatusCode;

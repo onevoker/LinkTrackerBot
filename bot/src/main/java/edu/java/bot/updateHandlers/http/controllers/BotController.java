@@ -1,7 +1,7 @@
 package edu.java.bot.updateHandlers.http.controllers;
 
-import edu.java.bot.dto.response.LinkUpdateResponse;
 import edu.java.bot.updateHandlers.BotUpdaterService;
+import edu.java.dto.response.LinkUpdateResponse;
 import io.micrometer.core.instrument.Counter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

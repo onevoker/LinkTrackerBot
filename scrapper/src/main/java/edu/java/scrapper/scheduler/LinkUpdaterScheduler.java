@@ -1,8 +1,8 @@
 package edu.java.scrapper.scheduler;
 
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.clients.exceptions.ApiException;
 import edu.java.scrapper.configuration.ApplicationConfig;
-import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.scheduler.updaterWorkers.LinkUpdaterService;
 import edu.java.scrapper.senderUpdates.UpdateSender;
 import java.time.Duration;

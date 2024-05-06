@@ -1,7 +1,7 @@
 package edu.java.scrapper.kafkaTest;
 
-import edu.java.scrapper.dto.response.LinkUpdateResponse;
-import edu.java.scrapper.senderUpdates.kafka.ScrapperQueueProducer;
+import edu.java.dto.response.LinkUpdateResponse;
+import edu.java.scrapper.senderUpdates.kafka.ScrapperKafkaQueueProducer;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,19 +16,19 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ScrapperQueueProducerTest {
+public class ScrapperKafkaQueueProducerTest {
 
     @Mock
     private KafkaTemplate<String, LinkUpdateResponse> kafkaTemplate;
 
     @InjectMocks
-    private ScrapperQueueProducer scrapperQueueProducer;
+    private ScrapperKafkaQueueProducer scrapperKafkaQueueProducer;
 
     private static final String TOPIC = "testTopic";
 
     @BeforeEach
     public void setUp() {
-        scrapperQueueProducer = new ScrapperQueueProducer(kafkaTemplate, TOPIC);
+        scrapperKafkaQueueProducer = new ScrapperKafkaQueueProducer(kafkaTemplate, TOPIC);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class ScrapperQueueProducerTest {
                 List.of(1L, 2L)
             );
 
-        scrapperQueueProducer.sendUpdate(update);
+        scrapperKafkaQueueProducer.sendUpdate(update);
 
         verify(kafkaTemplate, times(1)).send(eq(TOPIC), eq(update));
     }

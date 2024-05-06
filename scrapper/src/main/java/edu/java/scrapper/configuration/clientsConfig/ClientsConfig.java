@@ -1,4 +1,4 @@
-package edu.java.scrapper.configuration.resourcesConfig;
+package edu.java.scrapper.configuration.clientsConfig;
 
 import edu.java.scrapper.retry.BackOffType;
 import java.time.Duration;

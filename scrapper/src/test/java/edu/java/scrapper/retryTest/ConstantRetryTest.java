@@ -1,7 +1,7 @@
 package edu.java.scrapper.retryTest;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
+import edu.java.scrapper.configuration.clientsConfig.ClientsConfig;
 import edu.java.scrapper.retry.BackOffType;
 import edu.java.scrapper.retry.RetryFactory;
 import edu.java.scrapper.retry.retries.ConstantRetry;

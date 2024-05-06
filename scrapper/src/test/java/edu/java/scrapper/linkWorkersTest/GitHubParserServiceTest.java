@@ -1,6 +1,6 @@
 package edu.java.scrapper.linkWorkersTest;
 
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
+import edu.java.scrapper.configuration.clientsConfig.ClientsConfig;
 import edu.java.scrapper.linkParser.dto.GitHubLinkData;
 import edu.java.scrapper.linkParser.services.GitHubParserService;
 import java.net.URI;

@@ -1,6 +1,6 @@
 package edu.java.scrapper.linkWorkersTest;
 
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
+import edu.java.scrapper.configuration.clientsConfig.ClientsConfig;
 import edu.java.scrapper.linkParser.services.StackOverflowParserService;
 import java.net.URI;
 import org.junit.jupiter.api.Test;

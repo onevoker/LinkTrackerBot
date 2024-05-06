@@ -16,7 +16,8 @@ public record ApplicationConfig(
     RateLimitingSettings rateLimitingSettings,
     @Bean
     SwaggerEndpoints swaggerEndpoints,
-    Kafka kafka,
+    @Bean
+    KafkaSettings kafkaSettings,
     boolean useQueue,
     @Bean
     CustomMetrics customMetrics
@@ -27,7 +28,7 @@ public record ApplicationConfig(
     public record RateLimitingSettings(int count, int tokens, Duration period) {
     }
 
-    public record Kafka(String bootstrapServers, String topicName) {
+    public record KafkaSettings(String bootstrapServers, String topicName) {
     }
 
     public record SwaggerEndpoints(String swagger, String apiDocs) {

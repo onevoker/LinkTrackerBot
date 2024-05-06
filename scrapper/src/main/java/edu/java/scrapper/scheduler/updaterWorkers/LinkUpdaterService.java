@@ -1,8 +1,8 @@
 package edu.java.scrapper.scheduler.updaterWorkers;
 
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
-import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.ResourceUpdaterService;
 import java.net.URI;
 import java.time.OffsetDateTime;

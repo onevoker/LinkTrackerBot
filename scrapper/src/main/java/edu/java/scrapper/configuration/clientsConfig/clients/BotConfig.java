@@ -1,6 +1,6 @@
-package edu.java.scrapper.configuration.resourcesConfig.resources;
+package edu.java.scrapper.configuration.clientsConfig.clients;
 
-import edu.java.scrapper.configuration.resourcesConfig.ClientsConfig;
+import edu.java.scrapper.configuration.clientsConfig.ClientsConfig;
 import edu.java.scrapper.retry.RetryFactory;
 import io.github.resilience4j.retry.Retry;
 import lombok.RequiredArgsConstructor;
@@ -10,22 +10,22 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @RequiredArgsConstructor
-public class GitHubConfig {
-    private final ClientsConfig.GitHub gitHub;
+public class BotConfig {
+    private final ClientsConfig.Bot bot;
     private final RetryFactory retryFactory;
 
     @Bean
-    public WebClient gitHubWebClient() {
-        var apiUrl = gitHub.urls().api();
+    public WebClient botWebClient() {
+        String baseBotUrl = bot.baseUrl();
 
         return WebClient.builder()
-            .baseUrl(apiUrl)
+            .baseUrl(baseBotUrl)
             .build();
     }
 
     @Bean
-    public Retry gitHubRetry() {
-        var retrySettings = gitHub.retrySettings();
+    public Retry botRetry() {
+        var retrySettings = bot.retrySettings();
         return retryFactory.createRetry(retrySettings);
     }
 }

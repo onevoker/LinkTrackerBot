@@ -1,12 +1,12 @@
 package edu.java.scrapper.resourceUpdaterServiceTest;
 
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.models.ChatLink;
 import edu.java.scrapper.domain.models.Link;
 import edu.java.scrapper.domain.repositories.interfaces.ChatLinkRepository;
 import edu.java.scrapper.domain.repositories.interfaces.ChatRepository;
 import edu.java.scrapper.domain.repositories.interfaces.LinkRepository;
-import edu.java.scrapper.dto.response.LinkUpdateResponse;
 import edu.java.scrapper.scheduler.updaterWorkers.resourceUpdaterService.RemoverLinksService;
 import java.net.URI;
 import java.time.OffsetDateTime;

@@ -21,7 +21,8 @@ public record ApplicationConfig(
     @Bean
     RetrySettings retrySettings,
     RateLimitingSettings rateLimitingSettings,
-    Kafka kafka,
+    @Bean
+    KafkaSettings kafkaSettings,
     @Bean
     CustomMetrics customMetrics
 ) {
@@ -31,10 +32,9 @@ public record ApplicationConfig(
     public record RateLimitingSettings(int count, int tokens, Duration period) {
     }
 
-    public record Kafka(String topicName,
+    public record KafkaSettings(String topicName,
                         String consumerGroupId,
                         String bootstrapServer,
-                        String typeMapping,
                         String dlqTopicName) {
     }
 

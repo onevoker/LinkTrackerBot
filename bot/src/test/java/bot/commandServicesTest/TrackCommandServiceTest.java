@@ -4,11 +4,11 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.dto.request.AddLinkRequest;
+import edu.java.dto.response.LinkResponse;
 import edu.java.bot.clients.ScrapperLinkClient;
 import edu.java.bot.commandServices.TrackCommandService;
 import edu.java.bot.configuration.ApplicationConfig;
-import edu.java.bot.dto.request.AddLinkRequest;
-import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.linkValidators.LinkResponseFactory;
 import edu.java.bot.linkValidators.LinkResponseValidatorService;
 import edu.java.bot.retry.BackOffType;
@@ -45,11 +45,10 @@ public class TrackCommandServiceTest {
         Duration.ofSeconds(15),
         new ApplicationConfig.RetrySettings(BackOffType.CONSTANT, 3, Duration.ofSeconds(3), Collections.emptySet()),
         null,
-        new ApplicationConfig.Kafka(
+        new ApplicationConfig.KafkaSettings(
             "updates",
             "bot",
             "localhost:9092",
-            "edu.java.scrapper.dto.response.LinkUpdateResponse:edu.java.bot.dto.response.LinkUpdateResponse",
             "badResponse"
         ),
         null

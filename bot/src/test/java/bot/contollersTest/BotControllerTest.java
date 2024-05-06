@@ -1,6 +1,6 @@
 package bot.contollersTest;
 
-import edu.java.bot.dto.response.LinkUpdateResponse;
+import edu.java.dto.response.LinkUpdateResponse;
 import edu.java.bot.updateHandlers.BotUpdaterService;
 import edu.java.bot.updateHandlers.http.controllers.BotController;
 import io.micrometer.core.instrument.Counter;

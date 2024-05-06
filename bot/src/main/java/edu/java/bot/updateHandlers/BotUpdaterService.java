@@ -1,8 +1,8 @@
 package edu.java.bot.updateHandlers;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.dto.response.LinkUpdateResponse;
 import edu.java.bot.linkTrackerBot.Bot;
+import edu.java.dto.response.LinkUpdateResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

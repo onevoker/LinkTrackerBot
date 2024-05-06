@@ -1,11 +1,11 @@
 package edu.java.bot.clients;
 
-import edu.java.bot.dto.request.AddLinkRequest;
-import edu.java.bot.dto.request.RemoveLinkRequest;
-import edu.java.bot.dto.response.ApiErrorResponse;
-import edu.java.bot.dto.response.LinkResponse;
-import edu.java.bot.dto.response.ListLinksResponse;
 import edu.java.bot.exceptions.ApiException;
+import edu.java.dto.request.AddLinkRequest;
+import edu.java.dto.request.RemoveLinkRequest;
+import edu.java.dto.response.ApiErrorResponse;
+import edu.java.dto.response.LinkResponse;
+import edu.java.dto.response.ListLinksResponse;
 import io.github.resilience4j.reactor.retry.RetryOperator;
 import io.github.resilience4j.retry.Retry;
 import lombok.RequiredArgsConstructor;

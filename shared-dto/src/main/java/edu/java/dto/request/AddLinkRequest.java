@@ -1,4 +1,4 @@
-package edu.java.scrapper.dto.request;
+package edu.java.dto.request;
 
 import java.net.URI;
 

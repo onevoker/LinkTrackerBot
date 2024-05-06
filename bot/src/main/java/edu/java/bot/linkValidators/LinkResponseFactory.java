@@ -1,7 +1,7 @@
 package edu.java.bot.linkValidators;
 
-import edu.java.bot.dto.response.LinkResponse;
 import edu.java.bot.exceptions.InvalidLinkException;
+import edu.java.dto.response.LinkResponse;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
