@@ -8,7 +8,6 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.SendResponse;
-import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.exceptions.BlockedChatException;
 import edu.java.bot.messageProcessor.UserMessageProcessor;
 import jakarta.annotation.PostConstruct;
@@ -25,9 +24,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class LinkTrackerBot implements Bot {
     private final UserMessageProcessor userMessageProcessor;
-
-    private final ApplicationConfig applicationConfig;
-    private TelegramBot bot;
+    private final TelegramBot bot;
     private static final String EXECUTED_MESSAGE_FROM_BLOCKED_CHAT = "Разблокировали заблокированный чат";
 
     @Override
@@ -57,7 +54,6 @@ public class LinkTrackerBot implements Bot {
     @Override
     @PostConstruct
     public void start() {
-        bot = new TelegramBot(applicationConfig.telegramToken());
         bot.setUpdatesListener(this);
         createMenu();
     }
